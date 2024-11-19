@@ -506,10 +506,10 @@ namespace Chaotic
         {
             Action a = () =>
             {
-                var timeoutRegion = IP.ConvertStringCoordsToRect(_r["Timeout_Region"]);
-                var timeout = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("timeout2.png", _settings.Resolution), timeoutRegion, confidence: .65);
-                if (timeout.Found)
-                    _logger.Log(LogDetailLevel.Info, $"Timeout2 found. Confidence : {timeout.MaxConfidence}");
+               
+                var donate = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("donate_button.png", _settings.Resolution), confidence: .65);
+                if (donate.Found)
+                    _logger.Log(LogDetailLevel.Info, $"Donate found. Confidence : {donate.MaxConfidence}");
 
 
 
