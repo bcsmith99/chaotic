@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="Chaotic.SkillControl"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="clr-namespace:Chaotic"
+			 mc:Ignorable="d"
+			 d:DesignHeight="450"
+			 d:DesignWidth="800">
+	<UserControl.Resources>
+		<BooleanToVisibilityConverter x:Key="VisibilityConverter"></BooleanToVisibilityConverter>
+	</UserControl.Resources>
+	<StackPanel Orientation="Vertical"
+				DataContext="{Binding Skill, RelativeSource={RelativeSource AncestorType=UserControl}}">
+		<StackPanel Orientation="Horizontal">
+			<Label Content="{Binding SkillKey}"
+				   FontWeight="Bold"></Label>
+		</StackPanel>
+		<StackPanel Orientation="Vertical"
+					Margin="10, 0, 0, 0">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="75"></ColumnDefinition>
+					<ColumnDefinition Width="*"></ColumnDefinition>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition></RowDefinition>
+					<RowDefinition></RowDefinition>
+					<RowDefinition></RowDefinition>
+					<RowDefinition></RowDefinition>
+					<RowDefinition></RowDefinition>
+				</Grid.RowDefinitions>
+				<WrapPanel Grid.Row="0"
+						   Grid.ColumnSpan="2"
+						   Grid.Column="0">
+					<CheckBox Content="Directional"
+							  Margin="0, 0, 10, 0"
+							  IsChecked="{Binding IsDirectional, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+					<CheckBox Content="Short Cast"
+							  IsChecked="{Binding IsShortCast, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+				</WrapPanel>
+
+				<Label Grid.Row="1"
+					   Grid.Column="0">Priority</Label>
+				<ComboBox SelectedValue="{Binding Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						  SelectedValuePath="Content"
+						  Width="100px"
+						  Grid.Row="1"
+						  Grid.Column="1">
+					<ComboBoxItem>0</ComboBoxItem>
+					<ComboBoxItem>1</ComboBoxItem>
+					<ComboBoxItem>2</ComboBoxItem>
+					<ComboBoxItem>3</ComboBoxItem>
+				</ComboBox>
+				<Label Grid.Row="2">Skill Type</Label>
+				<ComboBox SelectedValue="{Binding SkillType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						  SelectedValuePath="Content"
+						  Grid.Row="2"
+						  Grid.Column="1"
+						  Width="100px">
+					<ComboBoxItem>Cast</ComboBoxItem>
+					<ComboBoxItem>Hold</ComboBoxItem>
+				</ComboBox>
+				<Label Grid.Row="3">Duration</Label>
+				<TextBox Text="{Binding Duration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 VerticalContentAlignment="Center"
+						 Grid.Row="3"
+						 Grid.Column="1"
+						 Width="100px">
+				</TextBox>
+				<Label Grid.Row="4">Image</Label>
+				<Image Grid.Row="4"
+					   Grid.Column="1"
+					   Source="{Binding SkillImage}"
+					   MaxHeight="75"
+					   MaxWidth="75"></Image>
+			</Grid>
+		</StackPanel>
+	</StackPanel>
+</UserControl>

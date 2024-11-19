@@ -1,0 +1,445 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdventureMenu" xml:space="preserve">
+    <value>3120,1385</value>
+  </data>
+  <data name="UnaDailyDropdownFavorite" xml:space="preserve">
+    <value>1000,480</value>
+  </data>
+  <data name="UnaDailyDropdown" xml:space="preserve">
+    <value>1000,320</value>
+  </data>
+  <data name="UnaDaily" xml:space="preserve">
+    <value>1000,210</value>
+  </data>
+  <data name="UnaTask" xml:space="preserve">
+    <value>3000,1275</value>
+  </data>
+  <data name="UnaWeeklyDropdownFavorite" xml:space="preserve">
+    <value>1000,350</value>
+  </data>
+  <data name="UnaWeeklyDropdown" xml:space="preserve">
+    <value>1000,265</value>
+  </data>
+  <data name="UnaWeekly" xml:space="preserve">
+    <value>1200,210</value>
+  </data>
+  <data name="UnaWeeklyAccept1" xml:space="preserve">
+    <value>2150,430</value>
+  </data>
+  <data name="UnaWeeklyAccept2" xml:space="preserve">
+    <value>2150,530</value>
+  </data>
+  <data name="UnaWeeklyAccept3" xml:space="preserve">
+    <value>2150,630</value>
+  </data>
+  <data name="CommunityMenu" xml:space="preserve">
+    <value>3290,1385</value>
+  </data>
+  <data name="GuildMenu" xml:space="preserve">
+    <value>3200,1275</value>
+  </data>
+  <data name="ScreenX" xml:space="preserve">
+    <value>3440</value>
+  </data>
+  <data name="ScreenY" xml:space="preserve">
+    <value>1440</value>
+  </data>
+  <data name="ServicesMenu" xml:space="preserve">
+    <value>3380,1385</value>
+  </data>
+  <data name="GameMenu" xml:space="preserve">
+    <value>3300,1275</value>
+  </data>
+  <data name="SwitchCharacterButton" xml:space="preserve">
+    <value>950,1000</value>
+  </data>
+  <data name="CenterScreen" xml:space="preserve">
+    <value>1720,700</value>
+  </data>
+  <data name="CharSelectCol0" xml:space="preserve">
+    <value>1380</value>
+  </data>
+  <data name="CharSelectCol1" xml:space="preserve">
+    <value>1740</value>
+  </data>
+  <data name="CharSelectCol2" xml:space="preserve">
+    <value>2100</value>
+  </data>
+  <data name="CharSelectRow0" xml:space="preserve">
+    <value>550</value>
+  </data>
+  <data name="CharSelectRow1" xml:space="preserve">
+    <value>710</value>
+  </data>
+  <data name="CharSelectRow2" xml:space="preserve">
+    <value>860</value>
+  </data>
+  <data name="ConnectButton" xml:space="preserve">
+    <value>1850,1000</value>
+  </data>
+  <data name="Bifrost1" xml:space="preserve">
+    <value>2400,520</value>
+  </data>
+  <data name="Bifrost2" xml:space="preserve">
+    <value>2400,630</value>
+  </data>
+  <data name="Bifrost3" xml:space="preserve">
+    <value>2400,740</value>
+  </data>
+  <data name="Bifrost4" xml:space="preserve">
+    <value>2400,910</value>
+  </data>
+  <data name="Bifrost5" xml:space="preserve">
+    <value>2400,1020</value>
+  </data>
+  <data name="Bifrost6" xml:space="preserve">
+    <value>2400,1120</value>
+  </data>
+  <data name="BifrostMenu" xml:space="preserve">
+    <value>3025,1060</value>
+  </data>
+  <data name="Kurzan1640" xml:space="preserve">
+    <value>1490,1040</value>
+  </data>
+  <data name="Kurzan1660" xml:space="preserve">
+    <value>1725,888</value>
+  </data>
+  <data name="MinimapRegion" xml:space="preserve">
+    <value>2990,50,400,350</value>
+  </data>
+  <data name="Skill_R" xml:space="preserve">
+    <value>1540,1308,55,55</value>
+  </data>
+  <data name="Skill_Q" xml:space="preserve">
+    <value>1350,1308,55,55</value>
+  </data>
+  <data name="Skill_W" xml:space="preserve">
+    <value>1415,1308,55,55</value>
+  </data>
+  <data name="Skill_E" xml:space="preserve">
+    <value>1475,1308,55,55</value>
+  </data>
+  <data name="Skill_A" xml:space="preserve">
+    <value>1380,1370,55,55</value>
+  </data>
+  <data name="Skill_S" xml:space="preserve">
+    <value>1445,1370,55,55</value>
+  </data>
+  <data name="Skill_D" xml:space="preserve">
+    <value>1505,1370,55,55</value>
+  </data>
+  <data name="Skill_F" xml:space="preserve">
+    <value>1570,1370,55,55</value>
+  </data>
+  <data name="Skill_T" xml:space="preserve">
+    <value>1275,1335,65,65</value>
+  </data>
+  <data name="Skill_HyperV" xml:space="preserve">
+    <value>1180,1335,65,65</value>
+  </data>
+  <data name="UnaWeeklyRegion" xml:space="preserve">
+    <value>2080,390,150,500</value>
+  </data>
+  <data name="UnaDailyRegion" xml:space="preserve">
+    <value>2050,425,200,600</value>
+  </data>
+  <data name="GuildSupport_Region" xml:space="preserve">
+    <value>2080,575,200,50</value>
+  </data>
+  <data name="GuildNormalSupport" xml:space="preserve">
+    <value>1525,700</value>
+  </data>
+  <data name="GuildSupportOk_Button" xml:space="preserve">
+    <value>1650,1010</value>
+  </data>
+  <data name="GuildSupportCancel_Region" xml:space="preserve">
+    <value>1720,990,120,50</value>
+  </data>
+  <data name="MinimapCenter" xml:space="preserve">
+    <value>3190,225</value>
+  </data>
+  <data name="ClickableArea" xml:space="preserve">
+    <value>1100,450</value>
+  </data>
+  <data name="VoldisLeap_Close" xml:space="preserve">
+    <value>1700,20,1000,500</value>
+  </data>
+  <data name="SKurzanLeap_Clickpoints" xml:space="preserve">
+    <value>1500,65
+880,490</value>
+  </data>
+  <data name="VoldisLeap_Npc" xml:space="preserve">
+    <value>2600,400,200,250</value>
+  </data>
+  <data name="ChaosDungeon_Shortcut" xml:space="preserve">
+    <value>1600,380</value>
+  </data>
+  <data name="ChaosDungeon_RightArrow" xml:space="preserve">
+    <value>2810,315</value>
+  </data>
+  <data name="ChaosDungeon_Voldis" xml:space="preserve">
+    <value>2580,310</value>
+  </data>
+  <data name="ChaosDungeon_Elgacia" xml:space="preserve">
+    <value>2320,310</value>
+  </data>
+  <data name="ChaosDungeon_Vern" xml:space="preserve">
+    <value>2060,310</value>
+  </data>
+  <data name="ChaosDungeon_1415" xml:space="preserve">
+    <value>1140,480</value>
+  </data>
+  <data name="ChaosDungeon_1445" xml:space="preserve">
+    <value>1140,570</value>
+  </data>
+  <data name="ChaosDungeon_1475" xml:space="preserve">
+    <value>1140,670</value>
+  </data>
+  <data name="ChaosDungeon_1490" xml:space="preserve">
+    <value>1140,760</value>
+  </data>
+  <data name="ChaosDungeon_1520" xml:space="preserve">
+    <value>1140,850</value>
+  </data>
+  <data name="ChaosDungeon_1540" xml:space="preserve">
+    <value>1140,950</value>
+  </data>
+  <data name="ChaosDungeon_1560" xml:space="preserve">
+    <value>1140,1040</value>
+  </data>
+  <data name="ChaosDungeon_1580" xml:space="preserve">
+    <value>1140,480</value>
+  </data>
+  <data name="ChaosDungeon_1600" xml:space="preserve">
+    <value>1140,570</value>
+  </data>
+  <data name="ChaosDungeon_1610" xml:space="preserve">
+    <value>1140,480</value>
+  </data>
+  <data name="ChaosLeave_Region" xml:space="preserve">
+    <value>110,350,150,50</value>
+  </data>
+  <data name="KurzanMap1_Start" xml:space="preserve">
+    <value>800,275</value>
+  </data>
+  <data name="KurzanMap2_Start" xml:space="preserve">
+    <value>1400,50</value>
+  </data>
+  <data name="KurzanMap3_Start" xml:space="preserve">
+    <value>1000,250</value>
+  </data>
+  <data name="CharacterIcon_Region" xml:space="preserve">
+    <value>1620,1250,200,175</value>
+  </data>
+  <data name="KurzanMap1_PreferredArea" xml:space="preserve">
+    <value>1920,100,700,500</value>
+  </data>
+  <data name="KurzanMap2_PreferredArea" xml:space="preserve">
+    <value>720,420,600,500</value>
+  </data>
+  <data name="KurzanMap3_PreferredArea" xml:space="preserve">
+    <value>720,270,700,450</value>
+  </data>
+  <data name="UnaLopang_Route" xml:space="preserve">
+    <value>565,650
+650,1125
+1100,100
+2230,70
+2600,300
+2400,300
+600,1000
+800,1150
+800,1250
+700,250
+1000,60</value>
+  </data>
+  <data name="HealthBar_Region" xml:space="preserve">
+    <value>1260,1270,330,30</value>
+  </data>
+  <data name="CharacterMenu" xml:space="preserve">
+    <value>3030,1390</value>
+  </data>
+  <data name="CharacterProfileMenu" xml:space="preserve">
+    <value>2950,1275</value>
+  </data>
+  <data name="KurzanMap3_Stickpoint_Region" xml:space="preserve">
+    <value>1400,0,1200,280</value>
+  </data>
+  <data name="Skill_V" xml:space="preserve">
+    <value>1260,1335,65,65</value>
+  </data>
+  <data name="GuideMenu" xml:space="preserve">
+    <value>3200,1385</value>
+  </data>
+  <data name="GuidePetMenu" xml:space="preserve">
+    <value>3100,1100</value>
+  </data>
+  <data name="Inventory_Region" xml:space="preserve">
+    <value>1950,300,700,800</value>
+  </data>
+  <data name="BottomRight_Exit" xml:space="preserve">
+    <value>3160,1340,200,60</value>
+  </data>
+  <data name="Timeout_Region" xml:space="preserve">
+    <value>350,40,1000,150</value>
+  </data>
+  <data name="Clickable_Region" xml:space="preserve">
+    <value>600,175,2150,1000</value>
+  </data>
+  <data name="Clickable_Offset" xml:space="preserve">
+    <value>200,150</value>
+  </data>
+  <data name="Complete_Region" xml:space="preserve">
+    <value>400,950,200,100</value>
+  </data>
+  <data name="ClaimAll_Region" xml:space="preserve">
+    <value>600,1120,300,70</value>
+  </data>
+  <data name="OngoingQuest_Region" xml:space="preserve">
+    <value>2980,500,200,50</value>
+  </data>
+  <data name="ChaosOk_Region" xml:space="preserve">
+    <value>1600,1250,300,50</value>
+  </data>
+  <data name="ElgaciaShard_Clickpoints" xml:space="preserve">
+    <value>2000,1200
+1450,150
+1700,350</value>
+  </data>
+  <data name="Chevron_Region" xml:space="preserve">
+    <value>3350,0,50,50</value>
+  </data>
+  <data name="SilverDonate_Region" xml:space="preserve">
+    <value>1250,680,250,100</value>
+  </data>
+  <data name="GoldDonate_Region" xml:space="preserve">
+    <value>1600,680,250,100</value>
+  </data>
+  <data name="BifrostOk_Region" xml:space="preserve">
+    <value>1550,775,300,125</value>
+  </data>
+  <data name="PlecciaShard_Clickpoints" xml:space="preserve">
+    <value>2250,400</value>
+  </data>
+  <data name="BossMobHealth_Region" xml:space="preserve">
+    <value>1000,30,600,300</value>
+  </data>
+</root>
