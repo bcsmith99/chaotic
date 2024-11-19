@@ -179,12 +179,12 @@ namespace Chaotic
         }
 
 
-        private string USER_STATISTICS_PATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\userStatistics.json";
+        private string USER_STATISTICS_PATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Chaotic\\userStatistics.json";
 
 
         //System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().Location).LocalPath) + "\\userStatistics.json";
 
-        private string USER_SETTINGS_PATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "userSettings.json"; 
+        private string USER_SETTINGS_PATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Chaotic\\userSettings.json"; 
             //System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().Location).LocalPath) + "\\userSettings.json";
 
         public event PropertyChangedEventHandler? PropertyChanged;
