@@ -196,6 +196,11 @@ namespace Chaotic
 
         public MainWindow()
         {
+            var appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Chaotic\\";
+
+            if (!Directory.Exists(appDataDirectory))
+                Directory.CreateDirectory(appDataDirectory);
+
             _settings = new UserSettings();
             _settings = _settings.Read(USER_SETTINGS_PATH);
 
