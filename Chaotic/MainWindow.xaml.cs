@@ -192,7 +192,6 @@ namespace Chaotic
         protected void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
         }
 
         public MainWindow()
