@@ -985,7 +985,7 @@ namespace Chaotic.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 300.
         /// </summary>
         internal static string Y_Distance {
             get {

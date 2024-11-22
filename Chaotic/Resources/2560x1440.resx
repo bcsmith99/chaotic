@@ -436,6 +436,6 @@
     <value>400,200,1000,400</value>
   </data>
   <data name="Y_Distance" xml:space="preserve">
-    <value />
+    <value>300</value>
   </data>
 </root>
