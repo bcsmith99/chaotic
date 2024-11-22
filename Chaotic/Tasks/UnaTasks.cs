@@ -39,16 +39,18 @@ namespace Chaotic.Tasks
         private readonly KeyboardUtility _kb;
         private readonly ResourceHelper _r;
         private readonly UITasks _uiTasks;
-        private readonly AppLogger _logger; 
+        private readonly AppLogger _logger;
+        private readonly ManualResetEvent _busy;
 
-        public UnaTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UITasks uiTasks, AppLogger logger)
+        public UnaTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UITasks uiTasks, AppLogger logger, ManualResetEvent busy)
         {
             _settings = settings;
             _mouse = mouse;
             _kb = kb;
             _r = r;
             _uiTasks = uiTasks;
-            _logger = logger; 
+            _logger = logger;
+            _busy = busy; 
         }
         public int AcceptDailies(UserCharacter character)
         {

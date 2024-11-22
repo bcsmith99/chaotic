@@ -20,10 +20,11 @@ namespace Chaotic.Tasks.Chaos.Kurzan
         public override void StartMapMove()
         {
             _logger.Log(LogDetailLevel.Debug, "Kurzan Map 2 Initial Moves");
-            var basePoint = IP.GetPointFromStringCoords(_rh["KurzanMap2_Start"]);
-            _mouse.ClickPosition(basePoint, 2000, MouseButtons.Right);
-            _mouse.ClickPosition(basePoint, 2000, MouseButtons.Right);
-            _mouse.ClickPosition(basePoint, 2000, MouseButtons.Right);
+            var startPoints = IP.ConvertPointArray(_rh["KurzanMap2_Start"]);
+            _mouse.ClickPosition(startPoints[0], 2000, MouseButtons.Right);
+            _mouse.ClickPosition(startPoints[0], 2000, MouseButtons.Right);
+            _mouse.ClickPosition(startPoints[0], 2000, MouseButtons.Right);
+            _mouse.ClickPosition(startPoints[1], 1200, MouseButtons.Right);
         }
     }
 }

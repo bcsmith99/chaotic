@@ -30,6 +30,7 @@ namespace Chaotic.Tasks
         private readonly ResourceHelper _r;
         private readonly UITasks _uiTasks;
         private readonly AppLogger _logger;
+        private readonly ManualResetEvent _busy;
 
         private Point MoveToPoint { get; set; }
         public int MoveTime { get; set; }
@@ -55,7 +56,7 @@ namespace Chaotic.Tasks
             Cleared
         }
 
-        public ChaosTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UITasks uiTasks, AppLogger logger)
+        public ChaosTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UITasks uiTasks, AppLogger logger, ManualResetEvent busy)
         {
             _settings = settings;
             _mouse = mouse;
@@ -63,6 +64,7 @@ namespace Chaotic.Tasks
             _r = r;
             _uiTasks = uiTasks;
             _logger = logger;
+            _busy = busy;
 
             var centerScreen = IP.GetPointFromStringCoords(_r["CenterScreen"]);
 
@@ -275,6 +277,8 @@ namespace Chaotic.Tasks
                 {
                     HealthCheck(cc);
                     DeathCheck();
+                    if (TimeoutCheck())
+                        break;
 
                     //1500, 1000, 500, 400,
                     var ok_chaos = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_chaos.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["ChaosOk_Region"]), confidence: .70);
@@ -289,10 +293,6 @@ namespace Chaotic.Tasks
                     var gold_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("gold_mob_middle.png", _settings.Resolution), minimapRegion, .75);
                     var elite_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("elite_mob_middle.png", _settings.Resolution), minimapRegion, .86);
 
-                    if (CurrentState == ChaosStates.KurzanMap1)
-                    {
-
-                    }
                     map.PerformSpecialChecks();
 
                     //check map sticking point 
@@ -309,24 +309,24 @@ namespace Chaotic.Tasks
                         _logger.Log(LogDetailLevel.Debug, $"Boss Mob Found - {boss_mob.MaxConfidence}");
                         MoveToMinimapPos(boss_mob.CenterX, boss_mob.CenterY, 1000, 1500);
                         cc.UseAwakening(MoveToPoint);
-                        cc.UseAbilities(MoveToPoint, 2);
+                        cc.UseAbilities(MoveToPoint, 3);
                     }
                     else if (elite_mob.Found)
                     {
                         _logger.Log(LogDetailLevel.Debug, $"Elite Mob Found, Confidence: {elite_mob.MaxConfidence}");
-                        MoveToMinimapPos(elite_mob.CenterX, elite_mob.CenterY, 500, 1000);
-                        cc.UseAbilities(MoveToPoint, 2);
+                        MoveToMinimapPos(elite_mob.CenterX, elite_mob.CenterY, 1000, 1500);
+                        cc.UseAbilities(MoveToPoint, 3);
                     }
                     else if (gold_mob.Found)
                     {
                         _logger.Log(LogDetailLevel.Debug, $"Gold Mob Found - {gold_mob.MaxConfidence}");
                         MoveToMinimapPos(gold_mob.CenterX, gold_mob.CenterY, 1000, 1500);
-                        cc.UseAbilities(MoveToPoint, 2);
-                    } 
+                        cc.UseAbilities(MoveToPoint, 3);
+                    }
                     else
                     {
                         var point = map.PreferredRandomPoint();
-                        RandomMove(500, 500, point, 60);
+                        RandomMove(500, 1000, point, 50);
                         cc.UseAbilities(MoveToPoint, 1);
                     }
 
@@ -834,7 +834,7 @@ namespace Chaotic.Tasks
             foreach (var image in portalImages)
             {
                 //IP.SAVE_DEBUG_IMAGES = true;
-                portal = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), minimapRegion, confidence: .8);
+                portal = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), minimapRegion, confidence: .9);
                 if (portal.Found)
                 {
                     //IP.SAVE_DEBUG_IMAGES = false;

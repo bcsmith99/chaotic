@@ -24,14 +24,16 @@ namespace Chaotic.Tasks.Chaos.Kurzan
         public override void StartMapMove()
         {
             _logger.Log(LogDetailLevel.Debug, "Kurzan Map 1 Initial Move");
-            var basePoint = IP.GetPointFromStringCoords(_rh["KurzanMap1_Start"]);
-            _mouse.ClickPosition(basePoint, 2000, MouseButtons.Right);
+            var startPoints = IP.ConvertPointArray(_rh["KurzanMap1_Start"]);
+
+            _mouse.ClickPosition(startPoints[0], 2500, MouseButtons.Right);
+            _mouse.ClickPosition(startPoints[1], 2000, MouseButtons.Right);
 
         }
         public override void PerformSpecialChecks()
         {
             //Look for jump portal and take it.
-            var jump_pad = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map1_jumppoint.png", _settings.Resolution), ClickableRegion, confidence: .8);
+            var jump_pad = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map1_jumppoint.png", _settings.Resolution), ClickableRegion, confidence: .88);
             if (jump_pad.Found)
             {
                 _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad Found - {jump_pad.MaxConfidence}");

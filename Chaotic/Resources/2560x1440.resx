@@ -326,10 +326,12 @@
     <value>850,540</value>
   </data>
   <data name="KurzanMap1_Start" xml:space="preserve">
-    <value>550,350</value>
+    <value>550,350
+1400,225</value>
   </data>
   <data name="KurzanMap2_Start" xml:space="preserve">
-    <value>1000,250</value>
+    <value>1000,250
+600,350</value>
   </data>
   <data name="KurzanMap3_Start" xml:space="preserve">
     <value>800,250</value>

@@ -612,7 +612,8 @@ namespace Chaotic.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 550,350.
+        ///   Looks up a localized string similar to 550,350
+        ///1400,225.
         /// </summary>
         internal static string KurzanMap1_Start {
             get {
@@ -630,7 +631,8 @@ namespace Chaotic.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1000,250.
+        ///   Looks up a localized string similar to 1000,250
+        ///600,350.
         /// </summary>
         internal static string KurzanMap2_Start {
             get {

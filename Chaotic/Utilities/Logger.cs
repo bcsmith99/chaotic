@@ -1,4 +1,5 @@
 ﻿using Chaotic.Tasks;
+using Chaotic.Tasks.Chaos;
 using Chaotic.User;
 using System;
 using System.Collections.Generic;
@@ -57,8 +58,7 @@ namespace Chaotic.Utilities
     {
         private readonly SessionLog _log;
         private readonly SessionStatistics _statistics;
-        private string USER_STATISTICS_PATH = System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().Location).LocalPath) + "\\userStatistics.json";
-
+        private string USER_STATISTICS_PATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Chaotic\\userStatistics.json";
         public AppLogger(SessionLog log, SessionStatistics statistics)
         {
             _log = log;
@@ -83,8 +83,22 @@ namespace Chaotic.Utilities
 
         public void AddStatisticEntry(TaskStatistic statistic)
         {
+            _statistics.CurrentSessionStatistics.Add(statistic);
             _statistics.Statistics.Add(statistic);
             _statistics.Save(USER_STATISTICS_PATH);
+        }
+
+        public void WriteSessionWorkCompleted(DateTime startTime, DateTime endTime)
+        {
+            var kurzanFronts = _statistics.CurrentSessionStatistics.Where(x => x.GetType() == typeof(KurzanTaskStatistic)).Cast<KurzanTaskStatistic>();
+            var chaosDungeons = _statistics.CurrentSessionStatistics.Where(x => x.GetType() == typeof(ChaosTaskStatistic)).Cast<ChaosTaskStatistic>();
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"Requested work completed. Elapsed Time: {endTime.Subtract(startTime).ToString(@"hh\:mm\:ss")}.  Overall Session Summary:");
+            sb.AppendLine($"Kurzan Front Executions: {kurzanFronts.Count()}  - Success: {kurzanFronts.Where(x => x.TaskOutcome == "Success").Count()}, Failure: {kurzanFronts.Where(x => x.TaskOutcome == "Failure").Count()}, Timeout: {kurzanFronts.Where(x => x.TaskOutcome == "Timeout").Count()}");
+            sb.AppendLine($"Chaos Dungeon Executions: {chaosDungeons.Count()}  - Success: {chaosDungeons.Where(x => x.TaskOutcome == "Success").Count()}, Failure: {chaosDungeons.Where(x => x.TaskOutcome == "Failure").Count()}, Timeout: {chaosDungeons.Where(x => x.TaskOutcome == "Timeout").Count()}");
+
+            Log(LogDetailLevel.Summary, sb.ToString());
         }
     }
 }

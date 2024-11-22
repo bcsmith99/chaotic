@@ -81,6 +81,8 @@ namespace Chaotic.User
 
         public Guid Identifier { get; set; }
 
+        public bool IsMain { get; set; }
+
         public string ClassName { get; set; }
         public int CharacterIndex { get; set; }
         public int ChaosLevel { get; set; }

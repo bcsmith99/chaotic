@@ -11,14 +11,33 @@ using System.Threading.Tasks;
 
 namespace Chaotic.User
 {
+    //public class SessionStatistic
+    //{
+    //    public SessionStatistic()
+    //    {
+            
+    //    }
+        //public int ChaosDungeonRuns { get; set; }
+        //public int KurzanFrontRuns { get; set; }
+        //public List<TimeSpan> ChaosFloorOneDurations { get; set; }
+        //public List<TimeSpan> ChaosFloorTwoDurations { get; set; }
+        //public List<TimeSpan> ChaosFloorThreeDurations { get; set; }
+        //public List<TimeSpan> KurzanFrontDurations { get; set; }
+        //public int Success { get; set; }
+
+
+
+    //}
     public class SessionStatistics
     {
         public SessionStatistics()
         {
             Statistics = new List<ITaskStatistic>();
+            CurrentSessionStatistics = new List<ITaskStatistic>();
         }
 
         public List<ITaskStatistic> Statistics { get; set; }
+        public List<ITaskStatistic> CurrentSessionStatistics { get; set; }
 
         public void Save(string fileName, bool includeFirstComma = true)
         {

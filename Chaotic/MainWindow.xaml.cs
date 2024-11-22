@@ -39,6 +39,32 @@ namespace Chaotic
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public MainWindow()
+        {
+            var appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Chaotic\\";
+            _busy = new ManualResetEvent(false);
+
+            if (!Directory.Exists(appDataDirectory))
+                Directory.CreateDirectory(appDataDirectory);
+
+            _settings = new UserSettings();
+            _settings = _settings.Read(USER_SETTINGS_PATH);
+
+            _statistics = new SessionStatistics();
+            //_statistics = _statistics.Read(USER_STATISTICS_PATH);
+
+            Log = new SessionLog(_settings.LogDetailLevel);
+            _logger = new AppLogger(Log, Statistics);
+
+            InitializeComponent();
+
+            _mouse = new MouseUtility();
+            _kb = new KeyboardUtility();
+
+            InitializeTasks();
+
+        }
+
         private List<string> _Resolutions = new List<string> { "3440x1440", "2560x1440" };
         private List<Tuple<string, int>> _GemLevels = new List<Tuple<string, int>>()
         {
@@ -184,8 +210,8 @@ namespace Chaotic
 
         //System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().Location).LocalPath) + "\\userStatistics.json";
 
-        private string USER_SETTINGS_PATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Chaotic\\userSettings.json"; 
-            //System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().Location).LocalPath) + "\\userSettings.json";
+        private string USER_SETTINGS_PATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Chaotic\\userSettings.json";
+        //System.IO.Path.GetDirectoryName(new System.Uri(System.Reflection.Assembly.GetExecutingAssembly().Location).LocalPath) + "\\userSettings.json";
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -194,40 +220,18 @@ namespace Chaotic
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public MainWindow()
-        {
-            var appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Chaotic\\";
 
-            if (!Directory.Exists(appDataDirectory))
-                Directory.CreateDirectory(appDataDirectory);
-
-            _settings = new UserSettings();
-            _settings = _settings.Read(USER_SETTINGS_PATH);
-
-            _statistics = new SessionStatistics();
-            //_statistics = _statistics.Read(USER_STATISTICS_PATH);
-
-            Log = new SessionLog(_settings.LogDetailLevel);
-            _logger = new AppLogger(Log, Statistics);
-
-            InitializeComponent();
-
-            _mouse = new MouseUtility();
-            _kb = new KeyboardUtility();
-
-            InitializeTasks();
-            _busy = new ManualResetEvent(false);
-        }
 
         private void InitializeTasks()
         {
             _r = new ResourceHelper("Chaotic.Resources." + UserSettings.Resolution);
-            _uit = new UITasks(UserSettings, _mouse, _kb, _r, _logger);
-            _gt = new GuildTasks(UserSettings, _mouse, _kb, _r, _logger);
-            _ut = new UnaTasks(UserSettings, _mouse, _kb, _r, _uit, _logger);
-            _ct = new ChaosTasks(UserSettings, _mouse, _kb, _r, _uit, _logger);
+            _uit = new UITasks(UserSettings, _mouse, _kb, _r, _logger, _busy);
+            _gt = new GuildTasks(UserSettings, _mouse, _kb, _r, _logger, _busy);
+            _ut = new UnaTasks(UserSettings, _mouse, _kb, _r, _uit, _logger, _busy);
+            _ct = new ChaosTasks(UserSettings, _mouse, _kb, _r, _uit, _logger, _busy);
         }
 
+        private DateTime _currentWorkStartTime;
         private BackgroundWorker _bw;
         private readonly ManualResetEvent _busy;
 
@@ -294,7 +298,7 @@ namespace Chaotic
                     success = success && _uit.OpenInventoryManagement();
                     if (UserSettings.MoveHoningMaterials)
                         success = success && _uit.MoveHoningMaterials();
-                    if (UserSettings.MoveGems)
+                    if (UserSettings.MoveGems && !character.IsMain)
                         success = success && _uit.MoveGems();
                     success = success && _uit.CloseInventoryManagement();
                 }
@@ -449,12 +453,12 @@ namespace Chaotic
 
             if (_bw != null && !_bw.IsBusy)
             {
-                _logger.Log(LogDetailLevel.Debug, "Listening for pause");
+                //_logger.Log(LogDetailLevel.Debug, "Listening for pause");
                 _kb.Listen(Key.Pause, () =>
                 {
                     _logger.Log(LogDetailLevel.Debug, "Pause pressed");
-                    //TogglePause();
-                    CancelWorker();
+                    TogglePause();
+                    //CancelWorker();
                 });
                 _bw.RunWorkerAsync();
                 TaskRunning = true;
@@ -462,6 +466,8 @@ namespace Chaotic
         }
 
         private bool _blocked = false;
+        private DateTime _currentWorkEndTime;
+
         private void TogglePause()
         {
             if (_blocked)
@@ -487,13 +493,16 @@ namespace Chaotic
 
         private void WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            _logger.Log(LogDetailLevel.Debug, "Finished Work");
+            _currentWorkEndTime = DateTime.Now; 
+            _logger.WriteSessionWorkCompleted(_currentWorkStartTime, _currentWorkEndTime);
+            //_logger.Log(LogDetailLevel.Debug, "Finished Work");
             _kb.StopListening(Key.Pause);
             TaskRunning = false;
         }
 
         private void CreateBackgroundWorker(Action workToDo)
         {
+            _currentWorkStartTime = DateTime.Now;
             _bw = new BackgroundWorker();
             _bw.WorkerSupportsCancellation = true;
             _bw.DoWork += (o, e) =>
@@ -515,7 +524,7 @@ namespace Chaotic
         {
             Action a = () =>
             {
-               
+
                 var donate = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("donate_button.png", _settings.Resolution), confidence: .65);
                 if (donate.Found)
                     _logger.Log(LogDetailLevel.Info, $"Donate found. Confidence : {donate.MaxConfidence}");

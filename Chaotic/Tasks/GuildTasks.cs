@@ -21,14 +21,16 @@ namespace Chaotic.Tasks
         private readonly KeyboardUtility _kb;
         private readonly ResourceHelper _r;
         private readonly AppLogger _logger;
+        private readonly ManualResetEvent _busy;
 
-        public GuildTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r,AppLogger logger)
+        public GuildTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r,AppLogger logger, ManualResetEvent busy)
         {
             _settings = settings;
             _mouse = mouse;
             _kb = kb;
             _r = r;
             _logger = logger;
+            _busy = busy; 
         }
         public bool PerformGuildTasks(UserCharacter character)
         {
