@@ -19,7 +19,8 @@ namespace Chaotic.Utilities
         None = 0,
         Debug = 1,
         Info = 2,
-        Summary = 3
+        Summary = 3,
+        Error
     }
     public class LogEntry
     {
@@ -75,7 +76,17 @@ namespace Chaotic.Utilities
 
         public void ClearLog()
         {
-            _log.ClearEntries(); 
+            _log.ClearEntries();
+        }
+
+        public void LogException(Exception exception, string message = "")
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("An unanticipated exception occurred during execution:");
+            if (!String.IsNullOrWhiteSpace(message))
+                sb.AppendLine(message);
+            sb.AppendLine($"Exception: {exception.Message}");
+            Log(LogDetailLevel.Error, sb.ToString());
         }
 
         public void Log(LogDetailLevel level, string message)

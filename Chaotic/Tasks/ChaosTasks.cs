@@ -98,7 +98,7 @@ namespace Chaotic.Tasks
                         RunChaosFloorOne(cc);
                         floor1End = DateTime.Now;
                         chaosEnd = DateTime.Now;
-                        _busy.WaitOne(); 
+                        _busy.WaitOne();
                         _logger.Log(LogDetailLevel.Info, $"Floor 1 Complete - {floor1End.Value.Subtract(floor1Start.Value).TotalSeconds.ToString("0.##")}s elapsed");
                         if (TimeoutCheck())
                         {
@@ -112,7 +112,7 @@ namespace Chaotic.Tasks
                         RunChaosFloorTwo(cc);
                         floor2End = DateTime.Now;
                         chaosEnd = DateTime.Now;
-                        _busy.WaitOne(); 
+                        _busy.WaitOne();
                         _logger.Log(LogDetailLevel.Info, $"Floor 2 Complete - {floor2End.Value.Subtract(floor2Start.Value).TotalSeconds.ToString("0.##")}s elapsed");
                         if (TimeoutCheck())
                         {
@@ -337,8 +337,9 @@ namespace Chaotic.Tasks
                     Sleep.SleepMs(50, 150);
                     currentTime = DateTime.Now;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    _logger.LogException(e, "Error during Kurzan Front.");
                     break;
                 }
             }

@@ -515,6 +515,10 @@ namespace Chaotic
                 {
                     _logger.Log(LogDetailLevel.Debug, "Work Stopped");
                 }
+                catch (Exception ex)
+                {
+                    _logger.LogException(ex);
+                }
             };
             _bw.RunWorkerCompleted += WorkCompleted;
             StartWorker();
