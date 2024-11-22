@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -35,11 +37,11 @@ namespace Chaotic.User
         public const string Summoner = "Summoner";
     }
 
-    public class UserCharacter
+    public class UserCharacter : INotifyPropertyChanged
     {
         public UserCharacter()
         {
-            Identifier = Guid.NewGuid(); 
+            Identifier = Guid.NewGuid();
 
             FirstUnaTask = new UserUnaTask() { UnaName = "Not Set", BifrostPosition = 1 };
             SecondUnaTask = new UserUnaTask() { UnaName = "Not Set", BifrostPosition = 1 };
@@ -47,6 +49,15 @@ namespace Chaotic.User
 
             Skills = new UserCharacterSkills();
         }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string name = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+
 
         [JsonIgnore]
         public static List<string> AllClasses = new List<string>()
@@ -76,8 +87,18 @@ namespace Chaotic.User
             ClassNames.Summoner
         };
 
+
+        private bool _isCharSelected = false;
         [JsonIgnore]
-        public bool IsCharSelected { get; set; } = true;
+        public bool IsCharSelected
+        {
+            get { return _isCharSelected; }
+            set
+            {
+                _isCharSelected = value;
+                OnPropertyChanged();
+            }
+        } 
 
         public Guid Identifier { get; set; }
 

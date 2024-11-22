@@ -40,6 +40,7 @@
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto" />
 						<RowDefinition Height="*" />
+						<RowDefinition Height="Auto" />
 					</Grid.RowDefinitions>
 
 					<Grid Grid.Row="1"
@@ -76,15 +77,22 @@
 											Margin="0,0,10,0">Run Chaos</Button>
 								</StackPanel>
 
-								<!--<Button Click="Test_Click"
+								<Button Click="Test_Click"
 										Margin="0,20,0,0"
-										Grid.Row="2">Current Test</Button>-->
+										Grid.Row="2">Current Test</Button>
 							</Grid>
 						</Border>
 						<Border Padding="10,5,10,0"
 								Grid.Row="1">
-							<Label Content="Log"
-								   FontWeight="Bold" />
+							<WrapPanel Orientation="Horizontal">
+								<Label Content="Log - "
+									   FontWeight="Bold" />
+								<TextBlock VerticalAlignment="Center"
+										   Margin="5,0,5,0">
+                                    <Hyperlink Click="ClearLog_Click">Clear</Hyperlink>
+								</TextBlock>
+							</WrapPanel>
+
 						</Border>
 						<ListView Padding="10,5,10,0"
 								  Grid.Row="2"
@@ -142,7 +150,29 @@
 							</DataTemplate>
 						</ListBox.ItemTemplate>
 					</ListBox>
-
+					<WrapPanel Orientation="Horizontal"
+							   Grid.Column="1"
+							   Grid.Row="2"
+							   HorizontalAlignment="Center">
+						<Label Content="Select:"
+							   HorizontalAlignment="Center" />
+						<TextBlock VerticalAlignment="Center"
+								   Margin="5,0,0,0">
+                                    <Hyperlink Click="SelectAll_Click">All</Hyperlink>
+						</TextBlock>
+						<TextBlock VerticalAlignment="Center"
+								   Margin="5,0,0,0">
+                                    <Hyperlink Click="SelectNone_Click">None</Hyperlink>
+						</TextBlock>
+						<TextBlock VerticalAlignment="Center"
+								   Margin="5,0,0,0">
+                                    <Hyperlink Click="KF_Click">KF</Hyperlink>
+						</TextBlock>
+						<TextBlock VerticalAlignment="Center"
+								   Margin="5,0,0,0">
+                                    <Hyperlink Click="CD_Click">CD</Hyperlink>
+						</TextBlock>
+					</WrapPanel>
 				</Grid>
 			</TabItem>
 			<TabItem Header="Characters"
@@ -236,7 +266,7 @@
 									  SelectedItem="{Binding CurrentSelectedEditChar.ChaosLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
 							</ComboBox>
-							<CheckBox Grid.Row="3" 
+							<CheckBox Grid.Row="3"
 									  IsChecked="{Binding CurrentSelectedEditChar.IsMain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 									  Content="Main Character" />
 							<StackPanel Grid.Row="4"

@@ -493,7 +493,7 @@ namespace Chaotic
 
         private void WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            _currentWorkEndTime = DateTime.Now; 
+            _currentWorkEndTime = DateTime.Now;
             _logger.WriteSessionWorkCompleted(_currentWorkStartTime, _currentWorkEndTime);
             //_logger.Log(LogDetailLevel.Debug, "Finished Work");
             _kb.StopListening(Key.Pause);
@@ -522,31 +522,51 @@ namespace Chaotic
 
         private void Test_Click(object sender, RoutedEventArgs e)
         {
-            Action a = () =>
+            //Action a = () =>
+            //{
+            //IP.SHOW_DEBUG_IMAGES = true;
+            IP.SAVE_DEBUG_IMAGES = true;
+            var ClickableRegion = IP.ConvertStringCoordsToRect(_r["Clickable_Region"]);
+            var jump_pad = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map1_jumppoint.png", _settings.Resolution), ClickableRegion, confidence: .8);
+            if (jump_pad.Found)
             {
+                _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad Found - {jump_pad.MaxConfidence}");
+            }
+            var jump_pad1 = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map1_jumppoint1.png", _settings.Resolution), ClickableRegion, confidence: .8);
+            if (jump_pad1.Found)
+            {
+                _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad 1 Found - {jump_pad1.MaxConfidence}");
+            }
+            var jump_pad2 = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map1_jumppoint2.png", _settings.Resolution), ClickableRegion, confidence: .8);
+            if (jump_pad2.Found)
+            {
+                _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad 2 Found - {jump_pad2.MaxConfidence}");
+            }
+            //IP.SHOW_DEBUG_IMAGES = false;
+            IP.SAVE_DEBUG_IMAGES = false;
 
-                var donate = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("donate_button.png", _settings.Resolution), confidence: .65);
-                if (donate.Found)
-                    _logger.Log(LogDetailLevel.Info, $"Donate found. Confidence : {donate.MaxConfidence}");
+            //var donate = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("donate_button.png", _settings.Resolution), confidence: .65);
+            //if (donate.Found)
+            //    _logger.Log(LogDetailLevel.Info, $"Donate found. Confidence : {donate.MaxConfidence}");
 
 
 
-                //_logger.AddStatisticEntry(new ChaosTaskStatistic()
-                //{
-                //    ChaosLevel = 1540,
-                //    Class = "Balh",
-                //    CharacterIdentifier = Guid.NewGuid(),
-                //    StartDate = DateTime.Now,
-                //    StatisticType = "ChaosDungeon",
-                //    TaskOutcome = "Success",
-                //    TotalDuration = new TimeSpan(0, 0, 300),
-                //    Floor1Duration = new TimeSpan(0, 0, 50),
-                //    Floor2Duration = new TimeSpan(0, 0, 100),
-                //    Floor3Duration = new TimeSpan(0, 0, 150)
-                //});
-            };
+            //_logger.AddStatisticEntry(new ChaosTaskStatistic()
+            //{
+            //    ChaosLevel = 1540,
+            //    Class = "Balh",
+            //    CharacterIdentifier = Guid.NewGuid(),
+            //    StartDate = DateTime.Now,
+            //    StatisticType = "ChaosDungeon",
+            //    TaskOutcome = "Success",
+            //    TotalDuration = new TimeSpan(0, 0, 300),
+            //    Floor1Duration = new TimeSpan(0, 0, 50),
+            //    Floor2Duration = new TimeSpan(0, 0, 100),
+            //    Floor3Duration = new TimeSpan(0, 0, 150)
+            //});
+            //    };
 
-            CreateBackgroundWorker(a);
+            //CreateBackgroundWorker(a);
         }
 
         private void LogDetailLevel_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -570,6 +590,35 @@ namespace Chaotic
         private void LogEntriesChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             CurrentLogEntry = _log.LogEntries.LastOrDefault();
+        }
+
+        private void SelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var character in _settings.Characters)
+                character.IsCharSelected = true;
+        }
+
+        private void SelectNone_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var character in _settings.Characters)
+                character.IsCharSelected = false;
+        }
+
+        private void ClearLog_Click(object sender, RoutedEventArgs e)
+        {
+            _logger.ClearLog();
+        }
+
+        private void KF_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var character in _settings.Characters)
+                character.IsCharSelected = character.ChaosLevel >= 1640;
+        }
+
+        private void CD_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var character in _settings.Characters)
+                character.IsCharSelected = character.ChaosLevel < 1640;
         }
     }
 }

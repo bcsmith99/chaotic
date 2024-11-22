@@ -641,7 +641,7 @@ namespace Chaotic.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 300,400,500,300.
+        ///   Looks up a localized string similar to 300,400,500,450.
         /// </summary>
         internal static string KurzanMap3_PreferredArea {
             get {
@@ -981,6 +981,15 @@ namespace Chaotic.Resources {
         internal static string VoldisLeap_Npc {
             get {
                 return ResourceManager.GetString("VoldisLeap_Npc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string Y_Distance {
+            get {
+                return ResourceManager.GetString("Y_Distance", resourceCulture);
             }
         }
     }

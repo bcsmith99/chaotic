@@ -1,6 +1,7 @@
 ﻿using Chaotic.Tasks;
 using Chaotic.Tasks.Chaos;
 using Chaotic.User;
+using OpenCvSharp.Internal.Vectors;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -43,6 +44,13 @@ namespace Chaotic.Utilities
             CurrentLoggingLevel = logLevel;
         }
 
+
+        public void ClearEntries()
+        {
+            AllLogEntries.Clear();
+            RefreshVisibleEntries();
+        }
+
         public void RefreshVisibleEntries()
         {
             LogEntries.Clear();
@@ -63,6 +71,11 @@ namespace Chaotic.Utilities
         {
             _log = log;
             _statistics = statistics;
+        }
+
+        public void ClearLog()
+        {
+            _log.ClearEntries(); 
         }
 
         public void Log(LogDetailLevel level, string message)
@@ -94,7 +107,8 @@ namespace Chaotic.Utilities
             var chaosDungeons = _statistics.CurrentSessionStatistics.Where(x => x.GetType() == typeof(ChaosTaskStatistic)).Cast<ChaosTaskStatistic>();
 
             var sb = new StringBuilder();
-            sb.AppendLine($"Requested work completed. Elapsed Time: {endTime.Subtract(startTime).ToString(@"hh\:mm\:ss")}.  Overall Session Summary:");
+            sb.AppendLine($"Requested work completed. Elapsed Time: {endTime.Subtract(startTime).ToString(@"hh\:mm\:ss")}.");
+            sb.AppendLine("Overall Session Summary:");
             sb.AppendLine($"Kurzan Front Executions: {kurzanFronts.Count()}  - Success: {kurzanFronts.Where(x => x.TaskOutcome == "Success").Count()}, Failure: {kurzanFronts.Where(x => x.TaskOutcome == "Failure").Count()}, Timeout: {kurzanFronts.Where(x => x.TaskOutcome == "Timeout").Count()}");
             sb.AppendLine($"Chaos Dungeon Executions: {chaosDungeons.Count()}  - Success: {chaosDungeons.Where(x => x.TaskOutcome == "Success").Count()}, Failure: {chaosDungeons.Where(x => x.TaskOutcome == "Failure").Count()}, Timeout: {chaosDungeons.Where(x => x.TaskOutcome == "Timeout").Count()}");
 

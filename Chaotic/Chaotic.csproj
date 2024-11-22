@@ -213,6 +213,12 @@
     <None Update="Resources\Assets\2560x1440\kurzan_map1_jumppoint.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\2560x1440\kurzan_map1_jumppoint1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\kurzan_map1_jumppoint2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\2560x1440\kurzan_map2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -502,6 +508,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\kurzan_map1_jumppoint.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\kurzan_map1_jumppoint1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\kurzan_map1_jumppoint2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\kurzan_map1_jumpready.png">

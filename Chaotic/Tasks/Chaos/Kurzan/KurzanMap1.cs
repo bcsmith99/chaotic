@@ -32,12 +32,29 @@ namespace Chaotic.Tasks.Chaos.Kurzan
         }
         public override void PerformSpecialChecks()
         {
-            //Look for jump portal and take it.
-            var jump_pad = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map1_jumppoint.png", _settings.Resolution), ClickableRegion, confidence: .88);
-            if (jump_pad.Found)
+            var jumpPadImages = new List<string>()
             {
-                _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad Found - {jump_pad.MaxConfidence}");
-                _mouse.ClickPosition(jump_pad.CenterX, jump_pad.CenterY + 50, 200, MouseButtons.Right);
+                "kurzan_map1_jumppoint.png",
+                "kurzan_map1_jumppoint1.png",
+                "kurzan_map1_jumppoint2.png"
+            };
+            ScreenSearchResult jumpPad = new ScreenSearchResult();
+
+            foreach (var image in jumpPadImages)
+            {
+                //IP.SAVE_DEBUG_IMAGES = true;
+                jumpPad = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), confidence: .85);
+                if (jumpPad.Found)
+                {
+                    //IP.SAVE_DEBUG_IMAGES = false;
+                    break;
+                }
+            }
+            //Look for jump portal and take it.
+            if (jumpPad.Found)
+            {
+                _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad Found - {jumpPad.MaxConfidence}");
+                _mouse.ClickPosition(jumpPad.CenterX, jumpPad.CenterY + 50, 200, MouseButtons.Right);
                 for (int i = 0; i < 8; i++)
                 {
                     _kb.Press(Key.G, 200);

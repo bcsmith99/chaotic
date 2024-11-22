@@ -343,7 +343,7 @@
     <value>1475,300,500,250</value>
   </data>
   <data name="KurzanMap3_PreferredArea" xml:space="preserve">
-    <value>300,400,500,300</value>
+    <value>300,400,500,450</value>
   </data>
   <data name="UnaLopang_Route" xml:space="preserve">
     <value>400,640
@@ -434,5 +434,8 @@
   </data>
   <data name="BossMobHealth_Region" xml:space="preserve">
     <value>400,200,1000,400</value>
+  </data>
+  <data name="Y_Distance" xml:space="preserve">
+    <value />
   </data>
 </root>

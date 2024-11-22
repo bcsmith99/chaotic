@@ -221,8 +221,7 @@ namespace Chaotic.Utilities
             if (SHOW_DEBUG_IMAGES)
                 Cv2.ImShow("Find Image", findImg);
             //Cv2.WaitKey();
-            if (SHOW_DEBUG_IMAGES)
-                Cv2.ImShow("Source Image", srcImg);
+
 
             using (Mat res = new Mat(srcImg.Rows - findImg.Rows + 1, srcImg.Cols - findImg.Cols + 1, MatType.CV_32FC1))
             {
@@ -266,7 +265,10 @@ namespace Chaotic.Utilities
                     else
                         break;
                 }
-                //Cv2.ImShow("Res", res);
+                if (SHOW_DEBUG_IMAGES)
+                    Cv2.ImShow("Source Image", srcImg);
+                //if (SHOW_DEBUG_IMAGES)
+                //    Cv2.ImShow("Res", res);
             }
 
             if (result.Matches.Count > 0 && SAVE_DEBUG_IMAGES)

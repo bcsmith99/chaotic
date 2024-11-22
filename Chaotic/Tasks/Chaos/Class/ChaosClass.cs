@@ -80,6 +80,7 @@ namespace Chaotic.Tasks.Chaos.Class
 
         public void UseAbilities(Point screenPoint, int maxCasts = 0)
         {
+            _logger.Log(LogDetailLevel.Debug, $"Abilities cycle - {maxCasts} casts");
             StartUp();
 
             UseCharacterSpecificAbilities();

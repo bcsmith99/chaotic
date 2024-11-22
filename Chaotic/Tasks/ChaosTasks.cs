@@ -98,6 +98,7 @@ namespace Chaotic.Tasks
                         RunChaosFloorOne(cc);
                         floor1End = DateTime.Now;
                         chaosEnd = DateTime.Now;
+                        _busy.WaitOne(); 
                         _logger.Log(LogDetailLevel.Info, $"Floor 1 Complete - {floor1End.Value.Subtract(floor1Start.Value).TotalSeconds.ToString("0.##")}s elapsed");
                         if (TimeoutCheck())
                         {
@@ -111,6 +112,7 @@ namespace Chaotic.Tasks
                         RunChaosFloorTwo(cc);
                         floor2End = DateTime.Now;
                         chaosEnd = DateTime.Now;
+                        _busy.WaitOne(); 
                         _logger.Log(LogDetailLevel.Info, $"Floor 2 Complete - {floor2End.Value.Subtract(floor2Start.Value).TotalSeconds.ToString("0.##")}s elapsed");
                         if (TimeoutCheck())
                         {
@@ -129,6 +131,7 @@ namespace Chaotic.Tasks
                             AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
                             return false;
                         }
+                        _busy.WaitOne();
 
                         if (TimeoutCheck())
                         {
@@ -275,6 +278,7 @@ namespace Chaotic.Tasks
             {
                 try
                 {
+                    _busy.WaitOne();
                     HealthCheck(cc);
                     DeathCheck();
                     if (TimeoutCheck())
@@ -304,7 +308,13 @@ namespace Chaotic.Tasks
                         MoveOnScreen(stuck.CenterX, stuck.CenterY, 1500, 2000);
                     }
 
-                    if (boss_mob.Found)
+                    if (gold_mob.Found)
+                    {
+                        _logger.Log(LogDetailLevel.Debug, $"Gold Mob Found - {gold_mob.MaxConfidence}");
+                        MoveToMinimapPos(gold_mob.CenterX, gold_mob.CenterY, 1000, 1500);
+                        cc.UseAbilities(MoveToPoint, 3);
+                    }
+                    else if (boss_mob.Found)
                     {
                         _logger.Log(LogDetailLevel.Debug, $"Boss Mob Found - {boss_mob.MaxConfidence}");
                         MoveToMinimapPos(boss_mob.CenterX, boss_mob.CenterY, 1000, 1500);
@@ -315,12 +325,6 @@ namespace Chaotic.Tasks
                     {
                         _logger.Log(LogDetailLevel.Debug, $"Elite Mob Found, Confidence: {elite_mob.MaxConfidence}");
                         MoveToMinimapPos(elite_mob.CenterX, elite_mob.CenterY, 1000, 1500);
-                        cc.UseAbilities(MoveToPoint, 3);
-                    }
-                    else if (gold_mob.Found)
-                    {
-                        _logger.Log(LogDetailLevel.Debug, $"Gold Mob Found - {gold_mob.MaxConfidence}");
-                        MoveToMinimapPos(gold_mob.CenterX, gold_mob.CenterY, 1000, 1500);
                         cc.UseAbilities(MoveToPoint, 3);
                     }
                     else
@@ -379,13 +383,6 @@ namespace Chaotic.Tasks
                     return;
                 Sleep.SleepMs(450, 550);
             }
-        }
-
-        public void TestChaos()
-        {
-            var minimapCenter = _r.Point("MinimapCenter");
-            SetMoveToPoint(minimapCenter.X + 50, minimapCenter.Y + 50);
-            CalcMinimapPos(MoveToPoint.X, MoveToPoint.Y);
         }
 
         public void RunChaosFloorOne(ChaosClass cc)
@@ -569,6 +566,7 @@ namespace Chaotic.Tasks
         {
             while (true)
             {
+                _busy.WaitOne();
                 DeathCheck();
                 HealthCheck(cc);
 
@@ -812,11 +810,20 @@ namespace Chaotic.Tasks
             return ok_chaos.Found;
         }
 
-        private void SetMoveToPoint(int x, int y)
+        private Point SetMoveToPoint(int x, int y)
         {
-            if (x < ClickableRegion.Left || y < ClickableRegion.Top || x > ClickableRegion.Right || y > ClickableRegion.Bottom)
-                _logger.Log(LogDetailLevel.Debug, $"Coordinates out of bounds! Region: {ClickableRegion.Left}, {ClickableRegion.Top}, {ClickableRegion.Right}, {ClickableRegion.Bottom} - {x},{y}");
+            if (x < ClickableRegion.Left)
+                x = ClickableRegion.Left;
+            if (x > ClickableRegion.Right)
+                x = ClickableRegion.Right;
+            if (y < ClickableRegion.Top)
+                y = ClickableRegion.Top;
+            if (y > ClickableRegion.Bottom)
+                y = ClickableRegion.Bottom;
+            //if (x < ClickableRegion.Left || y < ClickableRegion.Top || x > ClickableRegion.Right || y > ClickableRegion.Bottom)
+            //    _logger.Log(LogDetailLevel.Debug, $"Coordinates out of bounds! Region: {ClickableRegion.Left}, {ClickableRegion.Top}, {ClickableRegion.Right}, {ClickableRegion.Bottom} - {x},{y}");
             MoveToPoint = new Point(x, y);
+            return MoveToPoint;
         }
 
         private bool CheckPortal()
@@ -1206,12 +1213,109 @@ namespace Chaotic.Tasks
                 throw new ArgumentOutOfRangeException("Unknown Chaos Dungeon Entry");
         }
 
+        private int ScreenQuadrant(Point p)
+        {
+            if (p.X < CenterScreen.X && p.Y < CenterScreen.Y)
+                return 1;
+            else if (p.X > CenterScreen.X && p.Y < CenterScreen.Y)
+                return 2;
+            else if (p.X < CenterScreen.X && p.Y > CenterScreen.Y)
+                return 3;
+            else if (p.X > CenterScreen.X && p.Y > CenterScreen.Y)
+                return 4;
+            else return 1;
+        }
 
+        private Point SetMinDistance(Point p, int quadrant)
+        {
+            var newPoint = p;
 
-        private void MoveToMinimapPos(int x, int y, int minTime, int maxTime, bool blink = false)
+            if (quadrant == 1)
+            {
+                if (p.X > ClickableRegion.Left + ClickableOffset.X)
+                    newPoint.X = ClickableRegion.Left + ClickableOffset.X;
+                if (p.Y > ClickableRegion.Top + ClickableOffset.Y)
+                    newPoint.Y = ClickableRegion.Top + ClickableOffset.Y;
+            }
+            if (quadrant == 2)
+            {
+                if (p.X < ClickableRegion.Right - ClickableOffset.X)
+                    newPoint.X = ClickableRegion.Right - ClickableOffset.X;
+                if (p.Y > ClickableRegion.Top + ClickableOffset.Y)
+                    newPoint.Y = ClickableRegion.Top + ClickableOffset.Y;
+            }
+            if (quadrant == 3)
+            {
+                if (p.X > ClickableRegion.Left + ClickableOffset.X)
+                    newPoint.X = ClickableRegion.Left + ClickableOffset.X;
+                if (p.Y < ClickableRegion.Bottom - ClickableOffset.Y)
+                    newPoint.Y = ClickableRegion.Bottom - ClickableOffset.Y;
+            }
+            if (quadrant == 4)
+            {
+                if (p.X < ClickableRegion.Right - ClickableOffset.X)
+                    newPoint.X = ClickableRegion.Right - ClickableOffset.X;
+                if (p.Y < ClickableRegion.Bottom - ClickableOffset.Y)
+                    newPoint.Y = ClickableRegion.Bottom - ClickableOffset.Y;
+            }
+
+            return newPoint;
+        }
+
+        public void MoveToMinimapPos(int x, int y, int minTime, int maxTime, bool blink = false)
         {
             var pos = CalcMinimapPos(x, y);
+            //var quadrant = ScreenQuadrant(pos);
+            //pos = SetMinDistance(pos, quadrant);
+
+            var allPoints = GetVarietyPoints(pos.X, pos.Y, 200, 100);
+
+            //foreach (var point in allPoints)
             MoveOnScreen(pos.X, pos.Y, minTime, maxTime, blink);
+        }
+        private List<Point> GetVarietyPoints(int x, int y, int xOffset, int yOffset)
+        {
+            var points = new List<Point>();
+
+            //Quadrant 1 - Top Left
+            if (x < CenterScreen.X && y < CenterScreen.Y)
+            {
+                points.Add(new Point(x - xOffset, y + yOffset));
+                points.Add(new Point(x + xOffset, y - yOffset));
+                //points.Add(new Point(x - xOffset / 2, y + yOffset / 2));
+                //points.Add(new Point(x + xOffset / 2, y - yOffset / 2));
+                points.Add(new Point(x, y));
+            }
+            //Quadrant 2 - Top Right
+            if (x > CenterScreen.X && y < CenterScreen.Y)
+            {
+                points.Add(new Point(x + xOffset, y + yOffset));
+                points.Add(new Point(x - xOffset, y - yOffset));
+                points.Add(new Point(x + xOffset / 2, y + yOffset / 2));
+                points.Add(new Point(x - xOffset / 2, y - yOffset / 2));
+                points.Add(new Point(x, y));
+            }
+            //Quadrant 3 - Bottom Left
+            if (x < CenterScreen.X && y > CenterScreen.Y)
+            {
+                points.Add(new Point(x - xOffset, y - yOffset));
+                points.Add(new Point(x + xOffset, y + yOffset));
+                points.Add(new Point(x + xOffset / 2, y + yOffset / 2));
+                points.Add(new Point(x - xOffset / 2, y - yOffset / 2));
+                points.Add(new Point(x, y));
+
+            }
+            //Quadrant 4 - Bottom Right
+            if (x > CenterScreen.X && y > CenterScreen.Y)
+            {
+                points.Add(new Point(x + xOffset, y - yOffset));
+                points.Add(new Point(x - xOffset, y + yOffset));
+                points.Add(new Point(x + xOffset / 2, y - yOffset / 2));
+                points.Add(new Point(x - xOffset / 2, y + yOffset / 2));
+                points.Add(new Point(x, y));
+            }
+
+            return points;
         }
 
         public void MoveOnScreen(int x, int y, int minTime, int maxTime, bool blink = false)
@@ -1230,9 +1334,18 @@ namespace Chaotic.Tasks
             else if (wait > maxTime)
                 wait = maxTime;
 
+            if (x < ClickableRegion.Left)
+                x = ClickableRegion.Left;
+            if (x > ClickableRegion.Right)
+                x = ClickableRegion.Right;
+            if (y < ClickableRegion.Top)
+                y = ClickableRegion.Top;
+            if (y > ClickableRegion.Bottom)
+                y = ClickableRegion.Bottom;
+
             _mouse.ClickPosition(x, y, wait, MouseButtons.Right);
 
-            _mouse.ClickPosition(centerScreen.X, centerScreen.Y, 50, MouseButtons.Right);
+            //_mouse.ClickPosition(centerScreen.X, centerScreen.Y, 50, MouseButtons.Right);
             return;
         }
 
@@ -1311,11 +1424,86 @@ namespace Chaotic.Tasks
             //_mouse.ClickPosition(randomPoint, Random.Shared.Next(minTime, maxTime), MouseButtons.Right);
         }
 
+        //public Point CalcMinimapPos(int x, int y)
+        //{
+        //    var minimapCenter = _r.Point("MinimapCenter");
+        //    var screenCenter = _r.Point("CenterScreen");
+        //    var clickableArea = _r.Point("ClickableArea");
+
+
+        //    x = x - minimapCenter.X;
+        //    y = y - minimapCenter.Y;
+
+        //    var pointDistance = Math.Sqrt(x * x + y * y);
+        //    MoveTime = (int)pointDistance * 8;
+
+        //    var dist = 200;
+        //    int newX, newY;
+        //    if (y < 0)
+        //        dist *= -1;
+
+        //    if (x == 0)
+        //    {
+        //        newY = y < 0 ? y - Math.Abs(dist) : y + Math.Abs(dist);
+        //        MoveToPoint = new Point(screenCenter.X, newY + screenCenter.Y);
+        //        return MoveToPoint;
+        //    }
+
+        //    if (y == 0)
+        //    {
+        //        newX = x < 0 ? x - Math.Abs(dist) : x + Math.Abs(dist);
+        //        MoveToPoint = new Point(newX + screenCenter.X, screenCenter.Y);
+        //        return MoveToPoint;
+        //    }
+
+        //    double k = (double)y / (double)x;
+        //    newY = y + dist;
+        //    newX = (int)((newY - y) / k + x);
+
+        //    if (newX < 0 && Math.Abs(newX) > clickableArea.X)
+        //    {
+        //        newX = clickableArea.X * -1;
+        //        if (newY < 0)
+        //            newY = (int)(newY + Math.Abs(dist) * .25);
+        //        else
+        //            newY = (int)(newY - Math.Abs(dist) * .25);
+        //    }
+        //    else if (newX > 0 && Math.Abs(newX) > clickableArea.X)
+        //    {
+        //        newX = clickableArea.X;
+        //        if (newY < 0)
+        //            newY = (int)(newY + Math.Abs(dist) * .25);
+        //        else
+        //            newY = (int)(newY - Math.Abs(dist) * .25);
+        //    }
+
+        //    if (newY < 0 && Math.Abs(newY) > clickableArea.Y)
+        //    {
+        //        newY = clickableArea.Y * -1;
+        //        if (newX < 0)
+        //            newX = (int)(newX + Math.Abs(dist) * .7);
+        //        else
+        //            newX = (int)(newX - Math.Abs(dist) * .7);
+        //    }
+        //    else if (newY > 0 && Math.Abs(newY) > clickableArea.Y)
+        //    {
+        //        newY = clickableArea.Y;
+        //        if (newX < 0)
+        //            newX = (int)(newX + Math.Abs(dist) * .7);
+        //        else
+        //            newX = (int)(newX - Math.Abs(dist) * .7);
+        //    }
+
+
+        //    MoveToPoint = new Point(newX + screenCenter.X, newY + screenCenter.Y);
+        //    return MoveToPoint;
+        //}
+
         public Point CalcMinimapPos(int x, int y)
         {
             var minimapCenter = _r.Point("MinimapCenter");
             var screenCenter = _r.Point("CenterScreen");
-            var clickableArea = _r.Point("ClickableArea");
+            var dist = Int32.Parse(_r["Y_Distance"]);
 
             x = x - minimapCenter.X;
             y = y - minimapCenter.Y;
@@ -1323,7 +1511,6 @@ namespace Chaotic.Tasks
             var pointDistance = Math.Sqrt(x * x + y * y);
             MoveTime = (int)pointDistance * 8;
 
-            var dist = 200;
             int newX, newY;
             if (y < 0)
                 dist *= -1;
@@ -1331,49 +1518,47 @@ namespace Chaotic.Tasks
             if (x == 0)
             {
                 newY = y < 0 ? y - Math.Abs(dist) : y + Math.Abs(dist);
-                MoveToPoint = new Point(screenCenter.X, newY + screenCenter.Y);
-                return MoveToPoint;
+                return SetMoveToPoint(screenCenter.X, newY + screenCenter.Y);
             }
 
             if (y == 0)
             {
                 newX = x < 0 ? x - Math.Abs(dist) : x + Math.Abs(dist);
-                MoveToPoint = new Point(newX + screenCenter.X, screenCenter.Y);
-                return MoveToPoint;
+                return SetMoveToPoint(newX + screenCenter.X, screenCenter.Y);
             }
 
             double k = (double)y / (double)x;
             newY = y + dist;
             newX = (int)((newY - y) / k + x);
 
-            if (newX < 0 && Math.Abs(newX) > clickableArea.X)
+            if (newX < 0 && Math.Abs(newX) > ClickableRegion.Width)
             {
-                newX = clickableArea.X * -1;
+                newX = ClickableRegion.Width * -1;
                 if (newY < 0)
                     newY = (int)(newY + Math.Abs(dist) * .25);
                 else
                     newY = (int)(newY - Math.Abs(dist) * .25);
             }
-            else if (newX > 0 && Math.Abs(newX) > clickableArea.X)
+            else if (newX > 0 && Math.Abs(newX) > ClickableRegion.Width)
             {
-                newX = clickableArea.X;
+                newX = ClickableRegion.Width;
                 if (newY < 0)
                     newY = (int)(newY + Math.Abs(dist) * .25);
                 else
                     newY = (int)(newY - Math.Abs(dist) * .25);
             }
 
-            if (newY < 0 && Math.Abs(newY) > clickableArea.Y)
+            if (newY < 0 && Math.Abs(newY) > ClickableRegion.Height)
             {
-                newY = clickableArea.Y * -1;
+                newY = ClickableRegion.Height * -1;
                 if (newX < 0)
                     newX = (int)(newX + Math.Abs(dist) * .7);
                 else
                     newX = (int)(newX - Math.Abs(dist) * .7);
             }
-            else if (newY > 0 && Math.Abs(newY) > clickableArea.Y)
+            else if (newY > 0 && Math.Abs(newY) > ClickableRegion.Height)
             {
-                newY = clickableArea.Y;
+                newY = ClickableRegion.Height;
                 if (newX < 0)
                     newX = (int)(newX + Math.Abs(dist) * .7);
                 else
@@ -1381,8 +1566,7 @@ namespace Chaotic.Tasks
             }
 
 
-            MoveToPoint = new Point(newX + screenCenter.X, newY + screenCenter.Y);
-            return MoveToPoint;
+            return SetMoveToPoint(newX + screenCenter.X, newY + screenCenter.Y);
         }
     }
 }
