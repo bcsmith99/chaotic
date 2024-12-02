@@ -38,7 +38,7 @@ namespace Chaotic.Tasks.Una
                     _mouse.ClickPosition(closeButton.CenterX, closeButton.CenterY, 200);
 
                 if (retryCount > 5)
-                    npc = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("voldis_leap_npc.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["VoldisLeap_Npc"]), .75);
+                    npc = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("voldis_leap_npc.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["VoldisLeap_Npc"]), .7);
 
                 if (npc.Found)
                     break;

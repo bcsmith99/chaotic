@@ -26,7 +26,6 @@ namespace Chaotic.Tasks
             UnaTaskNames.ElgaciaShard,
             UnaTaskNames.GhostShipLeap,
             UnaTaskNames.PlecciaShard,
-            UnaTaskNames.VoldisLeap,
             UnaTaskNames.MokoMarketLeap,
             UnaTaskNames.VoldisLeap,
             UnaTaskNames.VoldisShard,
@@ -40,9 +39,8 @@ namespace Chaotic.Tasks
         private readonly ResourceHelper _r;
         private readonly UITasks _uiTasks;
         private readonly AppLogger _logger;
-        private readonly ManualResetEvent _busy;
 
-        public UnaTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UITasks uiTasks, AppLogger logger, ManualResetEvent busy)
+        public UnaTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UITasks uiTasks, AppLogger logger)
         {
             _settings = settings;
             _mouse = mouse;
@@ -50,10 +48,10 @@ namespace Chaotic.Tasks
             _r = r;
             _uiTasks = uiTasks;
             _logger = logger;
-            _busy = busy; 
         }
         public int AcceptDailies(UserCharacter character)
         {
+            BackgroundProcessing.ProgressCheck();
             int dailiesAccepted = 0; 
 
             if (!character.RunUnas)
@@ -87,6 +85,8 @@ namespace Chaotic.Tasks
 
         public bool AcceptWeeklies(UserCharacter character)
         {
+            BackgroundProcessing.ProgressCheck();
+
             _mouse.ClickPosition(_r["AdventureMenu"], 1000);
             _mouse.ClickPosition(_r["UnaTask"], 1500);
             _mouse.ClickPosition(_r["UnaWeekly"], 1000);
@@ -108,6 +108,7 @@ namespace Chaotic.Tasks
 
         private void RunDailyUna(UserUnaTask userTask)
         {
+            BackgroundProcessing.ProgressCheck();
             if (userTask != null && userTask.UnaName != UnaTaskNames.NotSet)
             {
                 var task = UnaTask.Create(userTask.UnaName, _uiTasks, _mouse, _kb, _r, _settings, _logger);
@@ -117,6 +118,7 @@ namespace Chaotic.Tasks
         }
         private void RunLopangUnas(UserCharacter character)
         {
+            BackgroundProcessing.ProgressCheck();
             var task = UnaTask.Create(UnaTaskNames.Lopang, _uiTasks, _mouse, _kb, _r, _settings, _logger);
             if (task != null && task.GetType() == typeof(Lopang))
             {

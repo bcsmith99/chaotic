@@ -22,16 +22,14 @@ namespace Chaotic.Tasks
         private readonly KeyboardUtility _kb;
         private readonly ResourceHelper _r;
         private readonly AppLogger _logger;
-        private readonly ManualResetEvent _busy;
 
-        public UITasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, AppLogger logger, ManualResetEvent busy)
+        public UITasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, AppLogger logger)
         {
             _settings = settings;
             _mouse = mouse;
             _kb = kb;
             _r = r;
             _logger = logger;
-            _busy = busy; 
         }
 
         public bool CrashCheck()
@@ -49,6 +47,7 @@ namespace Chaotic.Tasks
             double maxConfidence = 0;
             while (maxTries > 0)
             {
+                BackgroundProcessing.ProgressCheck();
                 //TODO: Parameterize Coordinates for Resolution
                 //,
                 var inTownButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("chevron.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["Chevron_Region"]), confidence: .65, useGrayscale: true);
@@ -70,6 +69,7 @@ namespace Chaotic.Tasks
 
         public void ToggleArkPassive(bool disable)
         {
+            BackgroundProcessing.ProgressCheck();
             Sleep.SleepMs(500, 500);
             _mouse.ClickCenterScreen(_r);
 
@@ -123,6 +123,7 @@ namespace Chaotic.Tasks
         public void ClearOngoingQuests()
         {
             Sleep.SleepMs(300, 400);
+            BackgroundProcessing.ProgressCheck();
             var ongoingButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ongoing_quests.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["OngoingQuest_Region"]), .85, true);
             if (ongoingButton.Found)
             {
@@ -147,6 +148,7 @@ namespace Chaotic.Tasks
             var moveGemLevel = _settings.GemLevelThreshold;
             var currentLevel = 9;
 
+            BackgroundProcessing.ProgressCheck();
             while (currentLevel >= moveGemLevel)
             {
                 var filePrefixes = new List<string>() { "t3_dmg_", "t3_cd_", "t4_dmg_", "t4_cd_" };
@@ -157,7 +159,7 @@ namespace Chaotic.Tasks
                     if (File.Exists(fileName))
                     {
                         var loopCount = 0;
-                        var gems = IP.LocateOnScreen(fileName, inventoryRegion, .95);
+                        var gems = IP.LocateOnScreen(fileName, inventoryRegion, .9);
                         if (gems.Matches.Count > 0)
                         {
                             foreach (var match in gems.Matches)
@@ -185,11 +187,12 @@ namespace Chaotic.Tasks
 
             var materialFileNames = Directory.GetFiles(honingMatsDirectory).Select(x => Path.GetFileName(x));
 
+            BackgroundProcessing.ProgressCheck();
             foreach (var materialFile in materialFileNames)
             {
                 var loopCount = 0;
 
-                var material = IP.LocateOnScreen($"{honingMatsDirectory}{materialFile}", inventoryRegion, .85);
+                var material = IP.LocateOnScreen($"{honingMatsDirectory}{materialFile}", inventoryRegion, .8);
                 if (material.Matches.Count > 0)
                 {
                     foreach (var match in material.Matches)
@@ -209,6 +212,7 @@ namespace Chaotic.Tasks
 
         public bool OpenInventoryManagement()
         {
+            BackgroundProcessing.ProgressCheck();
             bool success = true;
             OpenPetMenu();
 
@@ -223,6 +227,7 @@ namespace Chaotic.Tasks
 
         public bool CloseInventoryManagement()
         {
+            BackgroundProcessing.ProgressCheck();
             bool success = true;
 
             //IP.SHOW_DEBUG_IMAGES = true; 
@@ -270,6 +275,7 @@ namespace Chaotic.Tasks
 
         public bool AuraRepair()
         {
+            BackgroundProcessing.ProgressCheck();
             bool success = true;
             OpenPetMenu();
 
@@ -293,9 +299,41 @@ namespace Chaotic.Tasks
             return success;
         }
 
+        public bool ExitGame()
+        {
+            _mouse.ClickCenterScreen(_r);
+            for (int i = 0; i < 60; i++)
+            {
+                if (!GameMenuOpen())
+                {
+                    _kb.Press(Key.Escape);
+                    Sleep.SleepMs(700, 1000);
+                }
+                else
+                    break;
+            }
+
+            var quitButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("quit_button.png", _settings.Resolution), confidence: .9);
+            if (quitButton.Found)
+            {
+                _mouse.ClickPosition(quitButton.Center, 1000);
+                var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .9);
+
+                if (okButton.Found)
+                {
+                    _mouse.ClickPosition(okButton.Center, 1000);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
 
         public bool SwapCharacters(UserCharacter character)
         {
+            BackgroundProcessing.ProgressCheck();
             _mouse.ClickPosition(_r["ServicesMenu"], 500);
             _mouse.ClickPosition(_r["GameMenu"], 1000);
             _mouse.ClickPosition(_r["SwitchCharacterButton"], 500);

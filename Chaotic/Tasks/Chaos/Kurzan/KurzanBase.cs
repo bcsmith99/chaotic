@@ -1,4 +1,6 @@
 ﻿using Accessibility;
+using Chaotic.Extensions;
+using Chaotic.Tasks.Chaos.Class;
 using Chaotic.User;
 using Chaotic.Utilities;
 using OpenCvSharp;
@@ -8,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Chaotic.Tasks.ChaosTasks;
+using IP = Chaotic.Utilities.ImageProcessing;
 
 namespace Chaotic.Tasks.Chaos.Kurzan
 {
@@ -16,20 +19,26 @@ namespace Chaotic.Tasks.Chaos.Kurzan
         protected readonly UserSettings _settings;
         protected readonly MouseUtility _mouse;
         protected readonly KeyboardUtility _kb;
-        protected readonly ResourceHelper _rh;
+        protected readonly ResourceHelper _r;
         protected readonly AppLogger _logger;
         public string MapName { get; set; }
+        protected Point CenterScreen { get; }
+        public Rect MinimapRegion { get; }
+        public Rect TopMinimapRegion { get; }
 
-        public abstract void StartMapMove();
+        public abstract void StartMapMove(ChaosClass cc);
 
-        protected KurzanBase(string mapName, UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper rh, AppLogger logger)
+        protected KurzanBase(string mapName, UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, AppLogger logger)
         {
             _settings = settings;
             _mouse = mouse;
             _kb = kb;
-            _rh = rh;
+            _r = r;
             _logger = logger;
-            MapName = mapName; 
+            MapName = mapName;
+            CenterScreen = _r.Point("CenterScreen");
+            MinimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
+            TopMinimapRegion = MinimapRegion.TopRegion();
         }
 
         public Rect PreferredMovementArea { get; protected set; }
@@ -51,6 +60,11 @@ namespace Chaotic.Tasks.Chaos.Kurzan
         public virtual void PerformSpecialChecks()
         {
 
+        }
+
+        public virtual ScreenSearchResult CheckMapRoute(DateTime startTime)
+        {
+            return new ScreenSearchResult() { Found = false };
         }
 
         public static KurzanBase CreateMap(ChaosStates state, UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper rh, AppLogger logger)

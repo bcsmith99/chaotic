@@ -29,7 +29,8 @@
 			<RowDefinition Height="Auto"></RowDefinition>
 		</Grid.RowDefinitions>
 		<TabControl Grid.Row="1"
-					Grid.ColumnSpan="2">
+					Grid.ColumnSpan="2"
+					PreviewKeyDown="TabControl_PreviewKeyDown">
 			<TabItem Header="Tasks">
 				<Grid>
 					<Grid.ColumnDefinitions>
@@ -58,8 +59,12 @@
 									<RowDefinition />
 									<RowDefinition />
 								</Grid.RowDefinitions>
-								<Button Click="RunAllDailyRotation_Click"
-										Margin="0,0,0,0">Run Daily Rotation on All Selected Characters</Button>
+								<StackPanel Orientation="Horizontal">
+									<Button Click="RunAllDailyRotation_Click"
+											Margin="0,0,10,0">Run Daily Rotation on All Selected Characters</Button>
+									<CheckBox IsChecked="{Binding UserSettings.QuitAfterFullRotation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+											  VerticalAlignment="Center">Quit Game After Complete</CheckBox>
+								</StackPanel>
 
 								<StackPanel Orientation="Horizontal"
 											Grid.Row="1"

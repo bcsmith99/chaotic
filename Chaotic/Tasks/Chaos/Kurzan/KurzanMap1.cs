@@ -1,4 +1,5 @@
-﻿using Chaotic.User;
+﻿using Chaotic.Tasks.Chaos.Class;
+using Chaotic.User;
 using Chaotic.Utilities;
 using OpenCvSharp;
 using System;
@@ -18,18 +19,30 @@ namespace Chaotic.Tasks.Chaos.Kurzan
 
         public KurzanMap1(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper rh, AppLogger logger) : base("KurzanMap1", settings, mouse, kb, rh, logger)
         {
-            PreferredMovementArea = IP.ConvertStringCoordsToRect(_rh["KurzanMap1_PreferredArea"]);
-            ClickableRegion = IP.ConvertStringCoordsToRect(_rh["Clickable_Region"]);
+            PreferredMovementArea = IP.ConvertStringCoordsToRect(_r["KurzanMap1_PreferredArea"]);
+            ClickableRegion = IP.ConvertStringCoordsToRect(_r["Clickable_Region"]);
+
         }
-        public override void StartMapMove()
+        public override void StartMapMove(ChaosClass cc)
         {
             _logger.Log(LogDetailLevel.Debug, "Kurzan Map 1 Initial Move");
-            var startPoints = IP.ConvertPointArray(_rh["KurzanMap1_Start"]);
+            var startPoints = IP.ConvertPointArray(_r["KurzanMap1_Start"]);
 
             _mouse.ClickPosition(startPoints[0], 2500, MouseButtons.Right);
             _mouse.ClickPosition(startPoints[1], 2000, MouseButtons.Right);
 
+            cc.StartUp();
+            //Use abilities here for a minute before proceeding - Go NE then SW then back NE. 
+            var newPoint = new Point(CenterScreen.X + 200, CenterScreen.Y - 100);
+            cc.UseAbilities(newPoint, 4);
+
+            newPoint = new Point(CenterScreen.X - 200, CenterScreen.Y + 100);
+            cc.UseAbilities(newPoint, 4);
+
+            newPoint = new Point(CenterScreen.X + 200, CenterScreen.Y - 100);
+            cc.UseAbilities(newPoint, 4);
         }
+
         public override void PerformSpecialChecks()
         {
             var jumpPadImages = new List<string>()
@@ -60,8 +73,42 @@ namespace Chaotic.Tasks.Chaos.Kurzan
                     _kb.Press(Key.G, 200);
                 }
 
-                PreferredMovementArea = IP.ConvertStringCoordsToRect(_rh["Clickable_Region"]);
+                PreferredMovementArea = IP.ConvertStringCoordsToRect(_r["Clickable_Region"]);
             }
+        }
+
+        public override ScreenSearchResult CheckMapRoute(DateTime startTime)
+        {
+            var images = new List<string>()
+            {
+                "kf_map1_preferredarea1.png",
+                "kf_map1_preferredarea2.png",
+                "kf_map1_preferredarea3.png",
+            };
+            var currentTime = DateTime.Now;
+
+            var delta = currentTime.Subtract(startTime);
+
+            ScreenSearchResult prefArea = new ScreenSearchResult() { Found = false };
+            if (delta.TotalSeconds < 90)
+            {
+                prefArea = IP.LocateCenterOnScreen(Utility.ImageResourceLocation(images[0], _settings.Resolution), TopMinimapRegion, confidence: .8);
+                if (prefArea.Found)
+                    _logger.Log(LogDetailLevel.Debug, "Found Kurzan Map 1 Preferred Point 1");
+            }
+            else if (delta.TotalSeconds >= 90 && delta.TotalSeconds < 120)
+            {
+                prefArea = IP.LocateCenterOnScreen(Utility.ImageResourceLocation(images[1], _settings.Resolution), TopMinimapRegion, confidence: .8);
+                _logger.Log(LogDetailLevel.Debug, "Found Kurzan Map 1 Preferred Point 2");
+            }
+            else if (delta.TotalSeconds >= 120)
+            {
+                prefArea = IP.LocateCenterOnScreen(Utility.ImageResourceLocation(images[2], _settings.Resolution), TopMinimapRegion, confidence: .8);
+                _logger.Log(LogDetailLevel.Debug, "Found Kurzan Map 1 Preferred Point 3");
+            }
+                
+
+            return prefArea;
         }
     }
 }

@@ -135,6 +135,9 @@
     <None Update="Resources\Assets\2560x1440\dead.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\2560x1440\disconnect.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\2560x1440\donate_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -142,6 +145,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\elite_mob_middle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\ember.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\enter_button.png">
@@ -154,6 +160,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\exit_menu.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\fate_ember.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\game_menu.png">
@@ -207,6 +216,24 @@
     <None Update="Resources\Assets\2560x1440\gold_mob_middle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\2560x1440\kf_map1_jumparrow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\kf_map1_preferredarea1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\kf_map1_preferredarea2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\kf_map1_preferredarea3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\kf_map1_stickpoint1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\kf_map1_stickpoint2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\2560x1440\kurzan_map1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -217,6 +244,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\kurzan_map1_jumppoint2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\kurzan_map1_stickpoint.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\kurzan_map2.png">
@@ -283,6 +313,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\quest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\quit_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\red_mob_middle.png">
@@ -411,6 +444,9 @@
     <None Update="Resources\Assets\3440x1440\dead.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\3440x1440\disconnect.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\3440x1440\donate_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -423,6 +459,9 @@
     <None Update="Resources\Assets\3440x1440\elite_mob_middle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\3440x1440\ember.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\3440x1440\enter_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -433,6 +472,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\exit_menu.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\fate_ember.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\game_menu.png">
@@ -504,6 +546,24 @@
     <None Update="Resources\Assets\3440x1440\gold_mob_middle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\3440x1440\kf_map1_jumparrow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\kf_map1_preferredarea1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\kf_map1_preferredarea2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\kf_map1_preferredarea3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\kf_map1_stickpoint1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\kf_map1_stickpoint2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\3440x1440\kurzan_map1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -517,6 +577,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\kurzan_map1_jumpready.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\kurzan_map1_stickpoint.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\kurzan_map2.png">
@@ -583,6 +646,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\quest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\quit_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\remotestorage_button.png">

@@ -163,7 +163,7 @@
     <value>710,930</value>
   </data>
   <data name="CenterScreen" xml:space="preserve">
-    <value>1280,700</value>
+    <value>1280,710</value>
   </data>
   <data name="CharSelectCol0" xml:space="preserve">
     <value>1020</value>
@@ -265,7 +265,7 @@
     <value>1280,920,100,50</value>
   </data>
   <data name="MinimapCenter" xml:space="preserve">
-    <value>2385,350</value>
+    <value>2385,347</value>
   </data>
   <data name="ClickableArea" xml:space="preserve">
     <value>800,400</value>
@@ -340,10 +340,10 @@
     <value>1200,1115,150,130</value>
   </data>
   <data name="KurzanMap1_PreferredArea" xml:space="preserve">
-    <value>1475,300,500,250</value>
+    <value>1050,250,1000,550</value>
   </data>
   <data name="KurzanMap3_PreferredArea" xml:space="preserve">
-    <value>300,400,500,450</value>
+    <value>300,400,700,450</value>
   </data>
   <data name="UnaLopang_Route" xml:space="preserve">
     <value>400,640

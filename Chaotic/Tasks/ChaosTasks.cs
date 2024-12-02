@@ -30,8 +30,6 @@ namespace Chaotic.Tasks
         private readonly ResourceHelper _r;
         private readonly UITasks _uiTasks;
         private readonly AppLogger _logger;
-        private readonly ManualResetEvent _busy;
-
         private Point MoveToPoint { get; set; }
         public int MoveTime { get; set; }
         private ChaosStates CurrentState { get; set; }
@@ -56,7 +54,7 @@ namespace Chaotic.Tasks
             Cleared
         }
 
-        public ChaosTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UITasks uiTasks, AppLogger logger, ManualResetEvent busy)
+        public ChaosTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UITasks uiTasks, AppLogger logger)
         {
             _settings = settings;
             _mouse = mouse;
@@ -64,7 +62,6 @@ namespace Chaotic.Tasks
             _r = r;
             _uiTasks = uiTasks;
             _logger = logger;
-            _busy = busy;
 
             var centerScreen = IP.GetPointFromStringCoords(_r["CenterScreen"]);
 
@@ -98,7 +95,7 @@ namespace Chaotic.Tasks
                         RunChaosFloorOne(cc);
                         floor1End = DateTime.Now;
                         chaosEnd = DateTime.Now;
-                        _busy.WaitOne();
+                        BackgroundProcessing.ProgressCheck();
                         _logger.Log(LogDetailLevel.Info, $"Floor 1 Complete - {floor1End.Value.Subtract(floor1Start.Value).TotalSeconds.ToString("0.##")}s elapsed");
                         if (TimeoutCheck())
                         {
@@ -112,7 +109,7 @@ namespace Chaotic.Tasks
                         RunChaosFloorTwo(cc);
                         floor2End = DateTime.Now;
                         chaosEnd = DateTime.Now;
-                        _busy.WaitOne();
+                        BackgroundProcessing.ProgressCheck();
                         _logger.Log(LogDetailLevel.Info, $"Floor 2 Complete - {floor2End.Value.Subtract(floor2Start.Value).TotalSeconds.ToString("0.##")}s elapsed");
                         if (TimeoutCheck())
                         {
@@ -123,25 +120,7 @@ namespace Chaotic.Tasks
                         }
                         WaitForLoading();
                         floor3Start = DateTime.Now;
-                        if (!RunChaosFloorThree(cc))
-                        {
-                            floor3End = DateTime.Now;
-                            chaosEnd = DateTime.Now;
-                            _logger.Log(LogDetailLevel.Debug, "Failed to make it out of floor 3");
-                            AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
-                            return false;
-                        }
-                        _busy.WaitOne();
-
-                        if (TimeoutCheck())
-                        {
-                            floor3End = DateTime.Now;
-                            chaosEnd = DateTime.Now;
-                            result = TaskOutcomes.Timeout;
-                            AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
-                            return QuitChaos(true);
-                        }
-                        else
+                        if (RunChaosFloorThree(cc))
                         {
                             floor3End = DateTime.Now;
                             chaosEnd = DateTime.Now;
@@ -149,6 +128,24 @@ namespace Chaotic.Tasks
                             _logger.Log(LogDetailLevel.Info, $"Floor 3 Complete - {floor3End.Value.Subtract(floor3Start.Value).TotalSeconds.ToString("0.##")}s elapsed");
                             _logger.Log(LogDetailLevel.Summary, $"Chaos Dungeon Complete on {character.ClassName}, Total Elapsed: {chaosEnd.Value.Subtract(chaosStart).ToString(@"mm\:ss")}");
                             AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
+                        }
+                        else
+                        {
+                            floor3End = DateTime.Now;
+                            chaosEnd = DateTime.Now;
+
+                            if (TimeoutCheck())
+                            {
+                                result = TaskOutcomes.Timeout;
+                                AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
+                                if (!QuitChaos(true))
+                                    return false;
+                            }
+
+                            _logger.Log(LogDetailLevel.Debug, "Failed to make it out of floor 3");
+                            AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
+                            return false;
+                            //return QuitChaos(true);
                         }
                     }
                     else if (CheckAuraExpended())
@@ -172,7 +169,7 @@ namespace Chaotic.Tasks
 
                     ClearQuests();
 
-                    km.StartMapMove();
+                    km.StartMapMove(cc);
                     cc.StartUp();
 
                     if (WatchForMobs(cc, km))
@@ -271,14 +268,15 @@ namespace Chaotic.Tasks
         public bool WatchForMobs(ChaosClass cc, KurzanBase map)
         {
             var currentTime = DateTime.Now;
-            var maxTime = currentTime.AddMinutes(7);
+            var startTime = DateTime.Now;
+            var maxTime = startTime.AddMinutes(7);
 
             var minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
             while (currentTime < maxTime)
             {
                 try
                 {
-                    _busy.WaitOne();
+                    BackgroundProcessing.ProgressCheck();
                     HealthCheck(cc);
                     DeathCheck();
                     if (TimeoutCheck())
@@ -329,9 +327,22 @@ namespace Chaotic.Tasks
                     }
                     else
                     {
-                        var point = map.PreferredRandomPoint();
-                        RandomMove(500, 1000, point, 50);
-                        cc.UseAbilities(MoveToPoint, 1);
+                        var result = map.CheckMapRoute(startTime);
+                        if (result.Found)
+                        {
+                            CalcMinimapPos(result.CenterX, result.CenterY);
+                            cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 4);
+                            Sleep.SleepMs(500, 1000);
+                            MoveToMinimapPos(Random.Shared.Next(result.CenterX - 30, result.CenterX + 30), Random.Shared.Next(result.CenterY - 20, result.CenterY + 20), 1200, 2800);
+                            cc.UseAbilities(new Point(CenterScreen.X - 50, CenterScreen.Y + 50), 4);
+                            cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 4);
+                        }
+                        else
+                        {
+                            var point = map.PreferredRandomPoint();
+                            RandomMove(500, 1000, point, 50);
+                            cc.UseAbilities(MoveToPoint, 1);
+                        }
                     }
 
                     Sleep.SleepMs(50, 150);
@@ -477,6 +488,9 @@ namespace Chaotic.Tasks
 
             UseChaosDungeonAbilities(cc);
 
+            if (OfflineCheck() || GameCrashCheck() || TimeoutCheck())
+                return false;
+
             _logger.Log(LogDetailLevel.Info, "Chaos Dungeon Full Cleared");
             return QuitChaos();
         }
@@ -516,7 +530,17 @@ namespace Chaotic.Tasks
 
         private bool EnterPortal(ChaosClass cc)
         {
-            CheckPortal();
+            BackgroundProcessing.ProgressCheck();
+            if (TimeoutCheck())
+            {
+                _logger.Log(LogDetailLevel.Debug, "Timeout Detected while trying to enter portal");
+                return false;
+            }
+            if (!CheckPortal())
+            {
+                _logger.Log(LogDetailLevel.Debug, "Portal not found trying to enter it. Checking for Fate Ember blocking");
+                CheckFateEmber();
+            }
             Sleep.SleepMs(1100, 1200);
             if (MoveTime > 550)
             {
@@ -529,6 +553,7 @@ namespace Chaotic.Tasks
             Rect minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
             while (true)
             {
+                BackgroundProcessing.ProgressCheck();
                 var minimap = IP.CaptureScreen(minimapRegion);
                 var c = minimap.GetPixel(minimap.Width / 2, minimap.Height / 2);
                 if (c.R + c.G + c.B < 40)
@@ -567,7 +592,7 @@ namespace Chaotic.Tasks
         {
             while (true)
             {
-                _busy.WaitOne();
+                BackgroundProcessing.ProgressCheck();
                 DeathCheck();
                 HealthCheck(cc);
 
@@ -827,6 +852,38 @@ namespace Chaotic.Tasks
             return MoveToPoint;
         }
 
+        private bool CheckFateEmber()
+        {
+            var emberImages = new List<string>()
+            {
+                "fate_ember.png",
+            };
+            Rect minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
+
+            ScreenSearchResult ember = new ScreenSearchResult();
+
+            foreach (var image in emberImages)
+            {
+                //IP.SAVE_DEBUG_IMAGES = true;
+                ember = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), minimapRegion, confidence: .9);
+                if (ember.Found)
+                {
+                    //IP.SAVE_DEBUG_IMAGES = false;
+                    break;
+                }
+            }
+            //IP.SAVE_DEBUG_IMAGES = false;
+
+            if (ember.Found)
+            {
+                _logger.Log(LogDetailLevel.Debug, $"Ember Image Found, Confidence: {ember.MaxConfidence}");
+                CalcMinimapPos(ember.CenterX, ember.CenterY);
+                return true;
+            }
+            _logger.Log(LogDetailLevel.Debug, "Ember not found");
+            return false;
+        }
+
         private bool CheckPortal()
         {
             var portalImages = new List<string>()
@@ -858,7 +915,7 @@ namespace Chaotic.Tasks
 
                 return true;
             }
-            _logger.Log(LogDetailLevel.Debug, "Portal not found");
+            //_logger.Log(LogDetailLevel.Debug, "Portal not found");
             return false;
         }
 
@@ -1108,13 +1165,13 @@ namespace Chaotic.Tasks
 
             var cc = ChaosClass.Create(_settings, character, _r, _kb, _mouse, _logger);
 
-            var enterButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("enter_button.png", _settings.Resolution), confidence: .95);
+            var enterButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("enter_button.png", _settings.Resolution), confidence: .9);
 
             if (enterButton.Found)
             {
                 _mouse.ClickPosition(enterButton.CenterX, enterButton.CenterY, 1000);
                 //ImageProcessing.SHOW_DEBUG_IMAGES = true;
-                var acceptButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("accept_check_button.png", _settings.Resolution), confidence: .95);
+                var acceptButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("accept_check_button.png", _settings.Resolution), confidence: .9);
                 //ImageProcessing.SHOW_DEBUG_IMAGES = false;
                 if (acceptButton.Found)
                 {
@@ -1269,7 +1326,7 @@ namespace Chaotic.Tasks
             //var quadrant = ScreenQuadrant(pos);
             //pos = SetMinDistance(pos, quadrant);
 
-            var allPoints = GetVarietyPoints(pos.X, pos.Y, 200, 100);
+            //var allPoints = GetVarietyPoints(pos.X, pos.Y, 200, 100);
 
             //foreach (var point in allPoints)
             MoveOnScreen(pos.X, pos.Y, minTime, maxTime, blink);

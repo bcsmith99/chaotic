@@ -160,7 +160,7 @@ namespace Chaotic.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1280,700.
+        ///   Looks up a localized string similar to 1280,710.
         /// </summary>
         internal static string CenterScreen {
             get {
@@ -603,7 +603,7 @@ namespace Chaotic.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1475,300,500,250.
+        ///   Looks up a localized string similar to 1050,250,1000,550.
         /// </summary>
         internal static string KurzanMap1_PreferredArea {
             get {
@@ -641,7 +641,7 @@ namespace Chaotic.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 300,400,500,450.
+        ///   Looks up a localized string similar to 300,400,700,450.
         /// </summary>
         internal static string KurzanMap3_PreferredArea {
             get {
@@ -668,7 +668,7 @@ namespace Chaotic.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2385,350.
+        ///   Looks up a localized string similar to 2385,347.
         /// </summary>
         internal static string MinimapCenter {
             get {

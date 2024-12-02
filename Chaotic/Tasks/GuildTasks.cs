@@ -21,19 +21,18 @@ namespace Chaotic.Tasks
         private readonly KeyboardUtility _kb;
         private readonly ResourceHelper _r;
         private readonly AppLogger _logger;
-        private readonly ManualResetEvent _busy;
 
-        public GuildTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r,AppLogger logger, ManualResetEvent busy)
+        public GuildTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r,AppLogger logger)
         {
             _settings = settings;
             _mouse = mouse;
             _kb = kb;
             _r = r;
             _logger = logger;
-            _busy = busy; 
         }
         public bool PerformGuildTasks(UserCharacter character)
         {
+            BackgroundProcessing.ProgressCheck();
             var retVal = true;
             if (!character.GuildDonation)
                 return retVal;
@@ -87,6 +86,7 @@ namespace Chaotic.Tasks
                 }
             }
 
+            BackgroundProcessing.ProgressCheck();
             var supportButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("support_button.png", _settings.Resolution),
                 IP.ConvertStringCoordsToRect(_r["GuildSupport_Region"]), .85);
             if (supportButton.Found)

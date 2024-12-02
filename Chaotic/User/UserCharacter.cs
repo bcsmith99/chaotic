@@ -98,7 +98,7 @@ namespace Chaotic.User
                 _isCharSelected = value;
                 OnPropertyChanged();
             }
-        } 
+        }
 
         public Guid Identifier { get; set; }
 
@@ -114,7 +114,16 @@ namespace Chaotic.User
         public bool RunLopangShushireOnly { get; set; }
 
         public bool RunUnas { get; set; }
-        public bool GuildDonation { get; set; }
+        private bool _guildDonation;
+        public bool GuildDonation
+        {
+            get { return _guildDonation; }
+            set
+            {
+                _guildDonation = value;
+                OnPropertyChanged();
+            }
+        }
         public bool GuildDonationSilver { get; set; }
         public bool GuildDonationGold { get; set; }
 

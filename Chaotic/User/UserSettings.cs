@@ -21,6 +21,7 @@ namespace Chaotic.User
         public LogDetailLevel LogDetailLevel { get; set; }
 
         public string Resolution { get; set; } = "3440x1440";
+        public bool QuitAfterFullRotation { get; set; }
         public int UsePotionPercent { get; set; } = 40;
         public string HealthPotionKey { get; set; } = "F1";
         public bool EnableAura { get; set; }

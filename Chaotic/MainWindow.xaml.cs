@@ -225,10 +225,10 @@ namespace Chaotic
         private void InitializeTasks()
         {
             _r = new ResourceHelper("Chaotic.Resources." + UserSettings.Resolution);
-            _uit = new UITasks(UserSettings, _mouse, _kb, _r, _logger, _busy);
-            _gt = new GuildTasks(UserSettings, _mouse, _kb, _r, _logger, _busy);
-            _ut = new UnaTasks(UserSettings, _mouse, _kb, _r, _uit, _logger, _busy);
-            _ct = new ChaosTasks(UserSettings, _mouse, _kb, _r, _uit, _logger, _busy);
+            _uit = new UITasks(UserSettings, _mouse, _kb, _r, _logger);
+            _gt = new GuildTasks(UserSettings, _mouse, _kb, _r, _logger);
+            _ut = new UnaTasks(UserSettings, _mouse, _kb, _r, _uit, _logger);
+            _ct = new ChaosTasks(UserSettings, _mouse, _kb, _r, _uit, _logger);
         }
 
         private DateTime _currentWorkStartTime;
@@ -249,7 +249,7 @@ namespace Chaotic
                 lastReset = lastWednesday;
             }
 
-            if (!_settings.LastWeeklyReset.HasValue || lastReset > _settings.LastWeeklyReset)
+            if (!_settings.LastWeeklyReset.HasValue || lastReset >= _settings.LastWeeklyReset)
                 accept = true;
 
             return accept;
@@ -284,6 +284,7 @@ namespace Chaotic
             if (success && character.RunChaos)
                 success = _ct.RunChaos(character);
 
+            _busy.WaitOne();
             _uit.ClearOngoingQuests();
 
             Sleep.SleepMs(1000, 2000);
@@ -293,6 +294,7 @@ namespace Chaotic
                 if (UserSettings.RepairGear)
                     success = success && _uit.AuraRepair();
 
+                _busy.WaitOne();
                 if (success && (UserSettings.MoveHoningMaterials || UserSettings.MoveGems))
                 {
                     success = success && _uit.OpenInventoryManagement();
@@ -363,6 +365,7 @@ namespace Chaotic
                     if (i == charsToRun.Count - 1)
                         break;
 
+                    _busy.WaitOne();
                     if (_uit.SwapCharacters(charsToRun[i + 1]))
                     {
                         var backInTown = _uit.InAreaCheck();
@@ -376,6 +379,9 @@ namespace Chaotic
                     UserSettings.LastWeeklyReset = DateTime.Now.Date;
                     SaveUserSettings();
                 }
+
+                if (UserSettings.QuitAfterFullRotation)
+                    _uit.ExitGame();
             };
 
             CreateBackgroundWorker(a);
@@ -460,6 +466,11 @@ namespace Chaotic
                     TogglePause();
                     //CancelWorker();
                 });
+                _kb.Listen(Key.End, () =>
+                {
+                    _logger.Log(LogDetailLevel.Debug, "End Processing Pressed");
+                    CancelWorker();
+                });
                 _bw.RunWorkerAsync();
                 TaskRunning = true;
             }
@@ -482,7 +493,7 @@ namespace Chaotic
         {
             if (_bw.IsBusy)
             {
-                _logger.Log(LogDetailLevel.Debug, "Cancelling worker");
+                //_logger.Log(LogDetailLevel.Debug, "Cancelling worker");
                 _bw.CancelAsync();
                 TaskRunning = false;
 
@@ -509,9 +520,10 @@ namespace Chaotic
             {
                 try
                 {
+                    BackgroundProcessing.SetVariables(_bw, _busy, e);
                     workToDo();
                 }
-                catch (WorkStoppedException)
+                catch (BackgroundCancellationException)
                 {
                     _logger.Log(LogDetailLevel.Debug, "Work Stopped");
                 }
@@ -526,51 +538,28 @@ namespace Chaotic
 
         private void Test_Click(object sender, RoutedEventArgs e)
         {
-            //Action a = () =>
+            Action a = () =>
+            {
+                for (int i = 0; i < 60; i++)
+                {
+                    BackgroundProcessing.ProgressCheck();
+
+                    _logger.Log(LogDetailLevel.Debug, "Test Loop " + i);
+                    Sleep.SleepMs(1000, 1000);
+                }
+            };
+
+            CreateBackgroundWorker(a); 
+            
+            //var map = new KurzanMap1(_settings, _mouse, _kb, _r, _logger);
+
+            //var result = map.CheckMapRoute(DateTime.Now);
+            //if (result.Found)
             //{
-            //IP.SHOW_DEBUG_IMAGES = true;
-            IP.SAVE_DEBUG_IMAGES = true;
-            var ClickableRegion = IP.ConvertStringCoordsToRect(_r["Clickable_Region"]);
-            var jump_pad = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map1_jumppoint.png", _settings.Resolution), ClickableRegion, confidence: .8);
-            if (jump_pad.Found)
-            {
-                _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad Found - {jump_pad.MaxConfidence}");
-            }
-            var jump_pad1 = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map1_jumppoint1.png", _settings.Resolution), ClickableRegion, confidence: .8);
-            if (jump_pad1.Found)
-            {
-                _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad 1 Found - {jump_pad1.MaxConfidence}");
-            }
-            var jump_pad2 = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map1_jumppoint2.png", _settings.Resolution), ClickableRegion, confidence: .8);
-            if (jump_pad2.Found)
-            {
-                _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad 2 Found - {jump_pad2.MaxConfidence}");
-            }
-            //IP.SHOW_DEBUG_IMAGES = false;
-            IP.SAVE_DEBUG_IMAGES = false;
+            //    _logger.Log(LogDetailLevel.Debug, $"Pref Area found, {result.MaxConfidence}, x:{result.Center},y:{result.CenterY}");
+            //    _ct.MoveToMinimapPos(Random.Shared.Next(result.CenterX - 30, result.CenterX + 30), Random.Shared.Next(result.CenterY - 20, result.CenterY + 20), 1000, 1500);
+            //}
 
-            //var donate = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("donate_button.png", _settings.Resolution), confidence: .65);
-            //if (donate.Found)
-            //    _logger.Log(LogDetailLevel.Info, $"Donate found. Confidence : {donate.MaxConfidence}");
-
-
-
-            //_logger.AddStatisticEntry(new ChaosTaskStatistic()
-            //{
-            //    ChaosLevel = 1540,
-            //    Class = "Balh",
-            //    CharacterIdentifier = Guid.NewGuid(),
-            //    StartDate = DateTime.Now,
-            //    StatisticType = "ChaosDungeon",
-            //    TaskOutcome = "Success",
-            //    TotalDuration = new TimeSpan(0, 0, 300),
-            //    Floor1Duration = new TimeSpan(0, 0, 50),
-            //    Floor2Duration = new TimeSpan(0, 0, 100),
-            //    Floor3Duration = new TimeSpan(0, 0, 150)
-            //});
-            //    };
-
-            //CreateBackgroundWorker(a);
         }
 
         private void LogDetailLevel_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -623,6 +612,14 @@ namespace Chaotic
         {
             foreach (var character in _settings.Characters)
                 character.IsCharSelected = character.ChaosLevel < 1640;
+        }
+
+        private void TabControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.End)
+            {
+                e.Handled = true;
+            }
         }
     }
 }

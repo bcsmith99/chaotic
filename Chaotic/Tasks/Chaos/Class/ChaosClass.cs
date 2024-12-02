@@ -73,8 +73,8 @@ namespace Chaotic.Tasks.Chaos.Class
             var xModifier = center.X > point.X ? -1 : 1;
 
 
-            var xCoord = (int)(center.X + (xModifier * Math.Abs(center.X - point.X) * .2));
-            var yCoord = (int)(center.Y + (yModifier * Math.Abs(center.Y - point.Y) * .2));
+            var xCoord = (int)(center.X + (xModifier * Math.Abs(center.X - point.X) * .33));
+            var yCoord = (int)(center.Y + (yModifier * Math.Abs(center.Y - point.Y) * .33));
             return new Point(xCoord, yCoord);
         }
 
