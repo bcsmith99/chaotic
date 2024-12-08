@@ -976,11 +976,20 @@ namespace Chaotic.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2030,450,150,200.
+        ///   Looks up a localized string similar to 1830,450,450,200.
         /// </summary>
         internal static string VoldisLeap_Npc {
             get {
                 return ResourceManager.GetString("VoldisLeap_Npc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 600.
+        /// </summary>
+        internal static string VoldisLeap_X {
+            get {
+                return ResourceManager.GetString("VoldisLeap_X", resourceCulture);
             }
         }
         

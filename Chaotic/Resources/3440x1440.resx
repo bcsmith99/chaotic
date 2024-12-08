@@ -287,7 +287,7 @@
 880,490</value>
   </data>
   <data name="VoldisLeap_Npc" xml:space="preserve">
-    <value>2600,400,200,250</value>
+    <value>2300,400,500,250</value>
   </data>
   <data name="ChaosDungeon_Shortcut" xml:space="preserve">
     <value>1600,380</value>
@@ -446,5 +446,8 @@
   </data>
   <data name="Y_Distance" xml:space="preserve">
     <value>400</value>
+  </data>
+  <data name="VoldisLeap_X" xml:space="preserve">
+    <value>800</value>
   </data>
 </root>

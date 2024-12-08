@@ -98,15 +98,21 @@ namespace Chaotic.Tasks.Chaos.Kurzan
             }
             else if (delta.TotalSeconds >= 90 && delta.TotalSeconds < 120)
             {
+                //IP.SAVE_DEBUG_IMAGES = true;
                 prefArea = IP.LocateCenterOnScreen(Utility.ImageResourceLocation(images[1], _settings.Resolution), TopMinimapRegion, confidence: .8);
-                _logger.Log(LogDetailLevel.Debug, "Found Kurzan Map 1 Preferred Point 2");
+                if (prefArea.Found)
+                    _logger.Log(LogDetailLevel.Debug, "Found Kurzan Map 1 Preferred Point 2");
+                //IP.SAVE_DEBUG_IMAGES = false;
             }
             else if (delta.TotalSeconds >= 120)
             {
+                //IP.SAVE_DEBUG_IMAGES = true;
                 prefArea = IP.LocateCenterOnScreen(Utility.ImageResourceLocation(images[2], _settings.Resolution), TopMinimapRegion, confidence: .8);
-                _logger.Log(LogDetailLevel.Debug, "Found Kurzan Map 1 Preferred Point 3");
+                if (prefArea.Found)
+                    _logger.Log(LogDetailLevel.Debug, "Found Kurzan Map 1 Preferred Point 3");
+                //IP.SAVE_DEBUG_IMAGES = false;
             }
-                
+
 
             return prefArea;
         }

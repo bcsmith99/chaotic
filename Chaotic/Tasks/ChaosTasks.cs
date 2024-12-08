@@ -74,6 +74,8 @@ namespace Chaotic.Tasks
 
         public bool RunChaos(UserCharacter character, int chaosCount = 2)
         {
+            BackgroundProcessing.ProgressCheck();
+
             if (character == null || !character.RunChaos)
                 return true;
 
@@ -100,9 +102,9 @@ namespace Chaotic.Tasks
                         if (TimeoutCheck())
                         {
                             result = TaskOutcomes.Timeout;
-                            QuitChaos(true);
+                            var timeoutQuit = QuitChaos(true);
                             AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
-                            return false;
+                            return timeoutQuit;
                         }
                         WaitForLoading();
                         floor2Start = DateTime.Now;
@@ -114,9 +116,9 @@ namespace Chaotic.Tasks
                         if (TimeoutCheck())
                         {
                             result = TaskOutcomes.Timeout;
-                            QuitChaos(true);
+                            var timeoutQuit = QuitChaos(true);
                             AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
-                            return false;
+                            return timeoutQuit;
                         }
                         WaitForLoading();
                         floor3Start = DateTime.Now;
@@ -138,8 +140,11 @@ namespace Chaotic.Tasks
                             {
                                 result = TaskOutcomes.Timeout;
                                 AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
-                                if (!QuitChaos(true))
-                                    return false;
+
+                                var timeoutQuit = QuitChaos(true);
+                                if (!timeoutQuit)
+                                    _logger.Log(LogDetailLevel.Debug, "Failed to make it out of floor 3 after timeout");
+                                return timeoutQuit;
                             }
 
                             _logger.Log(LogDetailLevel.Debug, "Failed to make it out of floor 3");
@@ -188,7 +193,7 @@ namespace Chaotic.Tasks
                     {
                         QuitChaos(true);
                         outcome = TaskOutcomes.Timeout;
-                        _logger.Log(LogDetailLevel.Summary, $"Kurzan Front timed out on {character.ClassName}, Total Elapsed: {endTime.Subtract(startTime).TotalSeconds.ToString(@"mm\:ss")}");
+                        _logger.Log(LogDetailLevel.Summary, $"Kurzan Front timed out on {character.ClassName}, Total Elapsed: {endTime.Subtract(startTime).ToString(@"mm\:ss")}");
                     }
 
                     AddKurzanTaskStatistic(outcome, character, km, startTime, endTime);
@@ -330,10 +335,12 @@ namespace Chaotic.Tasks
                         var result = map.CheckMapRoute(startTime);
                         if (result.Found)
                         {
+                            _logger.Log(LogDetailLevel.Debug, "Route found and performing move action + abilities");
                             CalcMinimapPos(result.CenterX, result.CenterY);
-                            cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 4);
-                            Sleep.SleepMs(500, 1000);
+                            //cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 4);
+                            //Sleep.SleepMs(500, 1000);
                             MoveToMinimapPos(Random.Shared.Next(result.CenterX - 30, result.CenterX + 30), Random.Shared.Next(result.CenterY - 20, result.CenterY + 20), 1200, 2800);
+                            cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 2);
                             cc.UseAbilities(new Point(CenterScreen.X - 50, CenterScreen.Y + 50), 4);
                             cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 4);
                         }
@@ -1061,13 +1068,26 @@ namespace Chaotic.Tasks
 
         private void DeathCheck()
         {
-            var dead = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("dead.png", _settings.Resolution), confidence: .75);
+            var dead = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("dead.png", _settings.Resolution), confidence: .75);
 
             if (dead.Found)
             {
                 _logger.Log(LogDetailLevel.Debug, "You ded.");
-                return;
+                int i = 0;
+                while (i < 10)
+                {
+                    var revive_button = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("revive.png", _settings.Resolution), confidence: .7);
+                    if (revive_button.Found)
+                    {
+                        _mouse.ClickPosition(revive_button.Center, 1000);
+                        return;
+                    }
+                    Sleep.SleepMs(500, 700);
+                    i++;
+                }
+                _logger.Log(LogDetailLevel.Debug, "Unable to find revive button to press in death check.");
             }
+            return;
         }
 
         public bool TimeoutCheck()
@@ -1116,6 +1136,7 @@ namespace Chaotic.Tasks
             var retVal = true;
             _mouse.ClickCenterScreen(_r);
 
+            BackgroundProcessing.ProgressCheck();
             retVal = SelectChaosDungeon(character);
 
             if (retVal)
@@ -1158,6 +1179,7 @@ namespace Chaotic.Tasks
 
         private bool EnterKurzanFront(UserCharacter character)
         {
+            BackgroundProcessing.ProgressCheck();
             CurrentState = ChaosStates.InCity;
             _mouse.ClickCenterScreen(_r);
             _kb.AltPress(Key.Q, 1000);
@@ -1387,10 +1409,10 @@ namespace Chaotic.Tasks
 
             int wait = MoveTime / 2;
 
-            if (wait < minTime)
-                wait = minTime;
-            else if (wait > maxTime)
-                wait = maxTime;
+            //if (wait < minTime)
+            //    wait = minTime;
+            //else if (wait > maxTime)
+            //    wait = maxTime;
 
             if (x < ClickableRegion.Left)
                 x = ClickableRegion.Left;
@@ -1401,7 +1423,7 @@ namespace Chaotic.Tasks
             if (y > ClickableRegion.Bottom)
                 y = ClickableRegion.Bottom;
 
-            _mouse.ClickPosition(x, y, wait, MouseButtons.Right);
+            _mouse.ClickPosition(x, y, Random.Shared.Next(minTime, maxTime), MouseButtons.Right);
 
             //_mouse.ClickPosition(centerScreen.X, centerScreen.Y, 50, MouseButtons.Right);
             return;

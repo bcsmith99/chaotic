@@ -141,6 +141,7 @@ namespace Chaotic.Tasks
 
         public bool MoveGems()
         {
+            _logger.Log(LogDetailLevel.Debug, "Moving gems to storage"); 
             var inventoryRegion = IP.ConvertStringCoordsToRect(_r["Inventory_Region"]);
             var success = true;
             var gemDirectory = Utility.ResourceLocation(_settings.Resolution, "gems");
@@ -181,6 +182,7 @@ namespace Chaotic.Tasks
 
         public bool MoveHoningMaterials()
         {
+            _logger.Log(LogDetailLevel.Debug, "Moving Honing Materials to Storage"); 
             var inventoryRegion = IP.ConvertStringCoordsToRect(_r["Inventory_Region"]);
             var success = true;
             var honingMatsDirectory = Utility.ResourceLocation(_settings.Resolution, "mats");
@@ -212,6 +214,7 @@ namespace Chaotic.Tasks
 
         public bool OpenInventoryManagement()
         {
+            _logger.Log(LogDetailLevel.Debug, "Opening Inventory Management");
             BackgroundProcessing.ProgressCheck();
             bool success = true;
             OpenPetMenu();
@@ -227,6 +230,7 @@ namespace Chaotic.Tasks
 
         public bool CloseInventoryManagement()
         {
+            _logger.Log(LogDetailLevel.Debug, "Closing Inventory Management"); 
             BackgroundProcessing.ProgressCheck();
             bool success = true;
 
@@ -257,6 +261,7 @@ namespace Chaotic.Tasks
 
         private void OpenPetMenu()
         {
+
             _mouse.ClickPosition(_r["GuideMenu"], 500);
             _mouse.ClickPosition(_r["GuidePetMenu"], 1000);
         }
@@ -275,6 +280,7 @@ namespace Chaotic.Tasks
 
         public bool AuraRepair()
         {
+            _logger.Log(LogDetailLevel.Debug, "Attempting Aura Repair"); 
             BackgroundProcessing.ProgressCheck();
             bool success = true;
             OpenPetMenu();
@@ -283,16 +289,20 @@ namespace Chaotic.Tasks
             if (repairButton.Found)
             {
                 _mouse.ClickPosition(repairButton.CenterX, repairButton.CenterY, 1000);
-                var repairAllButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("repairall_button.png", _settings.Resolution), confidence: .95);
+                var repairAllButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("repairall_button.png", _settings.Resolution), confidence: .85);
 
-                Debug.Print($"Repair All Confidence: {repairAllButton.MaxConfidence}");
+                //Debug.Print($"Repair All Confidence: {repairAllButton.MaxConfidence}");
                 if (repairAllButton.Found)
                     _mouse.ClickPosition(repairAllButton.CenterX, repairAllButton.CenterY, 500);
 
                 _kb.Press(Key.Escape, 500);
             }
             else
+            {
+                _logger.Log(LogDetailLevel.Debug, "Unable to find repair button while repairing gear, failing.");
                 success = false;
+            }
+                
 
             _kb.Press(Key.Escape, 500);
 

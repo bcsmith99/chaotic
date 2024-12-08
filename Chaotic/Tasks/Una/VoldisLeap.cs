@@ -37,29 +37,35 @@ namespace Chaotic.Tasks.Una
                 if (closeButton.Found)
                     _mouse.ClickPosition(closeButton.CenterX, closeButton.CenterY, 200);
 
-                if (retryCount > 5)
+                if (retryCount > 4)
                     npc = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("voldis_leap_npc.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["VoldisLeap_Npc"]), .7);
 
                 if (npc.Found)
                     break;
 
                 retryCount++;
-                Sleep.SleepMs(1000, 1500);
+                Sleep.SleepMs(500, 750);
             }
 
             if (npc.Found)
             {
                 _logger.Log(LogDetailLevel.Debug, $"Voldis NPC Confidence: {npc.MaxConfidence}");
                 _mouse.ClickPosition(npc.CenterX, npc.CenterY + 300, 2000, MouseButtons.Right);
-                _kb.Press(Key.G, 1200);
-                _kb.ShiftPress(Key.G, 400);
+            }
+            else
+            {
+                _logger.Log(LogDetailLevel.Debug, $"Voldis NPC Not Found, Reverting to backup and walk yo ass over there.");
+                _mouse.ClickPosition(CenterScreen.X + Int32.Parse(_r["VoldisLeap_X"]), CenterScreen.Y + 100, 2000, MouseButtons.Right);
+            }
 
-                var completeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), 400, 950, 200, 100, .95);
-                if (completeButton.Found)
-                {
-                    Sleep.SleepMs(100, 200);
-                    _mouse.ClickPosition(completeButton.CenterX, completeButton.CenterY, 3000);
-                }
+            _kb.Press(Key.G, 1200);
+            _kb.ShiftPress(Key.G, 400);
+
+            var completeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), 400, 950, 200, 100, .95);
+            if (completeButton.Found)
+            {
+                Sleep.SleepMs(100, 200);
+                _mouse.ClickPosition(completeButton.CenterX, completeButton.CenterY, 3000);
             }
         }
     }

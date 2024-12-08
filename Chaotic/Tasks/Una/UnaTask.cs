@@ -1,6 +1,7 @@
 ﻿using Accessibility;
 using Chaotic.User;
 using Chaotic.Utilities;
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,9 @@ namespace Chaotic.Tasks.Una
         protected readonly KeyboardUtility _kb;
         protected readonly ResourceHelper _r;
         protected readonly UserSettings _settings;
-        protected readonly AppLogger _logger; 
+        protected readonly AppLogger _logger;
+
+        protected Point CenterScreen { get; }
 
         protected UnaTask(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UserSettings settings, AppLogger logger)
         {
@@ -52,6 +55,8 @@ namespace Chaotic.Tasks.Una
             _r = r;
             _settings = settings;
             _logger = logger;
+
+            CenterScreen = _r.Point("CenterScreen");
         }
 
         public static UnaTask Create(string unaTaskName, UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UserSettings settings, AppLogger logger)
@@ -104,7 +109,7 @@ namespace Chaotic.Tasks.Una
             _mouse.ClickPosition(_r[$"Bifrost{bifrost}"], 1000);
 
             var bifrostOkRegion = ImageProcessing.ConvertStringCoordsToRect(_r["BifrostOk_Region"]);
-            var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), bifrostOkRegion,  .95);
+            var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), bifrostOkRegion, .95);
             if (okButton.Found)
             {
                 _mouse.ClickPosition(okButton.CenterX, okButton.CenterY, 5000);

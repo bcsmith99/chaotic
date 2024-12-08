@@ -287,7 +287,7 @@ namespace Chaotic
             _busy.WaitOne();
             _uit.ClearOngoingQuests();
 
-            Sleep.SleepMs(1000, 2000);
+            Sleep.SleepMs(1500, 2500);
 
             if (success && UserSettings.EnableAura)
             {
@@ -360,7 +360,11 @@ namespace Chaotic
                     var success = RunCharacterDailyRotation(character, acceptWeeklies);
 
                     if (!success)
+                    {
+                        _logger.Log(LogDetailLevel.Info, $"Work Reported as Failure for {character.ClassName}, exiting daily rotation loop.");
                         break;
+                    }
+                        
 
                     if (i == charsToRun.Count - 1)
                         break;
@@ -506,8 +510,8 @@ namespace Chaotic
         {
             _currentWorkEndTime = DateTime.Now;
             _logger.WriteSessionWorkCompleted(_currentWorkStartTime, _currentWorkEndTime);
-            //_logger.Log(LogDetailLevel.Debug, "Finished Work");
             _kb.StopListening(Key.Pause);
+            _kb.StopListening(Key.End);
             TaskRunning = false;
         }
 
