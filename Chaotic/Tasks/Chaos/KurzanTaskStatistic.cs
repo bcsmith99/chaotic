@@ -10,10 +10,9 @@ namespace Chaotic.Tasks.Chaos
     {
         public KurzanTaskStatistic()
         {
-            StatisticType = "Kurzan"; 
+            StatisticType = "Kurzan";
         }
         public int ChaosLevel { get; set; }
-        public string Class { get; set; } = "";
         public string Map { get; set; } = "";
     }
 }

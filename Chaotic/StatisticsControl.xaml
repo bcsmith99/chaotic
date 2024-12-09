@@ -1,0 +1,324 @@
+﻿<UserControl x:Class="Chaotic.StatisticsControl"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="clr-namespace:Chaotic"
+			 mc:Ignorable="d"
+			 d:DesignHeight="450"
+			 d:DesignWidth="800"
+			 DataContext="{Binding RelativeSource={RelativeSource Self}}">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<BooleanToVisibilityConverter x:Key="VisibilityConverter"></BooleanToVisibilityConverter>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<StackPanel Orientation="Horizontal"
+					HorizontalAlignment="Center">
+			<Label Content="Show Statistics By: " />
+			<RadioButton GroupName="GroupingMethods"
+						 Name="ClassGrouping"
+						 IsChecked="{Binding IsClassGrouping, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 VerticalAlignment="Center"
+						 Margin="5">Class</RadioButton>
+			<RadioButton GroupName="GroupingMethods"
+						 Name="DateGrouping"
+						 IsChecked="{Binding IsDateGrouping, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 VerticalAlignment="Center"
+						 Margin="5">Date</RadioButton>
+			<RadioButton GroupName="GroupingMethods"
+						 Name="TypeGrouping"
+						 IsChecked="{Binding IsTypeGrouping, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						 VerticalAlignment="Center"
+						 Margin="5">Type</RadioButton>
+
+			<!--<Button Content="Refresh Statistics"
+					Click="LoadStatistics_Click" />-->
+		</StackPanel>
+		<ScrollViewer Grid.Row="1"
+					  VerticalScrollBarVisibility="Visible">
+			<Grid>
+				<Grid Visibility="{Binding IsClassGrouping, Converter={StaticResource VisibilityConverter}}">
+					<!--<Label>Class Analysis</Label>-->
+					<ItemsControl ItemsSource="{Binding ClassStatistics}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Margin="20,0,10,0">
+									<Label Content="{Binding ClassName}" FontWeight="Bold"/>
+									<StackPanel Margin="20,0,0,0">
+										<Label Content="Kurzan Front:" />
+										<ItemsControl ItemsSource="{Binding KurzanStats}"
+													  Margin="10,0,0,0">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Content="{Binding Level}"
+																   Padding="0,5,0,5"></Label>
+															<Label Padding="0,5,0,5">-</Label>
+															<Label Content="{Binding Map}"
+																   Padding="0,5,0,5"></Label>
+															<Label Padding="0,5,0,5">:</Label>
+														</StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Padding="5, 2, 2, 2">Total Runs:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalRuns}" />
+															<Label Padding="5, 2, 2, 2">Complete:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalComplete}" />
+															<Label Padding="5, 2, 2, 2">Failed:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalFailed}" />
+															<Label Padding="5, 2, 2, 2">Timeout:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalTimeout}" />
+															<Label Padding="5, 2, 2, 2">Average Time:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageTime}" />
+														</StackPanel>
+													</StackPanel>
+
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+										<Label Content="Chaos Dungeon:" />
+										<ItemsControl ItemsSource="{Binding ChaosStats}"
+													  Margin="10,0,0,0">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Content="{Binding Level}"
+																   Padding="5,2,0,2"></Label>
+															<Label Padding="0,2,5,2">:</Label>
+
+															<Label Padding="5, 2, 2, 2">Total Runs:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalRuns}" />
+															<Label Padding="5, 2, 2, 2">Complete:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalComplete}" />
+															<Label Padding="5, 2, 2, 2">Failed:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalFailed}" />
+															<Label Padding="5, 2, 2, 2">Timeout:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalTimeout}" />
+														</StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Padding="5, 2, 2, 2">Average Time:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageTime}" />
+															<Label Padding="5, 2, 2, 2">Floor 1 Avg:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageFloor1}" />
+															<Label Padding="5, 2, 2, 2">Floor 2 Avg:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageFloor2}" />
+															<Label Padding="5, 2, 2, 2">Floor 3 Avg:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageFloor3}" />
+														</StackPanel>
+													</StackPanel>
+
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+								</StackPanel>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</Grid>
+				<Grid Visibility="{Binding IsDateGrouping, Converter={StaticResource VisibilityConverter}}">
+					<ItemsControl ItemsSource="{Binding DateStatistics}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Margin="20,0,10,0">
+									<Label Content="{Binding ExecutionDate}" FontWeight="Bold" />
+									<StackPanel Margin="20,0,0,0">
+										<Label Content="Kurzan Front:" />
+										<ItemsControl ItemsSource="{Binding KurzanStats}"
+													  Margin="10,0,0,0">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Content="{Binding Level}"
+																   Padding="0,5,0,5"></Label>
+															<Label Padding="0,5,0,5">-</Label>
+															<Label Content="{Binding Map}"
+																   Padding="0,5,0,5"></Label>
+															<Label Padding="0,5,0,5">:</Label>
+														</StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Padding="5, 2, 2, 2">Total Runs:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalRuns}" />
+															<Label Padding="5, 2, 2, 2">Complete:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalComplete}" />
+															<Label Padding="5, 2, 2, 2">Failed:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalFailed}" />
+															<Label Padding="5, 2, 2, 2">Timeout:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalTimeout}" />
+															<Label Padding="5, 2, 2, 2">Average Time:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageTime}" />
+														</StackPanel>
+													</StackPanel>
+
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+										<Label Content="Chaos Dungeon:" />
+										<ItemsControl ItemsSource="{Binding ChaosStats}"
+													  Margin="10,0,0,0">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Content="{Binding Level}"
+																   Padding="0,2,0,2"></Label>
+															<Label Padding="0,2,5,2">:</Label>
+
+															<Label Padding="5, 2, 2, 2">Total Runs:</Label>
+															<Label Padding="0, 2, 2, 2"
+																   Content="{Binding TotalRuns}" />
+															<Label Padding="5, 2, 2, 2">Complete:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalComplete}" />
+															<Label Padding="5, 2, 2, 2">Failed:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalFailed}" />
+															<Label Padding="5, 2, 2, 2">Timeout:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalTimeout}" />
+														</StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Padding="5, 2, 2, 2">Average Time:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageTime}" />
+															<Label Padding="5, 2, 2, 2">Floor 1 Avg:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageFloor1}" />
+															<Label Padding="5, 2, 2, 2">Floor 2 Avg:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageFloor2}" />
+															<Label Padding="5, 2, 2, 2">Floor 3 Avg:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageFloor3}" />
+														</StackPanel>
+													</StackPanel>
+
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+								</StackPanel>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</Grid>
+				<Grid Visibility="{Binding IsTypeGrouping, Converter={StaticResource VisibilityConverter}}">
+					<ItemsControl ItemsSource="{Binding TypeStatistics}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Margin="20,0,10,0">
+									<Label Content="Kurzan Front:" FontWeight="Bold"/>
+									<ItemsControl ItemsSource="{Binding KurzanStats}"
+												  Margin="10,0,0,0">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<StackPanel>
+													<StackPanel Orientation="Horizontal">
+														<Label Content="{Binding Level}"
+															   Padding="0,5,0,5"></Label>
+														<Label Padding="0,5,0,5">-</Label>
+														<Label Content="{Binding Map}"
+															   Padding="0,5,0,5"></Label>
+														<Label Padding="0,5,0,5">:</Label>
+													</StackPanel>
+													<StackPanel Orientation="Horizontal">
+														<Label Padding="5, 2, 2, 2">Total Runs:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalRuns}" />
+														<Label Padding="5, 2, 2, 2">Complete:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalComplete}" />
+														<Label Padding="5, 2, 2, 2">Failed:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalFailed}" />
+														<Label Padding="5, 2, 2, 2">Timeout:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalTimeout}" />
+														<Label Padding="5, 2, 2, 2">Average Time:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding AverageTime}" />
+													</StackPanel>
+												</StackPanel>
+
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+									<Label Content="Chaos Dungeon:"  FontWeight="Bold"/>
+									<ItemsControl ItemsSource="{Binding ChaosStats}"
+												  Margin="10,0,0,0">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<StackPanel>
+													<StackPanel Orientation="Horizontal">
+														<Label Content="{Binding Level}"
+															   Padding="0,2,0,2"></Label>
+														<Label Padding="0,2,5,2">:</Label>
+
+														<Label Padding="5, 2, 2, 2">Total Runs:</Label>
+														<Label Padding="0, 2, 2, 2"
+															   Content="{Binding TotalRuns}" />
+														<Label Padding="5, 2, 2, 2">Complete:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalComplete}" />
+														<Label Padding="5, 2, 2, 2">Failed:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalFailed}" />
+														<Label Padding="5, 2, 2, 2">Timeout:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalTimeout}" />
+													</StackPanel>
+													<StackPanel Orientation="Horizontal">
+														<Label Padding="5, 2, 2, 2">Average Time:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding AverageTime}" />
+														<Label Padding="5, 2, 2, 2">Floor 1 Avg:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding AverageFloor1}" />
+														<Label Padding="5, 2, 2, 2">Floor 2 Avg:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding AverageFloor2}" />
+														<Label Padding="5, 2, 2, 2">Floor 3 Avg:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding AverageFloor3}" />
+													</StackPanel>
+												</StackPanel>
+
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</StackPanel>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</Grid>
+			</Grid>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

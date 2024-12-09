@@ -1,4 +1,5 @@
-﻿using Chaotic.Tasks;
+﻿using Chaotic.Resources;
+using Chaotic.Tasks;
 using Chaotic.Tasks.Chaos;
 using Chaotic.Tasks.Chaos.Class;
 using Chaotic.Tasks.Chaos.Kurzan;
@@ -50,6 +51,8 @@ namespace Chaotic
             _settings = new UserSettings();
             _settings = _settings.Read(USER_SETTINGS_PATH);
 
+            _config = ApplicationResources.Create(_settings.Resolution);
+
             _statistics = new SessionStatistics();
             //_statistics = _statistics.Read(USER_STATISTICS_PATH);
 
@@ -64,6 +67,8 @@ namespace Chaotic
             InitializeTasks();
 
         }
+
+        private readonly ApplicationResources _config;
 
         private List<string> _Resolutions = new List<string> { "3440x1440", "2560x1440" };
         private List<Tuple<string, int>> _GemLevels = new List<Tuple<string, int>>()
@@ -364,7 +369,7 @@ namespace Chaotic
                         _logger.Log(LogDetailLevel.Info, $"Work Reported as Failure for {character.ClassName}, exiting daily rotation loop.");
                         break;
                     }
-                        
+
 
                     if (i == charsToRun.Count - 1)
                         break;
@@ -553,17 +558,7 @@ namespace Chaotic
                 }
             };
 
-            CreateBackgroundWorker(a); 
-            
-            //var map = new KurzanMap1(_settings, _mouse, _kb, _r, _logger);
-
-            //var result = map.CheckMapRoute(DateTime.Now);
-            //if (result.Found)
-            //{
-            //    _logger.Log(LogDetailLevel.Debug, $"Pref Area found, {result.MaxConfidence}, x:{result.Center},y:{result.CenterY}");
-            //    _ct.MoveToMinimapPos(Random.Shared.Next(result.CenterX - 30, result.CenterX + 30), Random.Shared.Next(result.CenterY - 20, result.CenterY + 20), 1000, 1500);
-            //}
-
+            CreateBackgroundWorker(a);
         }
 
         private void LogDetailLevel_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -620,10 +615,20 @@ namespace Chaotic
 
         private void TabControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.End)
+            if (e.Key == Key.End)
             {
                 e.Handled = true;
             }
+        }
+
+        private void PauseExecution_Click(object sender, RoutedEventArgs e)
+        {
+            TogglePause();
+        }
+
+        private void CancelExecution_Click(object sender, RoutedEventArgs e)
+        {
+            CancelWorker();
         }
     }
 }

@@ -89,14 +89,32 @@
 						</Border>
 						<Border Padding="10,5,10,0"
 								Grid.Row="1">
-							<WrapPanel Orientation="Horizontal">
-								<Label Content="Log - "
-									   FontWeight="Bold" />
-								<TextBlock VerticalAlignment="Center"
-										   Margin="5,0,5,0">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+								<WrapPanel Orientation="Horizontal">
+									<TextBlock Text="Log - "
+											   FontWeight="Bold" />
+									<TextBlock VerticalAlignment="Center">
                                     <Hyperlink Click="ClearLog_Click">Clear</Hyperlink>
-								</TextBlock>
-							</WrapPanel>
+									</TextBlock>
+
+								</WrapPanel>
+								<WrapPanel Orientation="Horizontal"
+										   Grid.Column="1"
+										   HorizontalAlignment="Right"
+										   Visibility="{Binding TaskRunning, Converter={StaticResource VisibilityConverter}}">
+									<TextBlock Text="Execution - "
+											   FontWeight="Bold" />
+									<TextBlock VerticalAlignment="Center">
+										<Hyperlink Click="PauseExecution_Click">Toggle Pause</Hyperlink>
+										<Hyperlink Click="CancelExecution_Click">Cancel</Hyperlink>
+									</TextBlock>
+
+								</WrapPanel>
+							</Grid>
 
 						</Border>
 						<ListView Padding="10,5,10,0"
@@ -605,6 +623,9 @@
 						</StackPanel>
 					</ScrollViewer>
 				</Grid>
+			</TabItem>
+			<TabItem Header="Statistics">
+				<local:StatisticsControl />
 			</TabItem>
 		</TabControl>
 	</Grid>

@@ -20,12 +20,16 @@ namespace Chaotic.Tasks
     public interface ITaskStatistic
     {
         public string StatisticType { get; set; }
+        public string Class { get; set; }
+        public DateTime StartDate { get; set; }
     }
 
     public class TaskStatistic : ITaskStatistic
     {
         public string StatisticType { get; set; } = "";
         public Guid CharacterIdentifier { get; set; }
+
+        public string Class { get; set; } = "";
 
         public string TaskOutcome { get; set; } = "";
         public TimeSpan TotalDuration { get; set; }
