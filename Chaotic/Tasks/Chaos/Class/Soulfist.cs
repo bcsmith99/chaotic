@@ -8,12 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using IP = Chaotic.Utilities.ImageProcessing;
+using Chaotic.Resources;
 
 namespace Chaotic.Tasks.Chaos.Class
 {
     public class Soulfist : ChaosClass
     {
-        public Soulfist(UserSettings settings, UserCharacter character, ResourceHelper r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger) : base(settings, character, r, kb, mouse, logger)
+        public Soulfist(UserSettings settings, UserCharacter character, ApplicationResources r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger) : base(settings, character, r, kb, mouse, logger)
         {
 
         }

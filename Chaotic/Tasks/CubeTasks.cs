@@ -1,4 +1,5 @@
-﻿using Chaotic.Tasks.Chaos.Class;
+﻿using Chaotic.Resources;
+using Chaotic.Tasks.Chaos.Class;
 using Chaotic.User;
 using Chaotic.Utilities;
 using OpenCvSharp;
@@ -19,11 +20,11 @@ namespace Chaotic.Tasks
         private UserSettings _settings;
         private MouseUtility _mouse;
         private KeyboardUtility _kb;
-        private ResourceHelper _r;
+        private ApplicationResources _r;
         private UITasks _uiTasks;
         private AppLogger _logger;
 
-        public CubeTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UITasks uiTasks, AppLogger logger)
+        public CubeTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, UITasks uiTasks, AppLogger logger)
         {
             _settings = settings;
             _mouse = mouse;
@@ -32,11 +33,10 @@ namespace Chaotic.Tasks
             _uiTasks = uiTasks;
             _logger = logger;
 
-            CenterScreen = _r.Point("CenterScreen");
+            CenterScreen = _r.CenterScreen;
             MoveToPoint = CenterScreen;
-            ClickableRegion = IP.ConvertStringCoordsToRect(_r["Clickable_Region"]);
-
-            ClickableOffset = _r.Point("Clickable_Offset");
+            ClickableRegion = _r.ClickableRegion;
+            ClickableOffset = _r.ClickableOffset;
         }
 
         public Point MoveToPoint { get; private set; }

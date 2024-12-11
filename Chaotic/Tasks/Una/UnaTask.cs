@@ -1,4 +1,5 @@
 ﻿using Accessibility;
+using Chaotic.Resources;
 using Chaotic.User;
 using Chaotic.Utilities;
 using OpenCvSharp;
@@ -41,13 +42,13 @@ namespace Chaotic.Tasks.Una
         protected readonly UITasks _uiTask;
         protected readonly MouseUtility _mouse;
         protected readonly KeyboardUtility _kb;
-        protected readonly ResourceHelper _r;
+        protected readonly ApplicationResources _r;
         protected readonly UserSettings _settings;
         protected readonly AppLogger _logger;
 
         protected Point CenterScreen { get; }
 
-        protected UnaTask(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UserSettings settings, AppLogger logger)
+        protected UnaTask(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, UserSettings settings, AppLogger logger)
         {
             _uiTask = uiTask;
             _mouse = mouse;
@@ -56,10 +57,10 @@ namespace Chaotic.Tasks.Una
             _settings = settings;
             _logger = logger;
 
-            CenterScreen = _r.Point("CenterScreen");
+            CenterScreen = _r.CenterScreen;
         }
 
-        public static UnaTask Create(string unaTaskName, UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UserSettings settings, AppLogger logger)
+        public static UnaTask Create(string unaTaskName, UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, UserSettings settings, AppLogger logger)
         {
             UnaTask task;
             switch (unaTaskName)
@@ -95,7 +96,7 @@ namespace Chaotic.Tasks.Una
         {
             if (BifrostToPoint(bifrost))
             {
-                _mouse.ClickCenterScreen(_r);
+                _mouse.ClickCenterScreen(CenterScreen);
                 ExecuteTask();
             }
         }
@@ -104,11 +105,12 @@ namespace Chaotic.Tasks.Una
 
         protected bool BifrostToPoint(int bifrost)
         {
-            _mouse.ClickPosition(_r["AdventureMenu"], 1000);
-            _mouse.ClickPosition(_r["BifrostMenu"], 1500);
-            _mouse.ClickPosition(_r[$"Bifrost{bifrost}"], 1000);
+            _mouse.ClickPosition(_r.AdventureMenu, 1000);
+            _mouse.ClickPosition(_r.BifrostMenu, 1500);
+            var bifrostPoint = (OpenCvSharp.Point)_r.GetType().GetProperty($"Bifrost{bifrost}").GetValue(_r);
+            _mouse.ClickPosition(bifrostPoint, 1000);
 
-            var bifrostOkRegion = ImageProcessing.ConvertStringCoordsToRect(_r["BifrostOk_Region"]);
+            var bifrostOkRegion = _r.BifrostOk;
             var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), bifrostOkRegion, .95);
             if (okButton.Found)
             {

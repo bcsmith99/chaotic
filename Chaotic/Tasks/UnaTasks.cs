@@ -1,4 +1,5 @@
-﻿using Chaotic.Tasks.Una;
+﻿using Chaotic.Resources;
+using Chaotic.Tasks.Una;
 using Chaotic.User;
 using Chaotic.Utilities;
 using DeftSharp.Windows.Input.Keyboard;
@@ -36,11 +37,11 @@ namespace Chaotic.Tasks
         private UserSettings _settings;
         private readonly MouseUtility _mouse;
         private readonly KeyboardUtility _kb;
-        private readonly ResourceHelper _r;
+        private readonly ApplicationResources _r;
         private readonly UITasks _uiTasks;
         private readonly AppLogger _logger;
 
-        public UnaTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UITasks uiTasks, AppLogger logger)
+        public UnaTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, UITasks uiTasks, AppLogger logger)
         {
             _settings = settings;
             _mouse = mouse;
@@ -57,17 +58,17 @@ namespace Chaotic.Tasks
             if (!character.RunUnas)
                 return dailiesAccepted;
 
-            _mouse.ClickPosition(_r["AdventureMenu"], 1000);
-            _mouse.ClickPosition(_r["UnaTask"], 1500);
-            _mouse.ClickPosition(_r["UnaDaily"], 1000);
-            _mouse.ClickPosition(_r["UnaDailyDropdown"], 300);
-            _mouse.ClickPosition(_r["UnaDailyDropdownFavorite"], 500);
+            _mouse.ClickPosition(_r.AdventureMenu, 1000);
+            _mouse.ClickPosition(_r.UnaTask, 1500);
+            _mouse.ClickPosition(_r.UnaDaily, 1000);
+            _mouse.ClickPosition(_r.UnaDailyDropdown, 300);
+            _mouse.ClickPosition(_r.UnaDailyDropdownFavorite, 500);
 
 
             //TODO: Possibly replace with image recognition for the accept button and doing it 1-n times.
 
             var acceptMatches = IP.LocateOnScreen(Utility.ImageResourceLocation("accept_button.png", _settings.Resolution),
-                IP.ConvertStringCoordsToRect(_r["UnaDailyRegion"]), .95);
+                _r.UnaDailyRegion, .95);
 
             foreach (var acceptMatch in acceptMatches.Matches)
             {
@@ -87,14 +88,14 @@ namespace Chaotic.Tasks
         {
             BackgroundProcessing.ProgressCheck();
 
-            _mouse.ClickPosition(_r["AdventureMenu"], 1000);
-            _mouse.ClickPosition(_r["UnaTask"], 1500);
-            _mouse.ClickPosition(_r["UnaWeekly"], 1000);
-            _mouse.ClickPosition(_r["UnaWeeklyDropdown"], 300);
-            _mouse.ClickPosition(_r["UnaWeeklyDropdownFavorite"], 500);
+            _mouse.ClickPosition(_r.AdventureMenu, 1000);
+            _mouse.ClickPosition(_r.UnaTask, 1500);
+            _mouse.ClickPosition(_r.UnaWeekly, 1000);
+            _mouse.ClickPosition(_r.UnaWeeklyDropdown, 300);
+            _mouse.ClickPosition(_r.UnaWeeklyDropdownFavorite, 500);
 
             var acceptMatches = IP.LocateOnScreen(Utility.ImageResourceLocation("accept_button.png", _settings.Resolution),
-                IP.ConvertStringCoordsToRect(_r["UnaWeeklyRegion"]), .95);
+                _r.UnaWeeklyRegion, .95);
             foreach (var acceptMatch in acceptMatches.Matches)
             {
                 _mouse.ClickPosition(acceptMatch.Center.X, acceptMatch.Center.Y, 500);

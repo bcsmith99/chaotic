@@ -70,7 +70,8 @@ namespace Chaotic
             new Tuple<string, LogDetailLevel>("Summary", LogDetailLevel.Summary)
         };
 
-        private ResourceHelper _r;
+        //private ApplicationResources _r;
+        private ApplicationResources _r; 
         private UITasks _uit;
         private GuildTasks _gt;
         private UnaTasks _ut;
@@ -327,7 +328,8 @@ namespace Chaotic
 
         private void InitializeTasks()
         {
-            _r = new ResourceHelper("Chaotic.Resources." + UserSettings.Resolution);
+            _r = ApplicationResources.Create(UserSettings.Resolution); 
+            //_r = new ApplicationResources("Chaotic.Resources." + UserSettings.Resolution);
             _uit = new UITasks(UserSettings, _mouse, _kb, _r, _logger);
             _gt = new GuildTasks(UserSettings, _mouse, _kb, _r, _logger);
             _ut = new UnaTasks(UserSettings, _mouse, _kb, _r, _uit, _logger);
@@ -360,7 +362,8 @@ namespace Chaotic
 
         private void Resolution_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _r = new ResourceHelper("Chaotic.Resources." + UserSettings.Resolution);
+            _r = ApplicationResources.Create(UserSettings.Resolution); 
+            //_r = new ApplicationResources("Chaotic.Resources." + UserSettings.Resolution);
             SaveUserSettings();
 
             InitializeTasks();
@@ -374,7 +377,7 @@ namespace Chaotic
 
         private bool RunCharacterDailyRotation(UserCharacter character, bool shouldAcceptWeeklies = false)
         {
-            _mouse.ClickCenterScreen(_r);
+            _mouse.ClickCenterScreen(_r.CenterScreen);
 
             bool success = true;
             success = _gt.PerformGuildTasks(character);
@@ -416,7 +419,7 @@ namespace Chaotic
         {
             Action a = () =>
             {
-                _mouse.ClickCenterScreen(_r);
+                _mouse.ClickCenterScreen(_r.CenterScreen);
                 if (CurrentDailySelectedChar != null)
                     _ut.RunDailies(CurrentDailySelectedChar);
             };
@@ -535,11 +538,11 @@ namespace Chaotic
                 foreach (var skill in CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].AllSkills)
                 {
                     if (skill == null) continue;
-
-                    var region = IP.ConvertStringCoordsToRect(_r[$"Skill_{skill.SkillKey}"]);
+                    
+                    var region = (OpenCvSharp.Rect)_r.GetType().GetProperty($"Skill_{skill.SkillKey}").GetValue(_r);
 
                     if (skill.IsAwakening && CurrentSelectedEditChar.ChaosLevel >= 1640)
-                        region = IP.ConvertStringCoordsToRect(_r[$"Skill_Hyper{skill.SkillKey}"]);
+                        region = (OpenCvSharp.Rect)_r.GetType().GetProperty($"Skill_Hyper{skill.SkillKey}").GetValue(_r); 
 
                     if (skill.SkillKey == "T" && CurrentSelectedEditChar.ChaosLevel < 1640)
                         continue;

@@ -46,6 +46,11 @@ namespace Chaotic.Utilities
             this._mm = new MouseManipulator();
         }
 
+        internal void SetPosition(OpenCvSharp.Point p)
+        {
+            _mm.SetPosition(p.X, p.Y);
+        }
+
         internal void SetPosition(int x, int y)
         {
             _mm.SetPosition(x, y);
@@ -62,15 +67,14 @@ namespace Chaotic.Utilities
             SetPosition(positions[0], positions[1]);
         }
 
-        public void ClickTopScreen(ResourceHelper rh)
+        public void ClickTopScreen(OpenCvSharp.Point centerScreen)
         {
-            var positions = rh["CenterScreen"].Split(',');
-            ClickPosition(positions[0], "5", 500, MouseButtons.Left);
+            ClickPosition(centerScreen.X, 5, 500, MouseButtons.Left);
         }
 
-        public void ClickCenterScreen(ResourceHelper rh)
+        public void ClickCenterScreen(OpenCvSharp.Point centerPoint)
         {
-            ClickPosition(rh["CenterScreen"], 500, MouseButtons.Right);
+            ClickPosition(centerPoint, 500, MouseButtons.Right);
         }
         internal void ClickPosition(OpenCvSharp.Point position, int waitAfter = 0, MouseButtons mb = MouseButtons.Left, double performanceModifier = 1)
         {

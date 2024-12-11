@@ -52,7 +52,7 @@ namespace Chaotic.Utilities
             return bitmap;
         }
 
-        public static System.Drawing.Bitmap CaptureScreen(/*ResourceHelper rh*/)
+        public static System.Drawing.Bitmap CaptureScreen(/*ApplicationResources rh*/)
         {
             //var width = rh.GetInt("ScreenX");
             //var height = rh.GetInt("ScreenY");

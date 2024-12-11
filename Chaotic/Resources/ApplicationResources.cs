@@ -148,6 +148,10 @@ namespace Chaotic.Resources
             if (!File.Exists(path) || ConfigurationManager.AppSettings["ForceUpgradeResources"] == "true")
             {
                 Save();
+
+                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                config.AppSettings.Settings["ForceUpgradeResources"].Value = "false";
+                config.Save();
             }
         }
 

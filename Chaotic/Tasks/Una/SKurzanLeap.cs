@@ -9,13 +9,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using IP = Chaotic.Utilities.ImageProcessing;
+using Chaotic.Resources;
 
 namespace Chaotic.Tasks.Una
 {
     [UnaTask(UnaTaskNames.SKurzanLeap)]
     public class SKurzanLeap : UnaTask
     {
-        public SKurzanLeap(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UserSettings settings, AppLogger logger)
+        public SKurzanLeap(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, UserSettings settings, AppLogger logger)
                     : base(uiTask, mouse, kb, r, settings, logger)
         {
 
@@ -24,7 +25,7 @@ namespace Chaotic.Tasks.Una
 
         protected override void ExecuteTask()
         {
-            var clickPoints = IP.ConvertPointArray(_r["SKurzanLeap_Clickpoints"]);
+            var clickPoints = _r.SouthKurzanLeapClickpoints;
             _kb.Press(Key.Enter, 50);
             _kb.Press(Key.OemQuestion);
             _kb.TypeString("picturepose6");

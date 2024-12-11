@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using IP = Chaotic.Utilities.ImageProcessing;
 using System.Diagnostics;
+using Chaotic.Resources;
 
 namespace Chaotic.Tasks.Una
 {
     [UnaTask(UnaTaskNames.VoldisLeap)]
     public class VoldisLeap : UnaTask
     {
-        public VoldisLeap(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UserSettings settings, AppLogger logger)
+        public VoldisLeap(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, UserSettings settings, AppLogger logger)
                     : base(uiTask, mouse, kb, r, settings, logger)
         {
 
@@ -33,12 +34,12 @@ namespace Chaotic.Tasks.Una
             {
                 _kb.Press(Key.G, 500);
 
-                var closeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("x.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["VoldisLeap_Close"]), .65);
+                var closeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("x.png", _settings.Resolution), _r.VoldisLeapClose, .65);
                 if (closeButton.Found)
                     _mouse.ClickPosition(closeButton.CenterX, closeButton.CenterY, 200);
 
                 if (retryCount > 4)
-                    npc = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("voldis_leap_npc.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["VoldisLeap_Npc"]), .7);
+                    npc = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("voldis_leap_npc.png", _settings.Resolution), _r.VoldisLeapNpc, .7);
 
                 if (npc.Found)
                     break;
@@ -55,7 +56,7 @@ namespace Chaotic.Tasks.Una
             else
             {
                 _logger.Log(LogDetailLevel.Debug, $"Voldis NPC Not Found, Reverting to backup and walk yo ass over there.");
-                _mouse.ClickPosition(CenterScreen.X + Int32.Parse(_r["VoldisLeap_X"]), CenterScreen.Y + 100, 2000, MouseButtons.Right);
+                _mouse.ClickPosition(CenterScreen.X + _r.VoldisLeapX, CenterScreen.Y + 100, 2000, MouseButtons.Right);
             }
 
             _kb.Press(Key.G, 1200);

@@ -13,20 +13,21 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using IP = Chaotic.Utilities.ImageProcessing;
 using System.Diagnostics;
+using Chaotic.Resources;
 
 namespace Chaotic.Tasks.Chaos.Class
 {
     public class ChaosClass
     {
         protected readonly UserCharacter _char;
-        protected readonly ResourceHelper _r;
+        protected readonly ApplicationResources _r;
         protected readonly KeyboardUtility _kb;
         protected readonly KeyConverter _kc;
         protected readonly MouseUtility _mouse;
         protected readonly UserSettings _settings;
         protected readonly AppLogger _logger;
 
-        public ChaosClass(UserSettings settings, UserCharacter character, ResourceHelper r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger)
+        public ChaosClass(UserSettings settings, UserCharacter character, ApplicationResources r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger)
         {
             _char = character;
             _r = r;
@@ -36,8 +37,8 @@ namespace Chaotic.Tasks.Chaos.Class
             _settings = settings;
             _logger = logger;
 
-            CharacterIconRegion = IP.ConvertStringCoordsToRect(_r["CharacterIcon_Region"]);
-            ScreenCenter = IP.GetPointFromStringCoords(_r["CenterScreen"]);
+            CharacterIconRegion = _r.CharacterIcon; // IP.ConvertStringCoordsToRect(_r["CharacterIcon_Region"]);
+            ScreenCenter = _r.CenterScreen; // IP.GetPointFromStringCoords(_r["CenterScreen"]);
         }
 
         public double SkillConfidence { get; protected set; } = .95;
@@ -115,11 +116,12 @@ namespace Chaotic.Tasks.Chaos.Class
         {
             using (var ms = new MemoryStream(Convert.FromBase64String(skill.SkillImageEncoded)))
             {
-                var skillCoords = _r[$"Skill_{skill.SkillKey}"];
+                var skillRegion = (OpenCvSharp.Rect)_r.GetType().GetProperty($"Skill_{skill.SkillKey}").GetValue(_r);
+                //var skillCoords = _r[$"Skill_{skill.SkillKey}"];
                 if (skill.IsAwakening && _char.HasHyperSkill)
-                    skillCoords = _r[$"Skill_Hyper{skill.SkillKey}"];
+                    skillRegion = (OpenCvSharp.Rect)_r.GetType().GetProperty($"Skill_Hyper{skill.SkillKey}").GetValue(_r);
 
-                var skillFound = IP.LocateCenterOnScreen(ms, IP.ConvertStringCoordsToRect(skillCoords), confidence);
+                var skillFound = IP.LocateCenterOnScreen(ms, skillRegion, confidence);
                 return skillFound;
             }
         }
@@ -158,7 +160,7 @@ namespace Chaotic.Tasks.Chaos.Class
         }
 
 
-        public static ChaosClass Create(UserSettings settings, UserCharacter character, ResourceHelper r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger)
+        public static ChaosClass Create(UserSettings settings, UserCharacter character, ApplicationResources r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger)
         {
             switch (character.ClassName)
             {

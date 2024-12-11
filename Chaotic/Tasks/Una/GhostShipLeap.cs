@@ -8,13 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Chaotic.Resources;
 
 namespace Chaotic.Tasks.Una
 {
     [UnaTask(UnaTaskNames.GhostShipLeap)]
     public class GhostShipLeap : UnaTask
     {
-        public GhostShipLeap(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UserSettings settings, AppLogger logger)
+        public GhostShipLeap(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, UserSettings settings, AppLogger logger)
                     : base(uiTask, mouse, kb, r, settings, logger)
         {
 
