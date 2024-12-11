@@ -400,7 +400,7 @@ namespace Chaotic.Tasks
 
                 if (leaveButton.Found)
                     return;
-                Sleep.SleepMs(450, 550);
+                Sleep.SleepMs(450, 550, _settings.PerformanceMultiplier);
             }
         }
 

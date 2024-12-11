@@ -47,7 +47,7 @@ namespace Chaotic.Tasks.Chaos.Class
 
         public void UseAwakening(Point screenPoint)
         {
-            var awakening = _char.Skills.Awakening;
+            var awakening = _char.AllResolutionSkills[_settings.Resolution].Awakening;
             var skillFound = CheckSkillAvailable(awakening, .8);
 
             if (awakening.Priority > 0 && skillFound.Found)
@@ -86,7 +86,7 @@ namespace Chaotic.Tasks.Chaos.Class
             UseCharacterSpecificAbilities();
 
             int currentCasts = 0;
-            var abilities = _char.Skills.AllSkills.Where(x => !x.IsAwakening && x.Priority > 0).OrderBy(x => x.Priority);
+            var abilities = _char.AllResolutionSkills[_settings.Resolution].AllSkills.Where(x => !x.IsAwakening && x.Priority > 0).OrderBy(x => x.Priority);
 
             foreach (var ability in abilities)
             {
@@ -186,6 +186,8 @@ namespace Chaotic.Tasks.Chaos.Class
                     return new Summoner(settings, character, r, kb, mouse, logger);
                 case ClassNames.Gunlancer:
                     return new Gunlancer(settings, character, r, kb, mouse, logger);
+                case ClassNames.Soulfist:
+                    return new Soulfist(settings, character, r, kb, mouse, logger);
                 case ClassNames.Slayer:
                     return new Slayer(settings, character, r, kb, mouse, logger);
                 case ClassNames.Destroyer:

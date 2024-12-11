@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.Pkcs;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -17,16 +18,16 @@ namespace Chaotic.User
     {
         public UserCharacterSkills()
         {
-            QSkill = new UserCharacterSkill() { SkillKey = "Q", SkillType = "Normal" };
-            WSkill = new UserCharacterSkill() { SkillKey = "W", SkillType = "Normal" };
-            ESkill = new UserCharacterSkill() { SkillKey = "E", SkillType = "Normal" };
-            RSkill = new UserCharacterSkill() { SkillKey = "R", SkillType = "Normal" };
-            ASkill = new UserCharacterSkill() { SkillKey = "A", SkillType = "Normal" };
-            SSkill = new UserCharacterSkill() { SkillKey = "S", SkillType = "Normal" };
-            DSkill = new UserCharacterSkill() { SkillKey = "D", SkillType = "Normal" };
-            FSkill = new UserCharacterSkill() { SkillKey = "F", SkillType = "Normal" };
-            HyperSkill = new UserCharacterSkill() { SkillKey = "T", SkillType = "Normal" };
-            Awakening = new UserCharacterSkill() { SkillKey = "V", SkillType = "Normal", IsAwakening = true };
+            QSkill = new UserCharacterSkill() { SkillKey = "Q", SkillType = "Cast" };
+            WSkill = new UserCharacterSkill() { SkillKey = "W", SkillType = "Cast" };
+            ESkill = new UserCharacterSkill() { SkillKey = "E", SkillType = "Cast" };
+            RSkill = new UserCharacterSkill() { SkillKey = "R", SkillType = "Cast" };
+            ASkill = new UserCharacterSkill() { SkillKey = "A", SkillType = "Cast" };
+            SSkill = new UserCharacterSkill() { SkillKey = "S", SkillType = "Cast" };
+            DSkill = new UserCharacterSkill() { SkillKey = "D", SkillType = "Cast" };
+            FSkill = new UserCharacterSkill() { SkillKey = "F", SkillType = "Cast" };
+            HyperSkill = new UserCharacterSkill() { SkillKey = "T", SkillType = "Cast" };
+            Awakening = new UserCharacterSkill() { SkillKey = "V", SkillType = "Cast", IsAwakening = true };
         }
 
         public UserCharacterSkill QSkill { get; set; }
@@ -80,15 +81,26 @@ namespace Chaotic.User
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
         public string SkillKey { get; set; }
         public string SkillType { get; set; }
-        public int Duration { get; set; }
+        private int _duration;
+        public int Duration
+        {
+            get { return _duration; }
+            set
+            {
+                _duration = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsDirectional { get; set; }
         public bool IsShortCast { get; set; }
         public int Priority { get; set; }
         public bool IsAwakening { get; set; }
 
-        [JsonIgnore]
+
         private string _skillImageEncoded;
         public string SkillImageEncoded
         {

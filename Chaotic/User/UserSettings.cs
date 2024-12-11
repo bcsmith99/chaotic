@@ -29,6 +29,7 @@ namespace Chaotic.User
         public bool MoveHoningMaterials { get; set; }
         public bool MoveGems { get; set; }
         public int GemLevelThreshold { get; set; }
+        public double PerformanceMultiplier { get; set; } = 1;
 
         public DateTime? LastWeeklyReset { get; set; }
         public ObservableCollection<UserCharacter> Characters { get; set; }

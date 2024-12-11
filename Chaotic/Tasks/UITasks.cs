@@ -70,7 +70,7 @@ namespace Chaotic.Tasks
         public void ToggleArkPassive(bool disable)
         {
             BackgroundProcessing.ProgressCheck();
-            Sleep.SleepMs(500, 500);
+            Sleep.SleepMs(500, 500, _settings.PerformanceMultiplier);
             _mouse.ClickCenterScreen(_r);
 
             _mouse.ClickPosition(_r["CharacterMenu"], 500);
@@ -122,17 +122,17 @@ namespace Chaotic.Tasks
 
         public void ClearOngoingQuests()
         {
-            Sleep.SleepMs(300, 400);
+            Sleep.SleepMs(300, 400, _settings.PerformanceMultiplier);
             BackgroundProcessing.ProgressCheck();
             var ongoingButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ongoing_quests.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["OngoingQuest_Region"]), .85, true);
             if (ongoingButton.Found)
             {
-                Sleep.SleepMs(100, 200);
+                Sleep.SleepMs(100, 200, _settings.PerformanceMultiplier);
                 _mouse.ClickPosition(ongoingButton.CenterX, ongoingButton.CenterY, 1000);
                 var completeButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), confidence: .95);
                 while (completeButton.Found)
                 {
-                    Sleep.SleepMs(100, 200);
+                    Sleep.SleepMs(100, 200, _settings.PerformanceMultiplier);
                     _mouse.ClickPosition(completeButton.CenterX, completeButton.CenterY, 1000);
                     completeButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), confidence: .95);
                 }
@@ -141,7 +141,7 @@ namespace Chaotic.Tasks
 
         public bool MoveGems()
         {
-            _logger.Log(LogDetailLevel.Debug, "Moving gems to storage"); 
+            _logger.Log(LogDetailLevel.Debug, "Moving gems to storage");
             var inventoryRegion = IP.ConvertStringCoordsToRect(_r["Inventory_Region"]);
             var success = true;
             var gemDirectory = Utility.ResourceLocation(_settings.Resolution, "gems");
@@ -182,7 +182,7 @@ namespace Chaotic.Tasks
 
         public bool MoveHoningMaterials()
         {
-            _logger.Log(LogDetailLevel.Debug, "Moving Honing Materials to Storage"); 
+            _logger.Log(LogDetailLevel.Debug, "Moving Honing Materials to Storage");
             var inventoryRegion = IP.ConvertStringCoordsToRect(_r["Inventory_Region"]);
             var success = true;
             var honingMatsDirectory = Utility.ResourceLocation(_settings.Resolution, "mats");
@@ -207,7 +207,7 @@ namespace Chaotic.Tasks
                 }
             }
 
-            Sleep.SleepMs(200, 300);
+            Sleep.SleepMs(200, 300, _settings.PerformanceMultiplier);
 
             return success;
         }
@@ -230,7 +230,7 @@ namespace Chaotic.Tasks
 
         public bool CloseInventoryManagement()
         {
-            _logger.Log(LogDetailLevel.Debug, "Closing Inventory Management"); 
+            _logger.Log(LogDetailLevel.Debug, "Closing Inventory Management");
             BackgroundProcessing.ProgressCheck();
             bool success = true;
 
@@ -280,7 +280,7 @@ namespace Chaotic.Tasks
 
         public bool AuraRepair()
         {
-            _logger.Log(LogDetailLevel.Debug, "Attempting Aura Repair"); 
+            _logger.Log(LogDetailLevel.Debug, "Attempting Aura Repair");
             BackgroundProcessing.ProgressCheck();
             bool success = true;
             OpenPetMenu();
@@ -302,7 +302,7 @@ namespace Chaotic.Tasks
                 _logger.Log(LogDetailLevel.Debug, "Unable to find repair button while repairing gear, failing.");
                 success = false;
             }
-                
+
 
             _kb.Press(Key.Escape, 500);
 
@@ -317,7 +317,7 @@ namespace Chaotic.Tasks
                 if (!GameMenuOpen())
                 {
                     _kb.Press(Key.Escape);
-                    Sleep.SleepMs(700, 1000);
+                    Sleep.SleepMs(700, 1000, _settings.PerformanceMultiplier);
                 }
                 else
                     break;

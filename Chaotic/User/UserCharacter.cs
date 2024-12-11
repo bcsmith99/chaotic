@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Chaotic.User
@@ -35,6 +35,7 @@ namespace Chaotic.User
         public const string Wardancer = "Wardancer";
         public const string Reaper = "Reaper";
         public const string Summoner = "Summoner";
+        public const string Soulfist = "Soulfist";
     }
 
     public class UserCharacter : INotifyPropertyChanged
@@ -47,7 +48,8 @@ namespace Chaotic.User
             SecondUnaTask = new UserUnaTask() { UnaName = "Not Set", BifrostPosition = 1 };
             ThirdUnaTask = new UserUnaTask() { UnaName = "Not Set", BifrostPosition = 1 };
 
-            Skills = new UserCharacterSkills();
+            AllResolutionSkills.Add("3440x1440", new UserCharacterSkills());
+            AllResolutionSkills.Add("2560x1440", new UserCharacterSkills());
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -84,12 +86,12 @@ namespace Chaotic.User
             ClassNames.Deadeye,
             ClassNames.Wardancer,
             ClassNames.Reaper,
-            ClassNames.Summoner
-        };
+            ClassNames.Summoner,
+            ClassNames.Soulfist
+        }.OrderBy(x => x).ToList();
 
 
         private bool _isCharSelected = false;
-        [JsonIgnore]
         public bool IsCharSelected
         {
             get { return _isCharSelected; }
@@ -104,7 +106,7 @@ namespace Chaotic.User
 
         public bool IsMain { get; set; }
 
-        public string ClassName { get; set; }
+        public string ClassName { get; set; } = "";
         public int CharacterIndex { get; set; }
         public int ChaosLevel { get; set; }
 
@@ -131,8 +133,9 @@ namespace Chaotic.User
         public UserUnaTask SecondUnaTask { get; set; }
         public UserUnaTask ThirdUnaTask { get; set; }
 
-        public UserCharacterSkills Skills { get; set; }
+        public Dictionary<string, UserCharacterSkills> AllResolutionSkills { get; set; } = new Dictionary<string, UserCharacterSkills>();
 
+        [JsonIgnore]
         public bool HasHyperSkill
         {
             get

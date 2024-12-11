@@ -8,9 +8,9 @@ namespace Chaotic.Utilities
 {
     internal class Sleep
     {
-        internal static void SleepMs(int minMs, int maxMs)
+        internal static void SleepMs(int minMs, int maxMs, double multiplier = 1)
         {
-            var time = Random.Shared.Next(minMs, maxMs);
+            var time = Random.Shared.Next((int)Math.Round(minMs * multiplier), (int)Math.Round(maxMs * multiplier));
 
             Thread.Sleep(time);
         }

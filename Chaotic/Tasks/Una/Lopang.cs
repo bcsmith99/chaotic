@@ -42,7 +42,6 @@ namespace Chaotic.Tasks.Una
 
         public void RunLopangRoute()
         {
-            Sleep.SleepMs(1000, 1000);
             _mouse.ClickCenterScreen(_r);
 
             var routePositions = IP.ConvertPointArray(_r["UnaLopang_Route"]);
