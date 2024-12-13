@@ -290,7 +290,7 @@ namespace Chaotic.Tasks
             if (repairButton.Found)
             {
                 _mouse.ClickPosition(repairButton.CenterX, repairButton.CenterY, 1000);
-                var repairAllButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("repairall_button.png", _settings.Resolution), confidence: .85);
+                var repairAllButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("repairall_button.png", _settings.Resolution), confidence: .80);
 
                 //Debug.Print($"Repair All Confidence: {repairAllButton.MaxConfidence}");
                 if (repairAllButton.Found)
@@ -301,7 +301,7 @@ namespace Chaotic.Tasks
             else
             {
                 _logger.Log(LogDetailLevel.Debug, "Unable to find repair button while repairing gear, failing.");
-                success = false;
+                //success = false;
             }
 
 
