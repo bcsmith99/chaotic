@@ -21,7 +21,7 @@ namespace Chaotic.Tasks.Una
 
         }
 
-        protected override void ExecuteTask()
+        public override void ExecuteTask()
         {
             //Press both F5 and F6 in case an adventure quest is hijacking the key.
             _kb.Press(Key.F5, 1000);

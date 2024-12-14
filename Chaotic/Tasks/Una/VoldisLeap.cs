@@ -23,7 +23,7 @@ namespace Chaotic.Tasks.Una
 
         }
 
-        protected override void ExecuteTask()
+        public override void ExecuteTask()
         {
             var retryCount = 0;
             var maxTries = 60;
@@ -59,10 +59,10 @@ namespace Chaotic.Tasks.Una
                 _mouse.ClickPosition(CenterScreen.X + _r.VoldisLeapX, CenterScreen.Y + 100, 2000, MouseButtons.Right);
             }
 
-            _kb.Press(Key.G, 1200);
+            _kb.Press(Key.G, 1500, _settings.PerformanceMultiplier);
             _kb.ShiftPress(Key.G, 400);
 
-            var completeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), 400, 950, 200, 100, .95);
+            var completeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), _r.Complete, .95);
             if (completeButton.Found)
             {
                 Sleep.SleepMs(100, 200);

@@ -31,6 +31,8 @@ namespace Chaotic.User
         public int GemLevelThreshold { get; set; }
         public double PerformanceMultiplier { get; set; } = 1;
 
+        public bool CaptureTimeoutScreenshot { get; set; } = true;
+
         public DateTime? LastWeeklyReset { get; set; }
         public ObservableCollection<UserCharacter> Characters { get; set; }
 

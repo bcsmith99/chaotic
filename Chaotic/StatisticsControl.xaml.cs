@@ -1,4 +1,5 @@
 ﻿using Chaotic.Statistics;
+using Chaotic.Tasks;
 using Chaotic.Tasks.Chaos;
 using Chaotic.User;
 using Chaotic.Utilities;
@@ -146,6 +147,8 @@ namespace Chaotic
                 var stat = new DateStatistic()
                 {
                     ExecutionDate = x,
+
+                    SuccessRate = Math.Round((((double)_statistics.Statistics.Where(y => y.StartDate.Date == x && y.TaskOutcome == TaskOutcomes.Success).Count() / (double)_statistics.Statistics.Where(y => y.StartDate.Date == x).Count()) * 100), 2),
                     KurzanStatistics = _statistics.Statistics.Where(y => y.GetType() == typeof(KurzanTaskStatistic) && y.StartDate.Date == x).Cast<KurzanTaskStatistic>().ToList(),
                     ChaosStatistics = _statistics.Statistics.Where(y => y.GetType() == typeof(ChaosTaskStatistic) && y.StartDate.Date == x).Cast<ChaosTaskStatistic>().ToList()
                 };
@@ -164,6 +167,9 @@ namespace Chaotic
             TypeStatistics.Clear();
             var stat = new TypeStatistic()
             {
+                SuccessRate = Math.Round((((double)_statistics.Statistics.Where(y => y.TaskOutcome == TaskOutcomes.Success).Count() / (double)_statistics.Statistics.Count()) * 100), 2),
+                KurzanSuccessRate = Math.Round((((double)_statistics.Statistics.Count(y => y.GetType() == typeof(KurzanTaskStatistic) && y.TaskOutcome == TaskOutcomes.Success) / (double)_statistics.Statistics.Count(y => y.GetType() == typeof(KurzanTaskStatistic))) * 100), 2),
+                ChaosSuccessRate = Math.Round((((double)_statistics.Statistics.Count(y => y.GetType() == typeof(ChaosTaskStatistic) && y.TaskOutcome == TaskOutcomes.Success) / (double)_statistics.Statistics.Count(y => y.GetType() == typeof(ChaosTaskStatistic))) * 100), 2),
                 KurzanStatistics = _statistics.Statistics.Where(y => y.GetType() == typeof(KurzanTaskStatistic)).Cast<KurzanTaskStatistic>().ToList(),
                 ChaosStatistics = _statistics.Statistics.Where(y => y.GetType() == typeof(ChaosTaskStatistic)).Cast<ChaosTaskStatistic>().ToList()
             };
@@ -181,6 +187,7 @@ namespace Chaotic
                 var stat = new ClassStatistic()
                 {
                     ClassName = x,
+                    SuccessRate = Math.Round((((double)_statistics.Statistics.Where(y => y.Class == x && y.TaskOutcome == TaskOutcomes.Success).Count() / (double)_statistics.Statistics.Where(y => y.Class == x).Count()) * 100), 2),
                     KurzanStatistics = _statistics.Statistics.Where(y => y.GetType() == typeof(KurzanTaskStatistic) && y.Class == x).Cast<KurzanTaskStatistic>().ToList(),
                     ChaosStatistics = _statistics.Statistics.Where(y => y.GetType() == typeof(ChaosTaskStatistic) && y.Class == x).Cast<ChaosTaskStatistic>().ToList()
                 };

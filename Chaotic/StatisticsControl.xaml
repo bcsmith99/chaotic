@@ -41,202 +41,48 @@
 			<!--<Button Content="Refresh Statistics"
 					Click="LoadStatistics_Click" />-->
 		</StackPanel>
-		<ScrollViewer Grid.Row="1"
-					  VerticalScrollBarVisibility="Visible">
-			<Grid>
-				<Grid Visibility="{Binding IsClassGrouping, Converter={StaticResource VisibilityConverter}}">
-					<!--<Label>Class Analysis</Label>-->
-					<ItemsControl ItemsSource="{Binding ClassStatistics}">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<StackPanel Margin="20,0,10,0">
-									<Label Content="{Binding ClassName}" FontWeight="Bold"/>
-									<StackPanel Margin="20,0,0,0">
-										<Label Content="Kurzan Front:" />
-										<ItemsControl ItemsSource="{Binding KurzanStats}"
-													  Margin="10,0,0,0">
-											<ItemsControl.ItemTemplate>
-												<DataTemplate>
-													<StackPanel>
-														<StackPanel Orientation="Horizontal">
-															<Label Content="{Binding Level}"
-																   Padding="0,5,0,5"></Label>
-															<Label Padding="0,5,0,5">-</Label>
-															<Label Content="{Binding Map}"
-																   Padding="0,5,0,5"></Label>
-															<Label Padding="0,5,0,5">:</Label>
-														</StackPanel>
-														<StackPanel Orientation="Horizontal">
-															<Label Padding="5, 2, 2, 2">Total Runs:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalRuns}" />
-															<Label Padding="5, 2, 2, 2">Complete:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalComplete}" />
-															<Label Padding="5, 2, 2, 2">Failed:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalFailed}" />
-															<Label Padding="5, 2, 2, 2">Timeout:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalTimeout}" />
-															<Label Padding="5, 2, 2, 2">Average Time:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding AverageTime}" />
-														</StackPanel>
-													</StackPanel>
-
-												</DataTemplate>
-											</ItemsControl.ItemTemplate>
-										</ItemsControl>
-										<Label Content="Chaos Dungeon:" />
-										<ItemsControl ItemsSource="{Binding ChaosStats}"
-													  Margin="10,0,0,0">
-											<ItemsControl.ItemTemplate>
-												<DataTemplate>
-													<StackPanel>
-														<StackPanel Orientation="Horizontal">
-															<Label Content="{Binding Level}"
-																   Padding="5,2,0,2"></Label>
-															<Label Padding="0,2,5,2">:</Label>
-
-															<Label Padding="5, 2, 2, 2">Total Runs:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalRuns}" />
-															<Label Padding="5, 2, 2, 2">Complete:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalComplete}" />
-															<Label Padding="5, 2, 2, 2">Failed:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalFailed}" />
-															<Label Padding="5, 2, 2, 2">Timeout:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalTimeout}" />
-														</StackPanel>
-														<StackPanel Orientation="Horizontal">
-															<Label Padding="5, 2, 2, 2">Average Time:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding AverageTime}" />
-															<Label Padding="5, 2, 2, 2">Floor 1 Avg:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding AverageFloor1}" />
-															<Label Padding="5, 2, 2, 2">Floor 2 Avg:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding AverageFloor2}" />
-															<Label Padding="5, 2, 2, 2">Floor 3 Avg:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding AverageFloor3}" />
-														</StackPanel>
-													</StackPanel>
-
-												</DataTemplate>
-											</ItemsControl.ItemTemplate>
-										</ItemsControl>
-									</StackPanel>
-								</StackPanel>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</Grid>
-				<Grid Visibility="{Binding IsDateGrouping, Converter={StaticResource VisibilityConverter}}">
-					<ItemsControl ItemsSource="{Binding DateStatistics}">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<StackPanel Margin="20,0,10,0">
-									<Label Content="{Binding ExecutionDate}" FontWeight="Bold" />
-									<StackPanel Margin="20,0,0,0">
-										<Label Content="Kurzan Front:" />
-										<ItemsControl ItemsSource="{Binding KurzanStats}"
-													  Margin="10,0,0,0">
-											<ItemsControl.ItemTemplate>
-												<DataTemplate>
-													<StackPanel>
-														<StackPanel Orientation="Horizontal">
-															<Label Content="{Binding Level}"
-																   Padding="0,5,0,5"></Label>
-															<Label Padding="0,5,0,5">-</Label>
-															<Label Content="{Binding Map}"
-																   Padding="0,5,0,5"></Label>
-															<Label Padding="0,5,0,5">:</Label>
-														</StackPanel>
-														<StackPanel Orientation="Horizontal">
-															<Label Padding="5, 2, 2, 2">Total Runs:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalRuns}" />
-															<Label Padding="5, 2, 2, 2">Complete:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalComplete}" />
-															<Label Padding="5, 2, 2, 2">Failed:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalFailed}" />
-															<Label Padding="5, 2, 2, 2">Timeout:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalTimeout}" />
-															<Label Padding="5, 2, 2, 2">Average Time:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding AverageTime}" />
-														</StackPanel>
-													</StackPanel>
-
-												</DataTemplate>
-											</ItemsControl.ItemTemplate>
-										</ItemsControl>
-										<Label Content="Chaos Dungeon:" />
-										<ItemsControl ItemsSource="{Binding ChaosStats}"
-													  Margin="10,0,0,0">
-											<ItemsControl.ItemTemplate>
-												<DataTemplate>
-													<StackPanel>
-														<StackPanel Orientation="Horizontal">
-															<Label Content="{Binding Level}"
-																   Padding="0,2,0,2"></Label>
-															<Label Padding="0,2,5,2">:</Label>
-
-															<Label Padding="5, 2, 2, 2">Total Runs:</Label>
-															<Label Padding="0, 2, 2, 2"
-																   Content="{Binding TotalRuns}" />
-															<Label Padding="5, 2, 2, 2">Complete:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalComplete}" />
-															<Label Padding="5, 2, 2, 2">Failed:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalFailed}" />
-															<Label Padding="5, 2, 2, 2">Timeout:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding TotalTimeout}" />
-														</StackPanel>
-														<StackPanel Orientation="Horizontal">
-															<Label Padding="5, 2, 2, 2">Average Time:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding AverageTime}" />
-															<Label Padding="5, 2, 2, 2">Floor 1 Avg:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding AverageFloor1}" />
-															<Label Padding="5, 2, 2, 2">Floor 2 Avg:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding AverageFloor2}" />
-															<Label Padding="5, 2, 2, 2">Floor 3 Avg:</Label>
-															<Label Padding="0, 2, 5, 2"
-																   Content="{Binding AverageFloor3}" />
-														</StackPanel>
-													</StackPanel>
-
-												</DataTemplate>
-											</ItemsControl.ItemTemplate>
-										</ItemsControl>
-									</StackPanel>
-								</StackPanel>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</Grid>
-				<Grid Visibility="{Binding IsTypeGrouping, Converter={StaticResource VisibilityConverter}}">
-					<ItemsControl ItemsSource="{Binding TypeStatistics}">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<StackPanel Margin="20,0,10,0">
-									<Label Content="Kurzan Front:" FontWeight="Bold"/>
+		<!--<ScrollViewer Grid.Row="1"
+					  VirtualizingPanel.ScrollUnit="Pixel"
+					  VerticalScrollBarVisibility="Visible">-->
+		<Grid Grid.Row="1">
+			<Grid Visibility="{Binding IsClassGrouping, Converter={StaticResource VisibilityConverter}}">
+				<!--<Label>Class Analysis</Label>-->
+				<ItemsControl ItemsSource="{Binding ClassStatistics}"
+							  ScrollViewer.CanContentScroll="True"
+							  VirtualizingPanel.ScrollUnit="Pixel"
+							  VirtualizingStackPanel.VirtualizationMode="Recycling">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<VirtualizingStackPanel />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.Template>
+						<ControlTemplate>
+							<ScrollViewer>
+								<ItemsPresenter />
+							</ScrollViewer>
+						</ControlTemplate>
+					</ItemsControl.Template>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Margin="20,0,10,0">
+								<Label FontWeight="Bold">
+									<Label.Content>
+										<TextBlock>
+												<Run Text="{Binding ClassName}" />
+												<Run Text="{Binding SuccessRate, StringFormat={}({0}%)}" />
+										</TextBlock>
+									</Label.Content>
+								</Label>
+								<StackPanel Margin="20,0,0,0">
+									<Label Content="Kurzan Front:" />
 									<ItemsControl ItemsSource="{Binding KurzanStats}"
 												  Margin="10,0,0,0">
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<VirtualizingStackPanel />
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
 										<ItemsControl.ItemTemplate>
 											<DataTemplate>
 												<StackPanel>
@@ -270,9 +116,138 @@
 											</DataTemplate>
 										</ItemsControl.ItemTemplate>
 									</ItemsControl>
-									<Label Content="Chaos Dungeon:"  FontWeight="Bold"/>
+									<Label Content="Chaos Dungeon:" />
 									<ItemsControl ItemsSource="{Binding ChaosStats}"
 												  Margin="10,0,0,0">
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<VirtualizingStackPanel />
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<StackPanel>
+													<StackPanel Orientation="Horizontal">
+														<Label Content="{Binding Level}"
+															   Padding="5,2,0,2"></Label>
+														<Label Padding="0,2,5,2">:</Label>
+
+														<Label Padding="5, 2, 2, 2">Total Runs:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalRuns}" />
+														<Label Padding="5, 2, 2, 2">Complete:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalComplete}" />
+														<Label Padding="5, 2, 2, 2">Failed:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalFailed}" />
+														<Label Padding="5, 2, 2, 2">Timeout:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalTimeout}" />
+													</StackPanel>
+													<StackPanel Orientation="Horizontal">
+														<Label Padding="5, 2, 2, 2">Average Time:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding AverageTime}" />
+														<Label Padding="5, 2, 2, 2">Floor 1 Avg:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding AverageFloor1}" />
+														<Label Padding="5, 2, 2, 2">Floor 2 Avg:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding AverageFloor2}" />
+														<Label Padding="5, 2, 2, 2">Floor 3 Avg:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding AverageFloor3}" />
+													</StackPanel>
+												</StackPanel>
+
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</StackPanel>
+							</StackPanel>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</Grid>
+			<Grid Visibility="{Binding IsDateGrouping, Converter={StaticResource VisibilityConverter}}">
+				<ItemsControl ItemsSource="{Binding DateStatistics}"
+							  ScrollViewer.CanContentScroll="True"
+							  VirtualizingPanel.ScrollUnit="Pixel"
+							  VirtualizingStackPanel.VirtualizationMode="Recycling">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<VirtualizingStackPanel />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.Template>
+						<ControlTemplate>
+							<ScrollViewer>
+								<ItemsPresenter />
+							</ScrollViewer>
+						</ControlTemplate>
+					</ItemsControl.Template>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Margin="20,0,10,0">
+								<Label FontWeight="Bold">
+									<Label.Content>
+										<TextBlock>
+												<Run Text="{Binding ExecutionDate, StringFormat={}{0:ddd - MMM dd yyyy}}" />
+												<Run Text="{Binding SuccessRate, StringFormat={}({0}%)}" />
+										</TextBlock>
+									</Label.Content>
+								</Label>
+								<StackPanel Margin="20,0,0,0">
+									<Label Content="Kurzan Front:" />
+									<ItemsControl ItemsSource="{Binding KurzanStats}"
+												  Margin="10,0,0,0">
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<VirtualizingStackPanel />
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<StackPanel>
+													<StackPanel Orientation="Horizontal">
+														<Label Content="{Binding Level}"
+															   Padding="0,5,0,5"></Label>
+														<Label Padding="0,5,0,5">-</Label>
+														<Label Content="{Binding Map}"
+															   Padding="0,5,0,5"></Label>
+														<Label Padding="0,5,0,5">:</Label>
+													</StackPanel>
+													<StackPanel Orientation="Horizontal">
+														<Label Padding="5, 2, 2, 2">Total Runs:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalRuns}" />
+														<Label Padding="5, 2, 2, 2">Complete:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalComplete}" />
+														<Label Padding="5, 2, 2, 2">Failed:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalFailed}" />
+														<Label Padding="5, 2, 2, 2">Timeout:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding TotalTimeout}" />
+														<Label Padding="5, 2, 2, 2">Average Time:</Label>
+														<Label Padding="0, 2, 5, 2"
+															   Content="{Binding AverageTime}" />
+													</StackPanel>
+												</StackPanel>
+
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+									<Label Content="Chaos Dungeon:" />
+									<ItemsControl ItemsSource="{Binding ChaosStats}"
+												  Margin="10,0,0,0">
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<VirtualizingStackPanel />
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
 										<ItemsControl.ItemTemplate>
 											<DataTemplate>
 												<StackPanel>
@@ -314,11 +289,137 @@
 										</ItemsControl.ItemTemplate>
 									</ItemsControl>
 								</StackPanel>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</Grid>
+							</StackPanel>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
 			</Grid>
-		</ScrollViewer>
+			<Grid Visibility="{Binding IsTypeGrouping, Converter={StaticResource VisibilityConverter}}">
+				<ScrollViewer VerticalScrollBarVisibility="Visible">
+					<StackPanel>
+						<Label FontWeight="Bold">
+							<Label.Content>
+								<TextBlock>
+									<Run Text="Overall " />
+									<Run Text="{Binding TypeStatistics[0].SuccessRate, StringFormat={}({0}%):}" />
+								</TextBlock>
+							</Label.Content>
+						</Label>
+						<ItemsControl ItemsSource="{Binding TypeStatistics}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Margin="20,0,10,0">
+										<Label FontWeight="Bold">
+											<Label.Content>
+												<TextBlock>
+													<Run Text="Kurzan Front " />
+													<Run Text="{Binding KurzanSuccessRate, StringFormat={}({0}%):}" />
+												</TextBlock>
+											</Label.Content>
+										</Label>
+										<ItemsControl ItemsSource="{Binding KurzanStats}"
+													  Margin="10,0,0,0">
+											<ItemsControl.ItemsPanel>
+												<ItemsPanelTemplate>
+													<VirtualizingStackPanel />
+												</ItemsPanelTemplate>
+											</ItemsControl.ItemsPanel>
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Content="{Binding Level}"
+																   Padding="0,5,0,5"></Label>
+															<Label Padding="0,5,0,5">-</Label>
+															<Label Content="{Binding Map}"
+																   Padding="0,5,0,5"></Label>
+															<Label Padding="0,5,0,5">:</Label>
+														</StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Padding="5, 2, 2, 2">Total Runs:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalRuns}" />
+															<Label Padding="5, 2, 2, 2">Complete:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalComplete}" />
+															<Label Padding="5, 2, 2, 2">Failed:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalFailed}" />
+															<Label Padding="5, 2, 2, 2">Timeout:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalTimeout}" />
+															<Label Padding="5, 2, 2, 2">Average Time:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageTime}" />
+														</StackPanel>
+													</StackPanel>
+
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+										<Label FontWeight="Bold">
+											<Label.Content>
+												<TextBlock>
+													<Run Text="Chaos Dungeon " />
+													<Run Text="{Binding ChaosSuccessRate, StringFormat={}({0}%):}" />
+												</TextBlock>
+											</Label.Content>
+										</Label>
+										<ItemsControl ItemsSource="{Binding ChaosStats}"
+													  Margin="10,0,0,0">
+											<ItemsControl.ItemsPanel>
+												<ItemsPanelTemplate>
+													<VirtualizingStackPanel />
+												</ItemsPanelTemplate>
+											</ItemsControl.ItemsPanel>
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Content="{Binding Level}"
+																   Padding="0,2,0,2"></Label>
+															<Label Padding="0,2,5,2">:</Label>
+
+															<Label Padding="5, 2, 2, 2">Total Runs:</Label>
+															<Label Padding="0, 2, 2, 2"
+																   Content="{Binding TotalRuns}" />
+															<Label Padding="5, 2, 2, 2">Complete:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalComplete}" />
+															<Label Padding="5, 2, 2, 2">Failed:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalFailed}" />
+															<Label Padding="5, 2, 2, 2">Timeout:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding TotalTimeout}" />
+														</StackPanel>
+														<StackPanel Orientation="Horizontal">
+															<Label Padding="5, 2, 2, 2">Average Time:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageTime}" />
+															<Label Padding="5, 2, 2, 2">Floor 1 Avg:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageFloor1}" />
+															<Label Padding="5, 2, 2, 2">Floor 2 Avg:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageFloor2}" />
+															<Label Padding="5, 2, 2, 2">Floor 3 Avg:</Label>
+															<Label Padding="0, 2, 5, 2"
+																   Content="{Binding AverageFloor3}" />
+														</StackPanel>
+													</StackPanel>
+
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</ScrollViewer>
+			</Grid>
+		</Grid>
+		<!--</ScrollViewer>-->
 	</Grid>
 </UserControl>

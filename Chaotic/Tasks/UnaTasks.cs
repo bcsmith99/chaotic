@@ -107,7 +107,7 @@ namespace Chaotic.Tasks
         }
 
 
-        private void RunDailyUna(UserUnaTask userTask)
+        public void RunDailyUna(UserUnaTask userTask)
         {
             BackgroundProcessing.ProgressCheck();
             if (userTask != null && userTask.UnaName != UnaTaskNames.NotSet)

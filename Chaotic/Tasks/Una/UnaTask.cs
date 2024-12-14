@@ -101,7 +101,7 @@ namespace Chaotic.Tasks.Una
             }
         }
 
-        protected abstract void ExecuteTask();
+        public abstract void ExecuteTask();
 
         protected bool BifrostToPoint(int bifrost)
         {

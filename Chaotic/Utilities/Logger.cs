@@ -86,6 +86,12 @@ namespace Chaotic.Utilities
             if (!String.IsNullOrWhiteSpace(message))
                 sb.AppendLine(message);
             sb.AppendLine($"Exception: {exception.Message}");
+            sb.AppendLine($"Stack Trace: {exception.StackTrace}");
+            while (exception.InnerException != null)
+            {
+                exception = exception.InnerException;
+                sb.AppendLine($"Inner Exception: {exception.Message}");
+            }
             Log(LogDetailLevel.Error, sb.ToString());
         }
 

@@ -19,7 +19,7 @@ namespace Chaotic.Tasks.Una
 
         }
 
-        protected override void ExecuteTask()
+        public override void ExecuteTask()
         {
             _kb.Press(Key.G, 5000);
             _kb.Press(Key.G, 5000);

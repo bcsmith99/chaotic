@@ -23,7 +23,7 @@ namespace Chaotic.Tasks.Una
         }
 
 
-        protected override void ExecuteTask()
+        public override void ExecuteTask()
         {
             var clickPoints = _r.SouthKurzanLeapClickpoints;
             _kb.Press(Key.Enter, 50);
@@ -39,7 +39,7 @@ namespace Chaotic.Tasks.Una
             _kb.Press(Key.G, 1000);
             _kb.ShiftPress(Key.G, 400);
 
-            var completeButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), 400, 950, 200, 100, .95);
+            var completeButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), _r.Complete, .95);
             if (completeButton.Found)
             {
                 Sleep.SleepMs(100, 200);

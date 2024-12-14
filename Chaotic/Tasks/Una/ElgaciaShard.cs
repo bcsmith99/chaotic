@@ -20,7 +20,7 @@ namespace Chaotic.Tasks.Una
 
         }
 
-        protected override void ExecuteTask()
+        public override void ExecuteTask()
         {
             var clickPoints = _r.ElgaciaShardClickpoints; // IP.ConvertPointArray(_r["ElgaciaShard_Clickpoints"]);
             _kb.Press(Key.G, 1000);

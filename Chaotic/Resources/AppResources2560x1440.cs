@@ -60,7 +60,7 @@ namespace Chaotic.Resources
             Chevron = new Rect(2505, 185, 30, 30);
             ClaimAll = new Rect(450, 1025, 200, 50);
             ClickableOffset = new Point(200, 150);
-            ClickableRegion = new Rect(425, 300, 1750, 700);
+            ClickableRegion = new Rect(450, 325, 1625, 700);
             ClickableArea = new Point(800, 400);
             ClickableArea = new Point(800, 400);
             CommunityMenu = new Point(2460, 1225);
@@ -90,7 +90,7 @@ namespace Chaotic.Resources
             KurzanMap1Start = new List<Point>
             {
                 new Point(550,350),
-                new Point(1400,225)
+                new Point(1400,500)
             };
             KurzanMap2PreferredArea = new Rect(300, 625, 500, 275);
             KurzanMap2Start = new List<Point>

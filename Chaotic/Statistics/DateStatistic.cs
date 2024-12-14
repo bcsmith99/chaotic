@@ -17,9 +17,22 @@ namespace Chaotic.Statistics
         public List<KurzanStatDisplay> KurzanStats { get; set; } = new List<KurzanStatDisplay>();
         public List<ChaosStatDisplay> ChaosStats { get; set; } = new List<ChaosStatDisplay>();
 
+        private double _successRate = 0;
+        public double SuccessRate
+        {
+            get { return _successRate; }
+            set
+            {
+                if (!double.IsNaN(value))
+                {
+                    _successRate = value;
+                }
+            }
+        }
+
         public void Compute()
         {
-            KurzanStats = KurzanStatistics.Where(x=> x.StartDate.Date == ExecutionDate.Date).GroupBy(x => new { x.ChaosLevel, x.Map }).Select(x =>
+            KurzanStats = KurzanStatistics.Where(x => x.StartDate.Date == ExecutionDate.Date).GroupBy(x => new { x.ChaosLevel, x.Map }).Select(x =>
             {
                 return new KurzanStatDisplay()
                 {

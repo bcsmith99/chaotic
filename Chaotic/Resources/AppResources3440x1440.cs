@@ -24,7 +24,7 @@ namespace Chaotic.Resources
             Bifrost4 = new Point(2400, 910);
             Bifrost5 = new Point(2400, 1020);
             Bifrost6 = new Point(2400, 1120);
-            BifrostMenu = new Point(3025, 1030);
+            BifrostMenu = new Point(3025, 1060);
             BifrostOk = new Rect(1550, 775, 300, 125);
             BossMobHealth = new Rect(1000, 30, 600, 300);
             BottomRightExit = new Rect(3160, 1340, 200, 60);
@@ -64,7 +64,7 @@ namespace Chaotic.Resources
             ClickableRegion = new Rect(600, 175, 2150, 1000);
             ClickableArea = new Point(1100, 450);
             CommunityMenu = new Point(3290, 1385);
-            Complete = new Rect();
+            Complete = new Rect(400, 950, 200, 100);
             ConnectButton = new Point(1850, 1000);
             ElgaciaShardClickpoints = new List<Point>()
             {
@@ -106,7 +106,7 @@ namespace Chaotic.Resources
             KurzanMap3StickingPoint = new Rect(1400, 0, 1200, 280);
 
 
-            MinimapCenter = new Point(3190, 2220);
+            MinimapCenter = new Point(3190, 222);
             Minimap = new Rect(2990, 50, 400, 350);
             OngoingQuests = new Rect(2980, 500, 200, 50);
             PlecciaShardClickpoints = new List<Point>()
@@ -117,17 +117,17 @@ namespace Chaotic.Resources
             ScreenY = 1440;
             ServicesMenu = new Point(3380, 1385);
             SilverDonate = new Rect(1250, 680, 250, 100);
-            Skill_A = new Rect(1380, 1370, 55, 55);
-            Skill_D = new Rect(1505, 1370, 55, 55);
-            Skill_E = new Rect(1475, 1308, 55, 55);
-            Skill_F = new Rect(1570, 1370, 55, 55);
-            Skill_HyperV = new Rect(1180, 1335, 65, 65);
-            Skill_Q = new Rect(1350, 1308, 55, 55);
-            Skill_R = new Rect(1540, 1308, 55, 55);
-            Skill_S = new Rect(1445, 1370, 55, 55);
-            Skill_T = new Rect(1275, 1335, 65, 65);
-            Skill_V = new Rect(1260, 1335, 65, 65);
-            Skill_W = new Rect(1415, 1308, 55, 55);
+            Skill_A = new Rect(1382, 1372, 53, 53);
+            Skill_D = new Rect(1507, 1372, 53, 53);
+            Skill_E = new Rect(1477, 1310, 53, 53);
+            Skill_F = new Rect(1571, 1372, 53, 53);
+            Skill_HyperV = new Rect(1183, 1337, 60, 60);
+            Skill_Q = new Rect(1352, 1310, 53, 53);
+            Skill_R = new Rect(1542, 1310, 53, 53);
+            Skill_S = new Rect(1447, 1372, 53, 53);
+            Skill_T = new Rect(1279, 1340, 55, 55);
+            Skill_V = new Rect(1263, 1337, 60, 60);
+            Skill_W = new Rect(1417, 1310, 53, 53);
 
             SouthKurzanLeapClickpoints = new List<Point>()
             {

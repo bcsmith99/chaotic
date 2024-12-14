@@ -18,7 +18,7 @@ namespace Chaotic.Tasks.Una
         {
 
         }
-        protected override void ExecuteTask()
+        public override void ExecuteTask()
         {
             RunLopangRoute();
 
