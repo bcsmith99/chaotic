@@ -402,10 +402,10 @@
 								</TextBlock>
 							</WrapPanel>
 							<WrapPanel Orientation="Horizontal">
-								<TextBlock Text="{Binding UserSettings.Resolution, StringFormat=Currently displaying skills for {0}}" 
+								<TextBlock Text="{Binding UserSettings.Resolution, StringFormat=Currently displaying skills for {0}}"
 										   Margin="5,0,0,0"
-										   FontSize="10px"/>
-						
+										   FontSize="10px" />
+
 							</WrapPanel>
 
 							<local:SkillControl Skill="{Binding CurrentQSkill, UpdateSourceTrigger=PropertyChanged}"></local:SkillControl>
@@ -422,6 +422,9 @@
 						</StackPanel>
 					</ScrollViewer>
 				</Grid>
+			</TabItem>
+			<TabItem Header="Statistics">
+				<local:StatisticsControl />
 			</TabItem>
 			<TabItem Header="Settings">
 				<Grid>
@@ -630,9 +633,7 @@
 					</ScrollViewer>
 				</Grid>
 			</TabItem>
-			<TabItem Header="Statistics">
-				<local:StatisticsControl />
-			</TabItem>
+
 		</TabControl>
 	</Grid>
 </Window>

@@ -16,6 +16,45 @@ namespace Chaotic.Statistics
 
         public List<KurzanStatDisplay> KurzanStats { get; set; } = new List<KurzanStatDisplay>();
         public List<ChaosStatDisplay> ChaosStats { get; set; } = new List<ChaosStatDisplay>();
+        
+        private double _successRate = 0; 
+        public double SuccessRate
+        {
+            get { return _successRate; }
+            set
+            {
+                if (!double.IsNaN(value))
+                {
+                    _successRate = value;
+                }
+            }
+        }
+
+        private double _kurzanSuccessRate = 0;
+        public double KurzanSuccessRate
+        {
+            get { return _kurzanSuccessRate; }
+            set
+            {
+                if (!double.IsNaN(value))
+                {
+                    _kurzanSuccessRate = value;
+                }
+            }
+        }
+
+        private double _chaosSuccessRate = 0;
+        public double ChaosSuccessRate
+        {
+            get { return _chaosSuccessRate; }
+            set
+            {
+                if (!double.IsNaN(value))
+                {
+                    _chaosSuccessRate = value;
+                }
+            }
+        }
 
         public void Compute()
         {

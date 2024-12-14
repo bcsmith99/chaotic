@@ -58,6 +58,8 @@ namespace Chaotic.Tasks.Chaos.Class
 
         }
 
+        public string ClassName { get { return _char.ClassName; } }
+
         public virtual void StartUp()
         {
 

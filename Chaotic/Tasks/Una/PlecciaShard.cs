@@ -19,8 +19,9 @@ namespace Chaotic.Tasks.Una
         {
 
         }
-        protected override void ExecuteTask()
+        public override void ExecuteTask()
         {
+            _mouse.ClickCenterScreen(_r.CenterScreen);
             _kb.Press(Key.Enter, 50);
             _kb.Press(Key.OemQuestion);
             _kb.TypeString("joy");

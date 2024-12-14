@@ -31,7 +31,7 @@ namespace Chaotic.Tasks.Chaos.Kurzan
         public override ScreenSearchResult CheckIfStuck()
         {
             var region = _r.KurzanMap3StickingPoint; // IP.ConvertStringCoordsToRect(_r["KurzanMap3_Stickpoint_Region"]);
-            var stickPoint = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map3_stickpoint.png", _settings.Resolution), region, .65);
+            var stickPoint = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map3_stickpoint.png", _settings.Resolution), region, .7);
             return stickPoint;
 
         }

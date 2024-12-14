@@ -22,6 +22,7 @@ namespace Chaotic.Tasks
         public string StatisticType { get; set; }
         public string Class { get; set; }
         public DateTime StartDate { get; set; }
+        public string TaskOutcome { get; set; }
     }
 
     public class TaskStatistic : ITaskStatistic

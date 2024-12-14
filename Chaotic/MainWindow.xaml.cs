@@ -1,5 +1,6 @@
 ﻿using Chaotic.Resources;
 using Chaotic.Tasks;
+using Chaotic.Tasks.Una;
 using Chaotic.User;
 using Chaotic.Utilities;
 using System.Collections.Specialized;
@@ -391,7 +392,7 @@ namespace Chaotic
             if (success && character.RunChaos)
                 success = _ct.RunChaos(character);
 
-            _busy.WaitOne();
+            BackgroundProcessing.ProgressCheck();
             _uit.ClearOngoingQuests();
 
             Sleep.SleepMs(1500, 2500, _settings.PerformanceMultiplier);
@@ -401,7 +402,7 @@ namespace Chaotic
                 if (UserSettings.RepairGear)
                     success = success && _uit.AuraRepair();
 
-                _busy.WaitOne();
+                BackgroundProcessing.ProgressCheck();
                 if (success && (UserSettings.MoveHoningMaterials || UserSettings.MoveGems))
                 {
                     success = success && _uit.OpenInventoryManagement();
@@ -476,7 +477,7 @@ namespace Chaotic
                     if (i == charsToRun.Count - 1)
                         break;
 
-                    _busy.WaitOne();
+                    BackgroundProcessing.ProgressCheck();
                     if (_uit.SwapCharacters(charsToRun[i + 1]))
                     {
                         var backInTown = _uit.InAreaCheck();
@@ -651,13 +652,17 @@ namespace Chaotic
         {
             Action a = () =>
             {
-                for (int i = 0; i < 60; i++)
-                {
-                    BackgroundProcessing.ProgressCheck();
+                _mouse.ClickCenterScreen(_r.CenterScreen);
+                _ut.RunDailyUna(_CurrentDailySelectedChar.ThirdUnaTask);
+                //var pleccia = new PlecciaShard(_uit, _mouse, _kb, _r, _settings, _logger);
+                //pleccia.ExecuteTask(); 
+                //for (int i = 0; i < 60; i++)
+                //{
+                //    BackgroundProcessing.ProgressCheck();
 
-                    _logger.Log(LogDetailLevel.Debug, "Test Loop " + i);
-                    Sleep.SleepMs(1000, 1000);
-                }
+                //    _logger.Log(LogDetailLevel.Debug, "Test Loop " + i);
+                //    Sleep.SleepMs(1000, 1000);
+                //}
             };
 
             CreateBackgroundWorker(a);

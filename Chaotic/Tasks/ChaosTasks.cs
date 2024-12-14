@@ -20,6 +20,7 @@ using Chaotic.Tasks.Chaos;
 using Chaotic.Tasks.Chaos.Kurzan;
 using System.Linq.Expressions;
 using Chaotic.Resources;
+using System.IO;
 
 namespace Chaotic.Tasks
 {
@@ -104,9 +105,13 @@ namespace Chaotic.Tasks
                         if (TimeoutCheck())
                         {
                             result = TaskOutcomes.Timeout;
+                            CaptureTimeout(cc);
                             var timeoutQuit = QuitChaos(true);
                             AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
-                            return timeoutQuit;
+                            if (timeoutQuit)
+                                continue;
+                            else
+                                return timeoutQuit;
                         }
                         WaitForLoading();
                         floor2Start = DateTime.Now;
@@ -118,9 +123,13 @@ namespace Chaotic.Tasks
                         if (TimeoutCheck())
                         {
                             result = TaskOutcomes.Timeout;
+                            CaptureTimeout(cc);
                             var timeoutQuit = QuitChaos(true);
                             AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
-                            return timeoutQuit;
+                            if (timeoutQuit)
+                                continue;
+                            else
+                                return timeoutQuit;
                         }
                         WaitForLoading();
                         floor3Start = DateTime.Now;
@@ -141,18 +150,22 @@ namespace Chaotic.Tasks
                             if (TimeoutCheck())
                             {
                                 result = TaskOutcomes.Timeout;
+                                CaptureTimeout(cc);
                                 AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
 
                                 var timeoutQuit = QuitChaos(true);
-                                if (!timeoutQuit)
+                                if (timeoutQuit)
+                                    continue;
+                                else
+                                {
                                     _logger.Log(LogDetailLevel.Debug, "Failed to make it out of floor 3 after timeout");
-                                return timeoutQuit;
+                                    return timeoutQuit;
+                                }
                             }
 
                             _logger.Log(LogDetailLevel.Debug, "Failed to make it out of floor 3");
                             AddChaosTaskStatistic(result, character, chaosStart, chaosEnd, floor1Start, floor1End, floor2Start, floor2End, floor3Start, floor3End);
                             return false;
-                            //return QuitChaos(true);
                         }
                     }
                     else if (CheckAuraExpended())
@@ -193,6 +206,7 @@ namespace Chaotic.Tasks
 
                     if (TimeoutCheck())
                     {
+                        CaptureTimeout(cc);
                         QuitChaos(true);
                         outcome = TaskOutcomes.Timeout;
                         _logger.Log(LogDetailLevel.Summary, $"Kurzan Front timed out on {character.ClassName}, Total Elapsed: {endTime.Subtract(startTime).ToString(@"mm\:ss")}");
@@ -210,6 +224,19 @@ namespace Chaotic.Tasks
             }
 
             return true;
+        }
+
+        private void CaptureTimeout(ChaosClass cc)
+        {
+            if (_settings.CaptureTimeoutScreenshot)
+            {
+                var timeOutDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Chaotic\\Timeouts";
+                if (!Directory.Exists(timeOutDir))
+                    Directory.CreateDirectory(timeOutDir);
+
+                var ss = IP.CaptureScreen();
+                ss.Save($"{timeOutDir}{cc.ClassName}_{DateTime.Now.ToString("mm-dd-yyyy-HH-ss-fff")}.png");
+            }
         }
 
         private void AddKurzanTaskStatistic(string outcome, UserCharacter character, KurzanBase map, DateTime startTime, DateTime endTime)
@@ -297,6 +324,7 @@ namespace Chaotic.Tasks
                     }
 
                     var boss_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("boss_mob_middle.png", _settings.Resolution), MinimapRegion, .7);
+                    var gold_on_screen = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("gold_mob_actual.png", _settings.Resolution), ClickableRegion, .67);
                     var gold_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("gold_mob_middle.png", _settings.Resolution), MinimapRegion, .75);
                     var elite_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("elite_mob_middle.png", _settings.Resolution), MinimapRegion, .86);
 
@@ -311,6 +339,13 @@ namespace Chaotic.Tasks
                         MoveOnScreen(stuck.CenterX, stuck.CenterY, 1500, 2000);
                     }
 
+                    if (gold_on_screen.Found)
+                    {
+                        _logger.Log(LogDetailLevel.Debug, $"Actual Gold Mob Found - {gold_mob.MaxConfidence}");
+                        SetMoveToPoint(gold_on_screen.CenterX, gold_on_screen.CenterY);
+                        MoveOnScreen(gold_on_screen.CenterX, gold_on_screen.CenterY, 1000, 1500);
+                        cc.UseAbilities(MoveToPoint, 3);
+                    }
                     if (gold_mob.Found)
                     {
                         _logger.Log(LogDetailLevel.Debug, $"Gold Mob Found - {gold_mob.MaxConfidence}");
@@ -336,13 +371,14 @@ namespace Chaotic.Tasks
                         if (result.Found)
                         {
                             _logger.Log(LogDetailLevel.Debug, "Route found and performing move action + abilities");
+                            Sleep.SleepMs(500, 700);
                             CalcMinimapPos(result.CenterX, result.CenterY);
                             //cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 4);
                             //Sleep.SleepMs(500, 1000);
-                            MoveToMinimapPos(Random.Shared.Next(result.CenterX - 30, result.CenterX + 30), Random.Shared.Next(result.CenterY - 20, result.CenterY + 20), 1200, 2800);
+                            MoveOnScreen(Random.Shared.Next(MoveToPoint.X - 50, MoveToPoint.X + 50), Random.Shared.Next(MoveToPoint.Y - 30, MoveToPoint.Y + 30), 1500, 2800);
                             cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 2);
-                            cc.UseAbilities(new Point(CenterScreen.X - 50, CenterScreen.Y + 50), 4);
-                            cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 4);
+                            cc.UseAbilities(new Point(CenterScreen.X - 50, CenterScreen.Y + 50), 2);
+                            cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 2);
                         }
                         else
                         {
@@ -1058,6 +1094,7 @@ namespace Chaotic.Tasks
             if (dead.Found)
             {
                 _logger.Log(LogDetailLevel.Debug, "You ded.");
+                Sleep.SleepMs(5000, 7000);
                 int i = 0;
                 while (i < 10)
                 {
@@ -1169,7 +1206,7 @@ namespace Chaotic.Tasks
             _mouse.ClickCenterScreen(CenterScreen);
             _kb.AltPress(Key.Q, 1000);
 
-            var kurzanChaos = (OpenCvSharp.Point)_r.GetType().GetProperty($"Kurzan{character.ChaosLevel}").GetValue(_r);
+            var kurzanChaos = (OpenCvSharp.Point)_r.GetType().GetProperty($"Kurzan_{character.ChaosLevel}").GetValue(_r);
             _mouse.ClickPosition(kurzanChaos, 300);
 
             var cc = ChaosClass.Create(_settings, character, _r, _kb, _mouse, _logger);

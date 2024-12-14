@@ -123,6 +123,9 @@
     <None Update="Resources\Assets\2560x1440\class\souleater.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\2560x1440\class\soulfist.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\2560x1440\class\summoner_phoenix.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -211,6 +214,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\gems\t4_dmg_5.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\gold_mob_actual.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\gold_mob_middle.png">
@@ -435,6 +441,9 @@
     <None Update="Resources\Assets\3440x1440\class\souleater.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\3440x1440\class\soulfist.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\3440x1440\class\summoner_phoenix.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -544,6 +553,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\gold_mob.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\gold_mob_actual.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\gold_mob_middle.png">

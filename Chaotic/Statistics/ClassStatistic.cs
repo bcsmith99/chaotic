@@ -11,6 +11,18 @@ namespace Chaotic.Statistics
     public class ClassStatistic
     {
         public string ClassName { get; set; } = "";
+        private double _successRate = 0;
+        public double SuccessRate
+        {
+            get { return _successRate; }
+            set
+            {
+                if (!double.IsNaN(value))
+                {
+                    _successRate = value;
+                }
+            }
+        }
 
         public List<KurzanTaskStatistic> KurzanStatistics { get; set; } = new List<KurzanTaskStatistic>();
         public List<ChaosTaskStatistic> ChaosStatistics { get; set; } = new List<ChaosTaskStatistic>();
