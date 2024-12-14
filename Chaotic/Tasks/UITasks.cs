@@ -1,4 +1,5 @@
-﻿using Chaotic.User;
+﻿using Chaotic.Resources;
+using Chaotic.User;
 using Chaotic.Utilities;
 using OpenCvSharp;
 using System;
@@ -20,10 +21,10 @@ namespace Chaotic.Tasks
         private UserSettings _settings;
         private readonly MouseUtility _mouse;
         private readonly KeyboardUtility _kb;
-        private readonly ResourceHelper _r;
+        private readonly ApplicationResources _r;
         private readonly AppLogger _logger;
 
-        public UITasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, AppLogger logger)
+        public UITasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, AppLogger logger)
         {
             _settings = settings;
             _mouse = mouse;
@@ -50,7 +51,7 @@ namespace Chaotic.Tasks
                 BackgroundProcessing.ProgressCheck();
                 //TODO: Parameterize Coordinates for Resolution
                 //,
-                var inTownButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("chevron.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["Chevron_Region"]), confidence: .65, useGrayscale: true);
+                var inTownButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("chevron.png", _settings.Resolution), _r.Chevron, confidence: .65, useGrayscale: true);
                 maxConfidence = Math.Max(maxConfidence, inTownButton.MaxConfidence);
                 if (inTownButton.Found)
                 {
@@ -70,11 +71,11 @@ namespace Chaotic.Tasks
         public void ToggleArkPassive(bool disable)
         {
             BackgroundProcessing.ProgressCheck();
-            Sleep.SleepMs(500, 500);
-            _mouse.ClickCenterScreen(_r);
+            Sleep.SleepMs(500, 500, _settings.PerformanceMultiplier);
+            _mouse.ClickCenterScreen(_r.CenterScreen);
 
-            _mouse.ClickPosition(_r["CharacterMenu"], 500);
-            _mouse.ClickPosition(_r["CharacterProfileMenu"], 1000);
+            _mouse.ClickPosition(_r.CharacterMenu, 500);
+            _mouse.ClickPosition(_r.CharacterProfileMenu, 1000);
 
             var arkPassive = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("arkpassive_button.png", _settings.Resolution), confidence: .9);
 
@@ -122,27 +123,27 @@ namespace Chaotic.Tasks
 
         public void ClearOngoingQuests()
         {
-            Sleep.SleepMs(300, 400);
+            Sleep.SleepMs(300, 400, _settings.PerformanceMultiplier);
             BackgroundProcessing.ProgressCheck();
-            var ongoingButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ongoing_quests.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["OngoingQuest_Region"]), .85, true);
+            var ongoingButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("ongoing_quests.png", _settings.Resolution), _r.OngoingQuests, .85, true);
             if (ongoingButton.Found)
             {
-                Sleep.SleepMs(100, 200);
+                Sleep.SleepMs(100, 200, _settings.PerformanceMultiplier);
                 _mouse.ClickPosition(ongoingButton.CenterX, ongoingButton.CenterY, 1000);
-                var completeButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), confidence: .95);
+                var completeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), confidence: .95);
                 while (completeButton.Found)
                 {
-                    Sleep.SleepMs(100, 200);
+                    Sleep.SleepMs(100, 200, _settings.PerformanceMultiplier);
                     _mouse.ClickPosition(completeButton.CenterX, completeButton.CenterY, 1000);
-                    completeButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), confidence: .95);
+                    completeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), confidence: .95);
                 }
             }
         }
 
         public bool MoveGems()
         {
-            _logger.Log(LogDetailLevel.Debug, "Moving gems to storage"); 
-            var inventoryRegion = IP.ConvertStringCoordsToRect(_r["Inventory_Region"]);
+            _logger.Log(LogDetailLevel.Debug, "Moving gems to storage");
+            var inventoryRegion = _r.Inventory;
             var success = true;
             var gemDirectory = Utility.ResourceLocation(_settings.Resolution, "gems");
 
@@ -182,8 +183,8 @@ namespace Chaotic.Tasks
 
         public bool MoveHoningMaterials()
         {
-            _logger.Log(LogDetailLevel.Debug, "Moving Honing Materials to Storage"); 
-            var inventoryRegion = IP.ConvertStringCoordsToRect(_r["Inventory_Region"]);
+            _logger.Log(LogDetailLevel.Debug, "Moving Honing Materials to Storage");
+            var inventoryRegion = _r.Inventory;
             var success = true;
             var honingMatsDirectory = Utility.ResourceLocation(_settings.Resolution, "mats");
 
@@ -207,7 +208,7 @@ namespace Chaotic.Tasks
                 }
             }
 
-            Sleep.SleepMs(200, 300);
+            Sleep.SleepMs(200, 300, _settings.PerformanceMultiplier);
 
             return success;
         }
@@ -223,19 +224,23 @@ namespace Chaotic.Tasks
             if (remoteStorageButton.Found)
                 _mouse.ClickPosition(remoteStorageButton.CenterX, remoteStorageButton.CenterY, 1000);
             else
+            {
+                _logger.Log(LogDetailLevel.Debug, "Did not find remote storage button on inventory management, aborting.");
                 success = false;
+            }
+                
 
             return success;
         }
 
         public bool CloseInventoryManagement()
         {
-            _logger.Log(LogDetailLevel.Debug, "Closing Inventory Management"); 
+            _logger.Log(LogDetailLevel.Debug, "Closing Inventory Management");
             BackgroundProcessing.ProgressCheck();
             bool success = true;
 
             //IP.SHOW_DEBUG_IMAGES = true; 
-            var exitButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("exit_menu.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["BottomRight_Exit"]), confidence: .4, useGrayscale: true);
+            var exitButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("exit_menu.png", _settings.Resolution), _r.BottomRightExit, confidence: .4, useGrayscale: true);
             //IP.SHOW_DEBUG_IMAGES = false;
             if (exitButton.Found)
                 _mouse.ClickPosition(exitButton.CenterX, exitButton.CenterY, 1000);
@@ -248,7 +253,7 @@ namespace Chaotic.Tasks
                 _mouse.ClickPosition(closeButton.CenterX, closeButton.CenterY, 1000);
             else
             {
-                _mouse.ClickTopScreen(_r);
+                _mouse.ClickTopScreen(_r.CenterScreen);
                 _kb.Press(Key.Escape, 1000);
             }
 
@@ -262,8 +267,8 @@ namespace Chaotic.Tasks
         private void OpenPetMenu()
         {
 
-            _mouse.ClickPosition(_r["GuideMenu"], 500);
-            _mouse.ClickPosition(_r["GuidePetMenu"], 1000);
+            _mouse.ClickPosition(_r["GuideMenu"], 800);
+            _mouse.ClickPosition(_r["GuidePetMenu"], 1500);
         }
 
         public bool GameMenuOpen()
@@ -274,13 +279,13 @@ namespace Chaotic.Tasks
 
         public void CloseGameMenu()
         {
-            _mouse.ClickTopScreen(_r);
+            _mouse.ClickTopScreen(_r.CenterScreen);
             _kb.Press(Key.Escape);
         }
 
         public bool AuraRepair()
         {
-            _logger.Log(LogDetailLevel.Debug, "Attempting Aura Repair"); 
+            _logger.Log(LogDetailLevel.Debug, "Attempting Aura Repair");
             BackgroundProcessing.ProgressCheck();
             bool success = true;
             OpenPetMenu();
@@ -289,7 +294,7 @@ namespace Chaotic.Tasks
             if (repairButton.Found)
             {
                 _mouse.ClickPosition(repairButton.CenterX, repairButton.CenterY, 1000);
-                var repairAllButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("repairall_button.png", _settings.Resolution), confidence: .85);
+                var repairAllButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("repairall_button.png", _settings.Resolution), confidence: .80);
 
                 //Debug.Print($"Repair All Confidence: {repairAllButton.MaxConfidence}");
                 if (repairAllButton.Found)
@@ -300,9 +305,9 @@ namespace Chaotic.Tasks
             else
             {
                 _logger.Log(LogDetailLevel.Debug, "Unable to find repair button while repairing gear, failing.");
-                success = false;
+                //success = false;
             }
-                
+
 
             _kb.Press(Key.Escape, 500);
 
@@ -311,13 +316,13 @@ namespace Chaotic.Tasks
 
         public bool ExitGame()
         {
-            _mouse.ClickCenterScreen(_r);
+            _mouse.ClickCenterScreen(_r.CenterScreen);
             for (int i = 0; i < 60; i++)
             {
                 if (!GameMenuOpen())
                 {
                     _kb.Press(Key.Escape);
-                    Sleep.SleepMs(700, 1000);
+                    Sleep.SleepMs(700, 1000, _settings.PerformanceMultiplier);
                 }
                 else
                     break;
@@ -344,11 +349,11 @@ namespace Chaotic.Tasks
         public bool SwapCharacters(UserCharacter character)
         {
             BackgroundProcessing.ProgressCheck();
-            _mouse.ClickPosition(_r["ServicesMenu"], 500);
-            _mouse.ClickPosition(_r["GameMenu"], 1000);
-            _mouse.ClickPosition(_r["SwitchCharacterButton"], 500);
+            _mouse.ClickPosition(_r.ServicesMenu, 500);
+            _mouse.ClickPosition(_r.GameMenu, 1000);
+            _mouse.ClickPosition(_r.SwitchCharacterButton, 500);
 
-            _mouse.SetPosition(_r["CenterScreen"]);
+            _mouse.SetPosition(_r.CenterScreen);
 
             _mouse.Scroll(MouseUtility.ScrollDirection.Up, 5);
 
@@ -362,9 +367,11 @@ namespace Chaotic.Tasks
                 row = 2;
                 _mouse.Scroll(MouseUtility.ScrollDirection.Down, numScrolls);
             }
+            var charColumn = (int)_r.GetType().GetProperty($"CharSelectCol{col}").GetValue(_r);
+            var charRow = (int)_r.GetType().GetProperty($"CharSelectRow{row}").GetValue(_r);
 
-            _mouse.ClickPosition(_r[$"CharSelectCol{col}"], _r[$"CharSelectRow{row}"], 500);
-            _mouse.ClickPosition(_r["ConnectButton"], 1000);
+            _mouse.ClickPosition(charColumn, charRow, 500);
+            _mouse.ClickPosition(_r.ConnectButton, 1000);
 
             //1550, 775, 300, 75,
             var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .95);

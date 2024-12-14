@@ -1,4 +1,5 @@
-﻿using Chaotic.User;
+﻿using Chaotic.Resources;
+using Chaotic.User;
 using Chaotic.Utilities;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Chaotic.Tasks.Una
     [UnaTask(UnaTaskNames.PlecciaShard)]
     public class PlecciaShard : UnaTask
     {
-        public PlecciaShard(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UserSettings settings, AppLogger logger)
+        public PlecciaShard(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, UserSettings settings, AppLogger logger)
             : base(uiTask, mouse, kb, r, settings, logger)
         {
 
@@ -26,7 +27,7 @@ namespace Chaotic.Tasks.Una
             _kb.Press(Key.Enter);
             Sleep.SleepMs(8000, 10000);
 
-            var clickPoints = IP.ConvertPointArray(_r["PlecciaShard_Clickpoints"]);
+            var clickPoints = _r.PlecciaShardClickpoints;
 
             _mouse.ClickPosition(clickPoints[0], 3000, MouseButtons.Right);
 
@@ -36,7 +37,7 @@ namespace Chaotic.Tasks.Una
             _kb.Press(Key.G, 500);
             _kb.Release(Key.LeftShift);
 
-            var completeRegion = IP.ConvertStringCoordsToRect(_r["Complete_Region"]);
+            var completeRegion = _r.Complete;
 
             var completeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("complete_button.png", _settings.Resolution), completeRegion, .95);
             if (completeButton.Found)

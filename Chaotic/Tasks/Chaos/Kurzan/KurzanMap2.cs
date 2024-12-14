@@ -1,4 +1,5 @@
-﻿using Chaotic.Tasks.Chaos.Class;
+﻿using Chaotic.Resources;
+using Chaotic.Tasks.Chaos.Class;
 using Chaotic.User;
 using Chaotic.Utilities;
 using System;
@@ -13,15 +14,15 @@ namespace Chaotic.Tasks.Chaos.Kurzan
 {
     public class KurzanMap2 : KurzanBase
     {
-        public KurzanMap2(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper rh, AppLogger logger) : base("KurzanMap2", settings, mouse, kb, rh, logger)
+        public KurzanMap2(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ApplicationResources rh, AppLogger logger) : base("KurzanMap2", settings, mouse, kb, rh, logger)
         {
-            PreferredMovementArea = IP.ConvertStringCoordsToRect(_r["KurzanMap2_PreferredArea"]);
+            PreferredMovementArea = _r.KurzanMap2PreferredArea;
         }
 
         public override void StartMapMove(ChaosClass cc)
         {
             _logger.Log(LogDetailLevel.Debug, "Kurzan Map 2 Initial Moves");
-            var startPoints = IP.ConvertPointArray(_r["KurzanMap2_Start"]);
+            var startPoints = _r.KurzanMap2Start;
             _mouse.ClickPosition(startPoints[0], 2000, MouseButtons.Right);
             _mouse.ClickPosition(startPoints[0], 2000, MouseButtons.Right);
             _mouse.ClickPosition(startPoints[0], 2000, MouseButtons.Right);

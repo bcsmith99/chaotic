@@ -1,35 +1,16 @@
-﻿using Chaotic.Tasks;
-using Chaotic.Tasks.Chaos;
-using Chaotic.Tasks.Chaos.Class;
-using Chaotic.Tasks.Chaos.Kurzan;
-using Chaotic.Tasks.Una;
+﻿using Chaotic.Resources;
+using Chaotic.Tasks;
 using Chaotic.User;
 using Chaotic.Utilities;
-using DeftSharp.Windows.Input.Keyboard;
-using DeftSharp.Windows.Input.Mouse;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Resources;
-using System.Runtime;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.Marshalling;
-using System.Text;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using IP = Chaotic.Utilities.ImageProcessing;
 
 namespace Chaotic
@@ -50,6 +31,8 @@ namespace Chaotic
             _settings = new UserSettings();
             _settings = _settings.Read(USER_SETTINGS_PATH);
 
+            _config = ApplicationResources.Create(_settings.Resolution);
+
             _statistics = new SessionStatistics();
             //_statistics = _statistics.Read(USER_STATISTICS_PATH);
 
@@ -64,6 +47,8 @@ namespace Chaotic
             InitializeTasks();
 
         }
+
+        private readonly ApplicationResources _config;
 
         private List<string> _Resolutions = new List<string> { "3440x1440", "2560x1440" };
         private List<Tuple<string, int>> _GemLevels = new List<Tuple<string, int>>()
@@ -85,7 +70,8 @@ namespace Chaotic
             new Tuple<string, LogDetailLevel>("Summary", LogDetailLevel.Summary)
         };
 
-        private ResourceHelper _r;
+        //private ApplicationResources _r;
+        private ApplicationResources _r; 
         private UITasks _uit;
         private GuildTasks _gt;
         private UnaTasks _ut;
@@ -168,8 +154,126 @@ namespace Chaotic
             {
                 _CurrentSelectedEditChar = value;
                 OnPropertyChanged();
+                NotifySkillChanges();
             }
         }
+
+        public void NotifySkillChanges()
+        {
+            OnPropertyChanged("CurrentQSkill");
+            OnPropertyChanged("CurrentWSkill");
+            OnPropertyChanged("CurrentESkill");
+            OnPropertyChanged("CurrentRSkill");
+            OnPropertyChanged("CurrentASkill");
+            OnPropertyChanged("CurrentSSkill");
+            OnPropertyChanged("CurrentDSkill");
+            OnPropertyChanged("CurrentFSkill");
+            OnPropertyChanged("CurrentHyperSkill");
+            OnPropertyChanged("CurrentAwakening");
+        }
+
+        public UserCharacterSkill CurrentQSkill
+        {
+            get
+            {
+                if (CurrentSelectedEditChar == null)
+                    return new UserCharacterSkill();
+                else
+                    return CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].QSkill;
+            }
+        }
+        public UserCharacterSkill CurrentWSkill
+        {
+            get
+            {
+                if (CurrentSelectedEditChar == null)
+                    return new UserCharacterSkill();
+                else
+                    return CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].WSkill;
+            }
+        }
+        public UserCharacterSkill CurrentESkill
+        {
+            get
+            {
+                if (CurrentSelectedEditChar == null)
+                    return new UserCharacterSkill();
+                else
+                    return CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].ESkill;
+            }
+        }
+        public UserCharacterSkill CurrentRSkill
+        {
+            get
+            {
+                if (CurrentSelectedEditChar == null)
+                    return new UserCharacterSkill();
+                else
+                    return CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].RSkill;
+            }
+        }
+        public UserCharacterSkill CurrentASkill
+        {
+            get
+            {
+                if (CurrentSelectedEditChar == null)
+                    return new UserCharacterSkill();
+                else
+                    return CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].ASkill;
+            }
+        }
+        public UserCharacterSkill CurrentSSkill
+        {
+            get
+            {
+                if (CurrentSelectedEditChar == null)
+                    return new UserCharacterSkill();
+                else
+                    return CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].SSkill;
+            }
+        }
+        public UserCharacterSkill CurrentDSkill
+        {
+            get
+            {
+                if (CurrentSelectedEditChar == null)
+                    return new UserCharacterSkill();
+                else
+                    return CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].DSkill;
+            }
+        }
+        public UserCharacterSkill CurrentFSkill
+        {
+            get
+            {
+                if (CurrentSelectedEditChar == null)
+                    return new UserCharacterSkill();
+                else
+                    return CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].FSkill;
+            }
+        }
+
+        public UserCharacterSkill CurrentHyperSkill
+        {
+            get
+            {
+                if (CurrentSelectedEditChar == null)
+                    return new UserCharacterSkill();
+                else
+                    return CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].HyperSkill;
+            }
+        }
+        public UserCharacterSkill CurrentAwakening
+        {
+            get
+            {
+                if (CurrentSelectedEditChar == null)
+                    return new UserCharacterSkill();
+                else
+                    return CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].Awakening;
+            }
+        }
+
 
         private bool _taskRunning;
         public bool TaskRunning
@@ -224,7 +328,8 @@ namespace Chaotic
 
         private void InitializeTasks()
         {
-            _r = new ResourceHelper("Chaotic.Resources." + UserSettings.Resolution);
+            _r = ApplicationResources.Create(UserSettings.Resolution); 
+            //_r = new ApplicationResources("Chaotic.Resources." + UserSettings.Resolution);
             _uit = new UITasks(UserSettings, _mouse, _kb, _r, _logger);
             _gt = new GuildTasks(UserSettings, _mouse, _kb, _r, _logger);
             _ut = new UnaTasks(UserSettings, _mouse, _kb, _r, _uit, _logger);
@@ -257,7 +362,8 @@ namespace Chaotic
 
         private void Resolution_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _r = new ResourceHelper("Chaotic.Resources." + UserSettings.Resolution);
+            _r = ApplicationResources.Create(UserSettings.Resolution); 
+            //_r = new ApplicationResources("Chaotic.Resources." + UserSettings.Resolution);
             SaveUserSettings();
 
             InitializeTasks();
@@ -266,11 +372,12 @@ namespace Chaotic
         private void SaveUserSettings()
         {
             UserSettings.Save(USER_SETTINGS_PATH);
+            NotifySkillChanges();
         }
 
         private bool RunCharacterDailyRotation(UserCharacter character, bool shouldAcceptWeeklies = false)
         {
-            _mouse.ClickCenterScreen(_r);
+            _mouse.ClickCenterScreen(_r.CenterScreen);
 
             bool success = true;
             success = _gt.PerformGuildTasks(character);
@@ -287,7 +394,7 @@ namespace Chaotic
             _busy.WaitOne();
             _uit.ClearOngoingQuests();
 
-            Sleep.SleepMs(1500, 2500);
+            Sleep.SleepMs(1500, 2500, _settings.PerformanceMultiplier);
 
             if (success && UserSettings.EnableAura)
             {
@@ -312,7 +419,7 @@ namespace Chaotic
         {
             Action a = () =>
             {
-                _mouse.ClickCenterScreen(_r);
+                _mouse.ClickCenterScreen(_r.CenterScreen);
                 if (CurrentDailySelectedChar != null)
                     _ut.RunDailies(CurrentDailySelectedChar);
             };
@@ -364,7 +471,7 @@ namespace Chaotic
                         _logger.Log(LogDetailLevel.Info, $"Work Reported as Failure for {character.ClassName}, exiting daily rotation loop.");
                         break;
                     }
-                        
+
 
                     if (i == charsToRun.Count - 1)
                         break;
@@ -428,19 +535,19 @@ namespace Chaotic
             if (CurrentSelectedEditChar != null)
             {
 
-                foreach (var skill in CurrentSelectedEditChar.Skills.AllSkills)
+                foreach (var skill in CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].AllSkills)
                 {
                     if (skill == null) continue;
-
-                    var region = ImageProcessing.ConvertStringCoordsToRect(_r[$"Skill_{skill.SkillKey}"]);
+                    
+                    var region = (OpenCvSharp.Rect)_r.GetType().GetProperty($"Skill_{skill.SkillKey}").GetValue(_r);
 
                     if (skill.IsAwakening && CurrentSelectedEditChar.ChaosLevel >= 1640)
-                        region = ImageProcessing.ConvertStringCoordsToRect(_r[$"Skill_Hyper{skill.SkillKey}"]);
+                        region = (OpenCvSharp.Rect)_r.GetType().GetProperty($"Skill_Hyper{skill.SkillKey}").GetValue(_r); 
 
                     if (skill.SkillKey == "T" && CurrentSelectedEditChar.ChaosLevel < 1640)
                         continue;
 
-                    var skillScreenshot = ImageProcessing.CaptureScreen(region);
+                    var skillScreenshot = IP.CaptureScreen(region);
 
                     if (skillScreenshot != null)
                     {
@@ -553,17 +660,7 @@ namespace Chaotic
                 }
             };
 
-            CreateBackgroundWorker(a); 
-            
-            //var map = new KurzanMap1(_settings, _mouse, _kb, _r, _logger);
-
-            //var result = map.CheckMapRoute(DateTime.Now);
-            //if (result.Found)
-            //{
-            //    _logger.Log(LogDetailLevel.Debug, $"Pref Area found, {result.MaxConfidence}, x:{result.Center},y:{result.CenterY}");
-            //    _ct.MoveToMinimapPos(Random.Shared.Next(result.CenterX - 30, result.CenterX + 30), Random.Shared.Next(result.CenterY - 20, result.CenterY + 20), 1000, 1500);
-            //}
-
+            CreateBackgroundWorker(a);
         }
 
         private void LogDetailLevel_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -620,10 +717,20 @@ namespace Chaotic
 
         private void TabControl_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.End)
+            if (e.Key == Key.End)
             {
                 e.Handled = true;
             }
+        }
+
+        private void PauseExecution_Click(object sender, RoutedEventArgs e)
+        {
+            TogglePause();
+        }
+
+        private void CancelExecution_Click(object sender, RoutedEventArgs e)
+        {
+            CancelWorker();
         }
     }
 }

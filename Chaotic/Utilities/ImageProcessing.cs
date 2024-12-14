@@ -52,7 +52,7 @@ namespace Chaotic.Utilities
             return bitmap;
         }
 
-        public static System.Drawing.Bitmap CaptureScreen(/*ResourceHelper rh*/)
+        public static System.Drawing.Bitmap CaptureScreen(/*ApplicationResources rh*/)
         {
             //var width = rh.GetInt("ScreenX");
             //var height = rh.GetInt("ScreenY");
@@ -90,27 +90,27 @@ namespace Chaotic.Utilities
             return new Rect(Int32.Parse(coords[0]), Int32.Parse(coords[1]), Int32.Parse(coords[2]), Int32.Parse(coords[3]));
         }
 
-        public static ScreenSearchResult LocateCenterOnScreen(string filePath, Rect coords, double confidence = .999, bool useGrayscale = false)
+        public static ScreenSearchResult LocateCenterOnScreen(string filePath, Rect coords, double confidence = .999, bool useGrayscale = false, bool breakAfterFirst = true)
         {
-            return LocateCenterOnScreen(filePath, coords.X, coords.Y, coords.Width, coords.Height, confidence, useGrayscale);
+            return LocateCenterOnScreen(filePath, coords.X, coords.Y, coords.Width, coords.Height, confidence, useGrayscale, breakAfterFirst);
         }
 
-        public static ScreenSearchResult LocateCenterOnScreen(MemoryStream findImage, Rect coords, double confidence = .999, bool useGrayscale = false)
+        public static ScreenSearchResult LocateCenterOnScreen(MemoryStream findImage, Rect coords, double confidence = .999, bool useGrayscale = false, bool breakAfterFirst = true)
         {
-            return LocateCenterOnScreen(findImage, coords.X, coords.Y, coords.Width, coords.Height, confidence, useGrayscale);
+            return LocateCenterOnScreen(findImage, coords.X, coords.Y, coords.Width, coords.Height, confidence, useGrayscale, breakAfterFirst);
         }
 
-        public static ScreenSearchResult LocateCenterOnScreen(string filePath, int x = 0, int y = 0, int? width = null, int? height = null, double confidence = .999, bool useGrayscale = false)
+        public static ScreenSearchResult LocateCenterOnScreen(string filePath, int x = 0, int y = 0, int? width = null, int? height = null, double confidence = .999, bool useGrayscale = false, bool breakAfterFirst = true)
         {
             using (var fs = File.OpenRead(filePath))
             {
-                return LocateCenterOnScreen(fs, x, y, width, height, confidence, useGrayscale);
+                return LocateCenterOnScreen(fs, x, y, width, height, confidence, useGrayscale, breakAfterFirst);
             }
         }
-        public static ScreenSearchResult LocateCenterOnScreen(Stream findImage, int x = 0, int y = 0, int? width = null, int? height = null, double confidence = .999, bool useGrayscale = false)
+        public static ScreenSearchResult LocateCenterOnScreen(Stream findImage, int x = 0, int y = 0, int? width = null, int? height = null, double confidence = .999, bool useGrayscale = false, bool breakAfterFirst = true)
         {
             var result = new ScreenSearchResult();
-            var imResult = LocateOnScreen(findImage, x, y, width, height, confidence, useGrayscale);
+            var imResult = LocateOnScreen(findImage, x, y, width, height, confidence, useGrayscale, breakAfterFirst);
             result.MaxConfidence = imResult.MaxConfidence;
             result.Matches = imResult.Matches;
 
@@ -122,8 +122,6 @@ namespace Chaotic.Utilities
                 var center = GetMatchCenter(top.Match, x, y);
                 result.CenterX = center.X;
                 result.CenterY = center.Y;
-                //result.CenterX = x + (top.Match.X + .5 * top.Match.Width);
-                //result.CenterY = y + (top.Match.Y + .5 * top.Match.Height);
             }
             else
                 result.Found = false;
@@ -138,20 +136,20 @@ namespace Chaotic.Utilities
             return new Point(centerX, centerY);
         }
 
-        public static ImageMatchResult LocateOnScreen(String filePath, Rect region, double confidence = .999, bool useGrayscale = false)
+        public static ImageMatchResult LocateOnScreen(String filePath, Rect region, double confidence = .999, bool useGrayscale = false, bool breakAfterFirst = false)
         {
-            return LocateOnScreen(filePath, region.X, region.Y, region.Width, region.Height, confidence, useGrayscale);
+            return LocateOnScreen(filePath, region.X, region.Y, region.Width, region.Height, confidence, useGrayscale, breakAfterFirst);
         }
 
-        public static ImageMatchResult LocateOnScreen(String filePath, int x = 0, int y = 0, int? width = null, int? height = null, double confidence = .999, bool useGrayscale = false)
+        public static ImageMatchResult LocateOnScreen(String filePath, int x = 0, int y = 0, int? width = null, int? height = null, double confidence = .999, bool useGrayscale = false, bool breakAfterFirst = false)
         {
             using (var fs = File.OpenRead(filePath))
             {
-                return LocateOnScreen(fs, x, y, width, height, confidence, useGrayscale);
+                return LocateOnScreen(fs, x, y, width, height, confidence, useGrayscale, breakAfterFirst);
             }
         }
 
-        public static ImageMatchResult LocateOnScreen(Stream findImage, int x = 0, int y = 0, int? width = null, int? height = null, double confidence = .999, bool useGrayscale = false)
+        public static ImageMatchResult LocateOnScreen(Stream findImage, int x = 0, int y = 0, int? width = null, int? height = null, double confidence = .999, bool useGrayscale = false, bool breakAfterFirst = false)
         {
 
             if (!width.HasValue)
@@ -161,7 +159,7 @@ namespace Chaotic.Utilities
 
             using (var screenshot = CaptureScreen(x, y, width.Value, height.Value))
             {
-                return Locate(findImage, screenshot, x, y, confidence, useGrayscale);
+                return Locate(findImage, screenshot, x, y, confidence, useGrayscale, breakAfterFirst);
             }
         }
 
@@ -210,7 +208,7 @@ namespace Chaotic.Utilities
         }
 
         //int x, int y, int width, int height,
-        public static ImageMatchResult Locate(Stream toFind, System.Drawing.Bitmap src, int x, int y, double confidence = .999, bool grayScale = false)
+        public static ImageMatchResult Locate(Stream toFind, System.Drawing.Bitmap src, int x, int y, double confidence = .999, bool grayScale = false, bool breakAfterFirst = false)
         {
             var result = new ImageMatchResult() { MaxConfidence = 0 };
 
@@ -261,6 +259,8 @@ namespace Chaotic.Utilities
                         Cv2.FloodFill(res, maxLoc, new Scalar(0), out outRect, new Scalar(0.1), new Scalar(1.0));
 
                         result.Matches.Add(new ImageMatch() { Confidence = maxVal, Match = r, Center = GetMatchCenter(r, x, y) });
+                        if (breakAfterFirst)
+                            break;
                     }
                     else
                         break;

@@ -13,20 +13,21 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using IP = Chaotic.Utilities.ImageProcessing;
 using System.Diagnostics;
+using Chaotic.Resources;
 
 namespace Chaotic.Tasks.Chaos.Class
 {
     public class ChaosClass
     {
         protected readonly UserCharacter _char;
-        protected readonly ResourceHelper _r;
+        protected readonly ApplicationResources _r;
         protected readonly KeyboardUtility _kb;
         protected readonly KeyConverter _kc;
         protected readonly MouseUtility _mouse;
         protected readonly UserSettings _settings;
         protected readonly AppLogger _logger;
 
-        public ChaosClass(UserSettings settings, UserCharacter character, ResourceHelper r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger)
+        public ChaosClass(UserSettings settings, UserCharacter character, ApplicationResources r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger)
         {
             _char = character;
             _r = r;
@@ -36,8 +37,8 @@ namespace Chaotic.Tasks.Chaos.Class
             _settings = settings;
             _logger = logger;
 
-            CharacterIconRegion = IP.ConvertStringCoordsToRect(_r["CharacterIcon_Region"]);
-            ScreenCenter = IP.GetPointFromStringCoords(_r["CenterScreen"]);
+            CharacterIconRegion = _r.CharacterIcon; // IP.ConvertStringCoordsToRect(_r["CharacterIcon_Region"]);
+            ScreenCenter = _r.CenterScreen; // IP.GetPointFromStringCoords(_r["CenterScreen"]);
         }
 
         public double SkillConfidence { get; protected set; } = .95;
@@ -47,7 +48,7 @@ namespace Chaotic.Tasks.Chaos.Class
 
         public void UseAwakening(Point screenPoint)
         {
-            var awakening = _char.Skills.Awakening;
+            var awakening = _char.AllResolutionSkills[_settings.Resolution].Awakening;
             var skillFound = CheckSkillAvailable(awakening, .8);
 
             if (awakening.Priority > 0 && skillFound.Found)
@@ -86,7 +87,7 @@ namespace Chaotic.Tasks.Chaos.Class
             UseCharacterSpecificAbilities();
 
             int currentCasts = 0;
-            var abilities = _char.Skills.AllSkills.Where(x => !x.IsAwakening && x.Priority > 0).OrderBy(x => x.Priority);
+            var abilities = _char.AllResolutionSkills[_settings.Resolution].AllSkills.Where(x => !x.IsAwakening && x.Priority > 0).OrderBy(x => x.Priority);
 
             foreach (var ability in abilities)
             {
@@ -115,11 +116,12 @@ namespace Chaotic.Tasks.Chaos.Class
         {
             using (var ms = new MemoryStream(Convert.FromBase64String(skill.SkillImageEncoded)))
             {
-                var skillCoords = _r[$"Skill_{skill.SkillKey}"];
+                var skillRegion = (OpenCvSharp.Rect)_r.GetType().GetProperty($"Skill_{skill.SkillKey}").GetValue(_r);
+                //var skillCoords = _r[$"Skill_{skill.SkillKey}"];
                 if (skill.IsAwakening && _char.HasHyperSkill)
-                    skillCoords = _r[$"Skill_Hyper{skill.SkillKey}"];
+                    skillRegion = (OpenCvSharp.Rect)_r.GetType().GetProperty($"Skill_Hyper{skill.SkillKey}").GetValue(_r);
 
-                var skillFound = IP.LocateCenterOnScreen(ms, IP.ConvertStringCoordsToRect(skillCoords), confidence);
+                var skillFound = IP.LocateCenterOnScreen(ms, skillRegion, confidence);
                 return skillFound;
             }
         }
@@ -158,7 +160,7 @@ namespace Chaotic.Tasks.Chaos.Class
         }
 
 
-        public static ChaosClass Create(UserSettings settings, UserCharacter character, ResourceHelper r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger)
+        public static ChaosClass Create(UserSettings settings, UserCharacter character, ApplicationResources r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger)
         {
             switch (character.ClassName)
             {
@@ -186,6 +188,8 @@ namespace Chaotic.Tasks.Chaos.Class
                     return new Summoner(settings, character, r, kb, mouse, logger);
                 case ClassNames.Gunlancer:
                     return new Gunlancer(settings, character, r, kb, mouse, logger);
+                case ClassNames.Soulfist:
+                    return new Soulfist(settings, character, r, kb, mouse, logger);
                 case ClassNames.Slayer:
                     return new Slayer(settings, character, r, kb, mouse, logger);
                 case ClassNames.Destroyer:

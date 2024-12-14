@@ -1,5 +1,6 @@
 ﻿using Accessibility;
 using Chaotic.Extensions;
+using Chaotic.Resources;
 using Chaotic.Tasks.Chaos.Class;
 using Chaotic.User;
 using Chaotic.Utilities;
@@ -19,7 +20,7 @@ namespace Chaotic.Tasks.Chaos.Kurzan
         protected readonly UserSettings _settings;
         protected readonly MouseUtility _mouse;
         protected readonly KeyboardUtility _kb;
-        protected readonly ResourceHelper _r;
+        protected readonly ApplicationResources _r;
         protected readonly AppLogger _logger;
         public string MapName { get; set; }
         protected Point CenterScreen { get; }
@@ -28,7 +29,7 @@ namespace Chaotic.Tasks.Chaos.Kurzan
 
         public abstract void StartMapMove(ChaosClass cc);
 
-        protected KurzanBase(string mapName, UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, AppLogger logger)
+        protected KurzanBase(string mapName, UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, AppLogger logger)
         {
             _settings = settings;
             _mouse = mouse;
@@ -36,8 +37,8 @@ namespace Chaotic.Tasks.Chaos.Kurzan
             _r = r;
             _logger = logger;
             MapName = mapName;
-            CenterScreen = _r.Point("CenterScreen");
-            MinimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
+            CenterScreen = _r.CenterScreen;// _r.Point("CenterScreen");
+            MinimapRegion = _r.Minimap; // IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
             TopMinimapRegion = MinimapRegion.TopRegion();
         }
 
@@ -67,7 +68,7 @@ namespace Chaotic.Tasks.Chaos.Kurzan
             return new ScreenSearchResult() { Found = false };
         }
 
-        public static KurzanBase CreateMap(ChaosStates state, UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper rh, AppLogger logger)
+        public static KurzanBase CreateMap(ChaosStates state, UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ApplicationResources rh, AppLogger logger)
         {
             switch (state)
             {

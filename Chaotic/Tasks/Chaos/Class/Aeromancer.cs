@@ -1,4 +1,5 @@
-﻿using Chaotic.User;
+﻿using Chaotic.Resources;
+using Chaotic.User;
 using Chaotic.Utilities;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Chaotic.Tasks.Chaos.Class
 {
     public class Aeromancer : ChaosClass
     {
-        public Aeromancer(UserSettings settings, UserCharacter character, ResourceHelper r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger) : base(settings, character, r, kb, mouse, logger)
+        public Aeromancer(UserSettings settings, UserCharacter character, ApplicationResources r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger) : base(settings, character, r, kb, mouse, logger)
         {
 
         }

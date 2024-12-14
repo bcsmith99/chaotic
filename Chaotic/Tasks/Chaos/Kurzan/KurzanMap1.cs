@@ -1,4 +1,5 @@
-﻿using Chaotic.Tasks.Chaos.Class;
+﻿using Chaotic.Resources;
+using Chaotic.Tasks.Chaos.Class;
 using Chaotic.User;
 using Chaotic.Utilities;
 using OpenCvSharp;
@@ -17,16 +18,16 @@ namespace Chaotic.Tasks.Chaos.Kurzan
     {
         public Rect ClickableRegion { get; }
 
-        public KurzanMap1(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper rh, AppLogger logger) : base("KurzanMap1", settings, mouse, kb, rh, logger)
+        public KurzanMap1(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ApplicationResources rh, AppLogger logger) : base("KurzanMap1", settings, mouse, kb, rh, logger)
         {
-            PreferredMovementArea = IP.ConvertStringCoordsToRect(_r["KurzanMap1_PreferredArea"]);
-            ClickableRegion = IP.ConvertStringCoordsToRect(_r["Clickable_Region"]);
+            PreferredMovementArea = _r.KurzanMap1PreferredArea;
+            ClickableRegion = _r.ClickableRegion;
 
         }
         public override void StartMapMove(ChaosClass cc)
         {
             _logger.Log(LogDetailLevel.Debug, "Kurzan Map 1 Initial Move");
-            var startPoints = IP.ConvertPointArray(_r["KurzanMap1_Start"]);
+            var startPoints = _r.KurzanMap1Start;
 
             _mouse.ClickPosition(startPoints[0], 2500, MouseButtons.Right);
             _mouse.ClickPosition(startPoints[1], 2000, MouseButtons.Right);
@@ -73,7 +74,7 @@ namespace Chaotic.Tasks.Chaos.Kurzan
                     _kb.Press(Key.G, 200);
                 }
 
-                PreferredMovementArea = IP.ConvertStringCoordsToRect(_r["Clickable_Region"]);
+                PreferredMovementArea = _r.ClickableRegion; 
             }
         }
 

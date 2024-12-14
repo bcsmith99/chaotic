@@ -1,4 +1,5 @@
 ﻿using Accessibility;
+using Chaotic.Resources;
 using Chaotic.User;
 using Chaotic.Utilities;
 using DeftSharp.Windows.Input.Keyboard;
@@ -19,10 +20,10 @@ namespace Chaotic.Tasks
         private UserSettings _settings;
         private readonly MouseUtility _mouse;
         private readonly KeyboardUtility _kb;
-        private readonly ResourceHelper _r;
+        private readonly ApplicationResources _r;
         private readonly AppLogger _logger;
 
-        public GuildTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r,AppLogger logger)
+        public GuildTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r,AppLogger logger)
         {
             _settings = settings;
             _mouse = mouse;
@@ -38,8 +39,8 @@ namespace Chaotic.Tasks
                 return retVal;
 
             Thread.Sleep(2000);
-            _mouse.ClickPosition(_r["CommunityMenu"], 500);
-            _mouse.ClickPosition(_r["GuildMenu"], 3200);
+            _mouse.ClickPosition(_r.CommunityMenu, 500);
+            _mouse.ClickPosition(_r.GuildMenu, 3200);
 
             //1630, 710, 200, 60,
             var ok = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .95);
@@ -62,7 +63,7 @@ namespace Chaotic.Tasks
                     if (character.GuildDonationSilver)
                     {
                         // 1250, 680, 250, 100,
-                        var silverDono = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("donate_silver.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["SilverDonate_Region"]), confidence: .95);
+                        var silverDono = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("donate_silver.png", _settings.Resolution), _r.SilverDonate, confidence: .95);
                         if (silverDono != null)
                         {
                             _logger.Log(LogDetailLevel.Debug, $"Silver Donate - X: {silverDono.CenterX}, Y: {silverDono.CenterY}");
@@ -73,7 +74,7 @@ namespace Chaotic.Tasks
                     if (character.GuildDonationGold)
                     {
                         //1600, 680, 250, 100,
-                        var goldDono = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("donate_silver.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["GoldDonate_Region"]), confidence: .95);
+                        var goldDono = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("donate_silver.png", _settings.Resolution), _r.GoldDonate, confidence: .95);
                         if (goldDono != null)
                         {
                             _logger.Log(LogDetailLevel.Debug, $"Gold Donate - X: {goldDono.CenterX}, Y: {goldDono.CenterY}");
@@ -87,16 +88,14 @@ namespace Chaotic.Tasks
             }
 
             BackgroundProcessing.ProgressCheck();
-            var supportButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("support_button.png", _settings.Resolution),
-                IP.ConvertStringCoordsToRect(_r["GuildSupport_Region"]), .85);
+            var supportButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("support_button.png", _settings.Resolution), _r.GuildSupport, .85);
             if (supportButton.Found)
             {
                 _mouse.ClickPosition(supportButton.CenterX, supportButton.CenterY, 1000);
-                _mouse.ClickPosition(_r["GuildNormalSupport"], 500);
-                _mouse.ClickPosition(_r["GuildSupportOk_Button"], 1000);
+                _mouse.ClickPosition(_r.GuildNormalSupport, 500);
+                _mouse.ClickPosition(_r.GuildSupportOkButton, 1000);
 
-                var cancelButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("cancel_button.png", _settings.Resolution),
-                    IP.ConvertStringCoordsToRect(_r["GuildSupportCancel_Region"]), .7);
+                var cancelButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("cancel_button.png", _settings.Resolution), _r.GuildSupportCancel, .7);
                 if (cancelButton.Found)
                     _mouse.ClickPosition(cancelButton.CenterX, cancelButton.CenterY, 500);
             }

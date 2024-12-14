@@ -12,9 +12,9 @@ using Chaotic.Resources;
 
 namespace Chaotic.Tasks.Chaos.Class
 {
-    public class Arcanist : ChaosClass
+    public class Soulfist : ChaosClass
     {
-        public Arcanist(UserSettings settings, UserCharacter character, ApplicationResources r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger) : base(settings, character, r, kb, mouse, logger)
+        public Soulfist(UserSettings settings, UserCharacter character, ApplicationResources r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger) : base(settings, character, r, kb, mouse, logger)
         {
 
         }
@@ -25,8 +25,10 @@ namespace Chaotic.Tasks.Chaos.Class
 
         public override void UseCharacterSpecificAbilities()
         {
-            _kb.Press(Key.Z, 200);
-            _kb.Press(Key.X, 200);
+
+            var special = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("class/soulfist.png", _settings.Resolution), CharacterIconRegion, .65);
+            if (!special.Found)
+                _kb.Press(Key.Z, 200);
         }
     }
 }

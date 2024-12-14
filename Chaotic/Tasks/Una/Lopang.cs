@@ -1,4 +1,5 @@
-﻿using Chaotic.User;
+﻿using Chaotic.Resources;
+using Chaotic.User;
 using Chaotic.Utilities;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Chaotic.Tasks.Una
     public class Lopang : UnaTask
     {
         public bool RunShushireOnly { get; set; } = false;
-        public Lopang(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UserSettings settings, AppLogger logger) : base(uiTask, mouse, kb, r, settings, logger)
+        public Lopang(UITasks uiTask, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, UserSettings settings, AppLogger logger) : base(uiTask, mouse, kb, r, settings, logger)
         {
 
         }
@@ -42,10 +43,9 @@ namespace Chaotic.Tasks.Una
 
         public void RunLopangRoute()
         {
-            Sleep.SleepMs(1000, 1000);
-            _mouse.ClickCenterScreen(_r);
+            _mouse.ClickCenterScreen(CenterScreen);
 
-            var routePositions = IP.ConvertPointArray(_r["UnaLopang_Route"]);
+            var routePositions = _r.UnaLopangRoute;
 
             _kb.Press(Key.G, 500);
             _kb.Press(Key.G, 500);

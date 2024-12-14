@@ -89,14 +89,32 @@
 						</Border>
 						<Border Padding="10,5,10,0"
 								Grid.Row="1">
-							<WrapPanel Orientation="Horizontal">
-								<Label Content="Log - "
-									   FontWeight="Bold" />
-								<TextBlock VerticalAlignment="Center"
-										   Margin="5,0,5,0">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+								<WrapPanel Orientation="Horizontal">
+									<TextBlock Text="Log - "
+											   FontWeight="Bold" />
+									<TextBlock VerticalAlignment="Center">
                                     <Hyperlink Click="ClearLog_Click">Clear</Hyperlink>
-								</TextBlock>
-							</WrapPanel>
+									</TextBlock>
+
+								</WrapPanel>
+								<WrapPanel Orientation="Horizontal"
+										   Grid.Column="1"
+										   HorizontalAlignment="Right"
+										   Visibility="{Binding TaskRunning, Converter={StaticResource VisibilityConverter}}">
+									<TextBlock Text="Execution - "
+											   FontWeight="Bold" />
+									<TextBlock VerticalAlignment="Center">
+										<Hyperlink Click="PauseExecution_Click">Toggle Pause</Hyperlink>
+										<Hyperlink Click="CancelExecution_Click">Cancel</Hyperlink>
+									</TextBlock>
+
+								</WrapPanel>
+							</Grid>
 
 						</Border>
 						<ListView Padding="10,5,10,0"
@@ -383,18 +401,24 @@
                                     <Hyperlink Click="CaptureSkills_Click">Capture Skills</Hyperlink>
 								</TextBlock>
 							</WrapPanel>
+							<WrapPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding UserSettings.Resolution, StringFormat=Currently displaying skills for {0}}" 
+										   Margin="5,0,0,0"
+										   FontSize="10px"/>
+						
+							</WrapPanel>
 
-							<local:SkillControl Skill="{Binding CurrentSelectedEditChar.Skills.QSkill}"></local:SkillControl>
-							<local:SkillControl Skill="{Binding CurrentSelectedEditChar.Skills.WSkill}"></local:SkillControl>
-							<local:SkillControl Skill="{Binding CurrentSelectedEditChar.Skills.ESkill}"></local:SkillControl>
-							<local:SkillControl Skill="{Binding CurrentSelectedEditChar.Skills.RSkill}"></local:SkillControl>
-							<local:SkillControl Skill="{Binding CurrentSelectedEditChar.Skills.ASkill}"></local:SkillControl>
-							<local:SkillControl Skill="{Binding CurrentSelectedEditChar.Skills.SSkill}"></local:SkillControl>
-							<local:SkillControl Skill="{Binding CurrentSelectedEditChar.Skills.DSkill}"></local:SkillControl>
-							<local:SkillControl Skill="{Binding CurrentSelectedEditChar.Skills.FSkill}"></local:SkillControl>
-							<local:SkillControl Skill="{Binding CurrentSelectedEditChar.Skills.HyperSkill}"
+							<local:SkillControl Skill="{Binding CurrentQSkill, UpdateSourceTrigger=PropertyChanged}"></local:SkillControl>
+							<local:SkillControl Skill="{Binding CurrentWSkill, UpdateSourceTrigger=PropertyChanged}"></local:SkillControl>
+							<local:SkillControl Skill="{Binding CurrentESkill, UpdateSourceTrigger=PropertyChanged}"></local:SkillControl>
+							<local:SkillControl Skill="{Binding CurrentRSkill, UpdateSourceTrigger=PropertyChanged}"></local:SkillControl>
+							<local:SkillControl Skill="{Binding CurrentASkill, UpdateSourceTrigger=PropertyChanged}"></local:SkillControl>
+							<local:SkillControl Skill="{Binding CurrentSSkill, UpdateSourceTrigger=PropertyChanged}"></local:SkillControl>
+							<local:SkillControl Skill="{Binding CurrentDSkill, UpdateSourceTrigger=PropertyChanged}"></local:SkillControl>
+							<local:SkillControl Skill="{Binding CurrentFSkill, UpdateSourceTrigger=PropertyChanged}"></local:SkillControl>
+							<local:SkillControl Skill="{Binding CurrentHyperSkill}"
 												Visibility="{Binding CurrentSelectedEditChar.HasHyperSkill, Converter={StaticResource VisibilityConverter}}"></local:SkillControl>
-							<local:SkillControl Skill="{Binding CurrentSelectedEditChar.Skills.Awakening}"></local:SkillControl>
+							<local:SkillControl Skill="{Binding CurrentAwakening}"></local:SkillControl>
 						</StackPanel>
 					</ScrollViewer>
 				</Grid>
@@ -605,6 +629,9 @@
 						</StackPanel>
 					</ScrollViewer>
 				</Grid>
+			</TabItem>
+			<TabItem Header="Statistics">
+				<local:StatisticsControl />
 			</TabItem>
 		</TabControl>
 	</Grid>

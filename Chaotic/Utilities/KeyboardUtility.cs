@@ -59,10 +59,10 @@ namespace Chaotic.Utilities
             Sleep.SleepMs(10, 30);
         }
 
-        private void ModifierPress(Key modifier, Key key, int waitAfter = 0)
+        private void ModifierPress(Key modifier, Key key, int waitAfter = 0, double performanceMultiplier = 1)
         {
             Hold(modifier);
-            Press(key, waitAfter);
+            Press(key, waitAfter, performanceMultiplier);
             Release(modifier);
         }
 
@@ -82,17 +82,17 @@ namespace Chaotic.Utilities
         }
 
 
-        public void Press(string key, int waitAfter = 0)
+        public void Press(string key, int waitAfter = 0, double performanceMultiplier = 1)
         {
             var keyToPress = (Key)_kc.ConvertFromString(key);
-            Press(keyToPress, waitAfter);
+            Press(keyToPress, waitAfter, performanceMultiplier);
         }
 
-        public void Press(Key key, int waitAfter = 0)
+        public void Press(Key key, int waitAfter = 0, double performanceMultiplier = 1)
         {
             _kb.Press(key);
             if (waitAfter > 0)
-                Sleep.SleepMs(waitAfter, waitAfter + 50);
+                Sleep.SleepMs(waitAfter, waitAfter + 50, performanceMultiplier);
         }
 
         public void Press(params Key[] keys)

@@ -13,7 +13,6 @@ namespace Chaotic.Tasks.Chaos
             StatisticType = "ChaosDungeon";
         }
         public int ChaosLevel { get; set; }
-        public string Class { get; set; } = "";
         public TimeSpan Floor1Duration { get; set; }
         public TimeSpan Floor2Duration { get; set; }
         public TimeSpan Floor3Duration { get; set; }

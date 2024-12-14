@@ -19,6 +19,7 @@ using System.DirectoryServices;
 using Chaotic.Tasks.Chaos;
 using Chaotic.Tasks.Chaos.Kurzan;
 using System.Linq.Expressions;
+using Chaotic.Resources;
 
 namespace Chaotic.Tasks
 {
@@ -27,7 +28,7 @@ namespace Chaotic.Tasks
         private readonly UserSettings _settings;
         private readonly MouseUtility _mouse;
         private readonly KeyboardUtility _kb;
-        private readonly ResourceHelper _r;
+        private readonly ApplicationResources _r;
         private readonly UITasks _uiTasks;
         private readonly AppLogger _logger;
         private Point MoveToPoint { get; set; }
@@ -38,7 +39,7 @@ namespace Chaotic.Tasks
 
         public Rect ClickableRegion { get; set; }
         public Point CenterScreen { get; set; }
-
+        public Rect MinimapRegion { get; set; }
         public Point ClickableOffset { get; set; }
 
         public enum ChaosStates
@@ -54,7 +55,7 @@ namespace Chaotic.Tasks
             Cleared
         }
 
-        public ChaosTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ResourceHelper r, UITasks uiTasks, AppLogger logger)
+        public ChaosTasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, UITasks uiTasks, AppLogger logger)
         {
             _settings = settings;
             _mouse = mouse;
@@ -63,12 +64,13 @@ namespace Chaotic.Tasks
             _uiTasks = uiTasks;
             _logger = logger;
 
-            var centerScreen = IP.GetPointFromStringCoords(_r["CenterScreen"]);
+            var centerScreen = _r.CenterScreen;
 
             MoveToPoint = new Point(centerScreen.X, centerScreen.Y);
-            ClickableRegion = IP.ConvertStringCoordsToRect(_r["Clickable_Region"]);
-            CenterScreen = _r.Point("CenterScreen");
-            ClickableOffset = _r.Point("Clickable_Offset");
+            ClickableRegion = _r.ClickableRegion; // IP.ConvertStringCoordsToRect(_r["Clickable_Region"]);
+            CenterScreen = _r.CenterScreen; // _r.Point("CenterScreen");
+            ClickableOffset = _r.ClickableOffset;// _r.Point("Clickable_Offset");
+            MinimapRegion = _r.Minimap;
         }
 
 
@@ -275,8 +277,6 @@ namespace Chaotic.Tasks
             var currentTime = DateTime.Now;
             var startTime = DateTime.Now;
             var maxTime = startTime.AddMinutes(7);
-
-            var minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
             while (currentTime < maxTime)
             {
                 try
@@ -288,7 +288,7 @@ namespace Chaotic.Tasks
                         break;
 
                     //1500, 1000, 500, 400,
-                    var ok_chaos = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_chaos.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["ChaosOk_Region"]), confidence: .70);
+                    var ok_chaos = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_chaos.png", _settings.Resolution), _r.ChaosOk, confidence: .70);
 
                     if (ok_chaos.Found)
                     {
@@ -296,9 +296,9 @@ namespace Chaotic.Tasks
                         return true;
                     }
 
-                    var boss_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("boss_mob_middle.png", _settings.Resolution), minimapRegion, .7);
-                    var gold_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("gold_mob_middle.png", _settings.Resolution), minimapRegion, .75);
-                    var elite_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("elite_mob_middle.png", _settings.Resolution), minimapRegion, .86);
+                    var boss_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("boss_mob_middle.png", _settings.Resolution), MinimapRegion, .7);
+                    var gold_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("gold_mob_middle.png", _settings.Resolution), MinimapRegion, .75);
+                    var elite_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("elite_mob_middle.png", _settings.Resolution), MinimapRegion, .86);
 
                     map.PerformSpecialChecks();
 
@@ -396,11 +396,11 @@ namespace Chaotic.Tasks
                     throw new Exception("Waited too long to enter, crashing out of execution");
                 }
 
-                var leaveButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("exit_chaos.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["ChaosLeave_Region"]), .7, true);
+                var leaveButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("exit_chaos.png", _settings.Resolution), _r.ChaosLeave, .7, true);
 
                 if (leaveButton.Found)
                     return;
-                Sleep.SleepMs(450, 550);
+                Sleep.SleepMs(450, 550, _settings.PerformanceMultiplier);
             }
         }
 
@@ -412,7 +412,7 @@ namespace Chaotic.Tasks
 
             AuraRepair();
 
-            _mouse.ClickPosition(_r["CenterScreen"], 500, MouseButtons.Right);
+            _mouse.ClickPosition(CenterScreen, 500, MouseButtons.Right);
 
             if (OfflineCheck() || GameCrashCheck())
                 return;
@@ -446,9 +446,7 @@ namespace Chaotic.Tasks
 
             AuraRepair();
 
-            var screenCenter = IP.GetPointFromStringCoords(_r["CenterScreen"]);
-
-            _mouse.ClickPosition(screenCenter, 800, MouseButtons.Right);
+            _mouse.ClickPosition(CenterScreen, 800, MouseButtons.Right);
 
             while (true)
             {
@@ -489,9 +487,7 @@ namespace Chaotic.Tasks
 
             AuraRepair();
 
-            var screenCenter = IP.GetPointFromStringCoords(_r["CenterScreen"]);
-
-            _mouse.ClickPosition(screenCenter, 800, MouseButtons.Right);
+            _mouse.ClickPosition(CenterScreen, 800, MouseButtons.Right);
 
             UseChaosDungeonAbilities(cc);
 
@@ -555,18 +551,16 @@ namespace Chaotic.Tasks
             }
             var maxTimeMs = 6000;
             var enterTime = DateTime.Now;
-            var screenCenter = IP.GetPointFromStringCoords(_r["CenterScreen"]);
 
-            Rect minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
             while (true)
             {
                 BackgroundProcessing.ProgressCheck();
-                var minimap = IP.CaptureScreen(minimapRegion);
+                var minimap = IP.CaptureScreen(MinimapRegion);
                 var c = minimap.GetPixel(minimap.Width / 2, minimap.Height / 2);
                 if (c.R + c.G + c.B < 40)
                 {
                     _logger.Log(LogDetailLevel.Debug, "Portal Entered");
-                    _mouse.SetPosition(screenCenter.X, screenCenter.Y);
+                    _mouse.SetPosition(CenterScreen);
                     return true;
                 }
 
@@ -578,7 +572,7 @@ namespace Chaotic.Tasks
                     return EnterPortal(cc);
                 }
 
-                if (MoveToPoint.X == screenCenter.X && MoveToPoint.Y == screenCenter.Y)
+                if (MoveToPoint.X == CenterScreen.X && MoveToPoint.Y == CenterScreen.Y)
                     for (int i = 0; i < 10; i++)
                     {
                         _kb.Press(Key.G, 100);
@@ -654,7 +648,7 @@ namespace Chaotic.Tasks
 
                 if (CheckPortal() && (CurrentState == ChaosStates.Floor1 || CurrentState == ChaosStates.Floor2 || CurrentState == ChaosStates.Floor3))
                 {
-                    _mouse.SetPosition(_r["CenterScreen"]);
+                    _mouse.SetPosition(CenterScreen);
                     CheckPortal();
                     return;
                 }
@@ -722,9 +716,7 @@ namespace Chaotic.Tasks
             {
                 if (_minimapSpiralized == null)
                 {
-                    Rect minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
-
-                    _minimapSpiralized = GetPixelsSpiralized(Math.Max(minimapRegion.Width, minimapRegion.Height)).ToList();
+                    _minimapSpiralized = GetPixelsSpiralized(Math.Max(MinimapRegion.Width, MinimapRegion.Height)).ToList();
                     return _minimapSpiralized;
                 }
                 else
@@ -865,14 +857,13 @@ namespace Chaotic.Tasks
             {
                 "fate_ember.png",
             };
-            Rect minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
 
             ScreenSearchResult ember = new ScreenSearchResult();
 
             foreach (var image in emberImages)
             {
                 //IP.SAVE_DEBUG_IMAGES = true;
-                ember = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), minimapRegion, confidence: .9);
+                ember = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), MinimapRegion, confidence: .9);
                 if (ember.Found)
                 {
                     //IP.SAVE_DEBUG_IMAGES = false;
@@ -899,14 +890,12 @@ namespace Chaotic.Tasks
                 "portal_top.png",
                 "portal_bot.png"
             };
-            Rect minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
-
             ScreenSearchResult portal = new ScreenSearchResult();
 
             foreach (var image in portalImages)
             {
                 //IP.SAVE_DEBUG_IMAGES = true;
-                portal = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), minimapRegion, confidence: .9);
+                portal = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), MinimapRegion, confidence: .9);
                 if (portal.Found)
                 {
                     //IP.SAVE_DEBUG_IMAGES = false;
@@ -929,7 +918,7 @@ namespace Chaotic.Tasks
         private bool CheckBossMobHealthBar()
         {
             _logger.Log(LogDetailLevel.Debug, "Checking Boss Health Bar");
-            Rect bossRegion = IP.ConvertStringCoordsToRect(_r["BossMobHealth_Region"]);
+            Rect bossRegion = _r.BossMobHealth; // IP.ConvertStringCoordsToRect(_r["BossMobHealth_Region"]);
             var boss = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("boss_bar.png", _settings.Resolution), bossRegion, confidence: .75);
             if (boss.Found)
             {
@@ -941,8 +930,7 @@ namespace Chaotic.Tasks
 
         private bool CheckBossMob()
         {
-            Rect minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
-            var boss = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("boss_mob_middle.png", _settings.Resolution), minimapRegion, confidence: .7);
+            var boss = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("boss_mob_middle.png", _settings.Resolution), MinimapRegion, confidence: .7);
             if (boss.Found)
             {
                 _logger.Log(LogDetailLevel.Debug, $"Found Boss, Max Confidence: {boss.MaxConfidence}, Position: X: {boss.CenterX}, Y: {boss.CenterY}");
@@ -954,8 +942,8 @@ namespace Chaotic.Tasks
 
         private bool CheckRedMob()
         {
-            Rect minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
-            var minimap = IP.CaptureScreen(minimapRegion);
+
+            var minimap = IP.CaptureScreen(MinimapRegion);
 
             foreach (var entry in MinimapSpiralized)
             {
@@ -966,7 +954,7 @@ namespace Chaotic.Tasks
                 bool inRange = (Enumerable.Range(206, 211).Contains(c.R) && Enumerable.Range(22, 27).Contains(c.G) && Enumerable.Range(22, 27).Contains(c.B));
                 if (inRange)
                 {
-                    CalcMinimapPos(minimapRegion.Left + entry.X, minimapRegion.Top + entry.Y);
+                    CalcMinimapPos(MinimapRegion.Left + entry.X, MinimapRegion.Top + entry.Y);
                     return true;
                 }
             }
@@ -975,8 +963,7 @@ namespace Chaotic.Tasks
 
         private bool CheckEliteMob()
         {
-            Rect minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
-            var elite = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("elite_mob_middle.png", _settings.Resolution), minimapRegion, confidence: .9);
+            var elite = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("elite_mob_middle.png", _settings.Resolution), MinimapRegion, confidence: .9);
             if (elite.Found)
             {
                 _logger.Log(LogDetailLevel.Debug, $"Found Elite, Max Confidence: {elite.MaxConfidence}, Position: X: {elite.CenterX}, Y: {elite.CenterY}");
@@ -995,13 +982,11 @@ namespace Chaotic.Tasks
                 "tower_top.png",
                 "tower_bot.png"
             };
-            Rect minimapRegion = IP.ConvertStringCoordsToRect(_r["MinimapRegion"]);
-
             ScreenSearchResult tower = new ScreenSearchResult();
 
             foreach (var image in towerImages)
             {
-                tower = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), minimapRegion, confidence: .75);
+                tower = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), MinimapRegion, confidence: .75);
                 if (tower.Found)
                     break;
             }
@@ -1038,7 +1023,7 @@ namespace Chaotic.Tasks
             if (currentTime.Subtract(LastHealthPotUsed).TotalSeconds < 15)
                 return;
 
-            var healthBarRegion = IP.ConvertStringCoordsToRect(_r["HealthBar_Region"]);
+            var healthBarRegion = _r.HealthBar;
             var percentToPot = _settings.UsePotionPercent;
             var healthPotKey = _settings.HealthPotionKey;
 
@@ -1092,7 +1077,7 @@ namespace Chaotic.Tasks
 
         public bool TimeoutCheck()
         {
-            var timeoutRegion = IP.ConvertStringCoordsToRect(_r["Timeout_Region"]);
+            var timeoutRegion = _r.Timeout;
             var timeout = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("timeout1.png", _settings.Resolution), timeoutRegion, confidence: .9);
             if (timeout.Found)
                 _logger.Log(LogDetailLevel.Info, $"Timeout1 found. Confidence : {timeout.MaxConfidence}");
@@ -1134,7 +1119,7 @@ namespace Chaotic.Tasks
         private bool EnterChaosDungeon(UserCharacter character)
         {
             var retVal = true;
-            _mouse.ClickCenterScreen(_r);
+            _mouse.ClickCenterScreen(CenterScreen);
 
             BackgroundProcessing.ProgressCheck();
             retVal = SelectChaosDungeon(character);
@@ -1181,9 +1166,11 @@ namespace Chaotic.Tasks
         {
             BackgroundProcessing.ProgressCheck();
             CurrentState = ChaosStates.InCity;
-            _mouse.ClickCenterScreen(_r);
+            _mouse.ClickCenterScreen(CenterScreen);
             _kb.AltPress(Key.Q, 1000);
-            _mouse.ClickPosition(_r[$"Kurzan{character.ChaosLevel}"], 300);
+
+            var kurzanChaos = (OpenCvSharp.Point)_r.GetType().GetProperty($"Kurzan{character.ChaosLevel}").GetValue(_r);
+            _mouse.ClickPosition(kurzanChaos, 300);
 
             var cc = ChaosClass.Create(_settings, character, _r, _kb, _mouse, _logger);
 
@@ -1223,14 +1210,13 @@ namespace Chaotic.Tasks
         {
             var tries = 1;
             var maxTries = 20;
-            var minimapRegion = ImageProcessing.ConvertStringCoordsToRect(_r["MinimapRegion"]);
 
             while (tries <= maxTries)
             {
                 var breakLoop = false;
-                var map1 = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map1.png", _settings.Resolution), minimapRegion, .75);
-                var map2 = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map2.png", _settings.Resolution), minimapRegion, .75);
-                var map3 = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map3.png", _settings.Resolution), minimapRegion, .75);
+                var map1 = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map1.png", _settings.Resolution), MinimapRegion, .75);
+                var map2 = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map2.png", _settings.Resolution), MinimapRegion, .75);
+                var map3 = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("kurzan_map3.png", _settings.Resolution), MinimapRegion, .75);
 
                 if (map1.Found)
                 {
@@ -1259,9 +1245,9 @@ namespace Chaotic.Tasks
 
             //Todo remove alt-q and go through adventure menu. 
             _kb.AltPress(Key.Q, 1000);
-            _mouse.ClickPosition(_r["ChaosDungeon_Shortcut"], 500);
+            _mouse.ClickPosition(_r.ChaosDungeon_Shortcut, 500);
 
-            var claimAll = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("claimall_button.png", _settings.Resolution), IP.ConvertStringCoordsToRect(_r["ClaimAll_Region"]), .95);
+            var claimAll = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("claimall_button.png", _settings.Resolution), _r.ClaimAll, .95);
 
             if (claimAll.Found)
             {
@@ -1271,24 +1257,26 @@ namespace Chaotic.Tasks
                     _mouse.ClickPosition(okButton.Center, 500);
             }
 
-            _mouse.ClickPosition(_r["ChaosDungeon_RightArrow"], 300);
-            _mouse.ClickPosition(_r["ChaosDungeon_RightArrow"], 300);
-            _mouse.ClickPosition(_r["ChaosDungeon_RightArrow"], 300);
+            _mouse.ClickPosition(_r.ChaosDungeon_RightArrow, 300);
+            _mouse.ClickPosition(_r.ChaosDungeon_RightArrow, 300);
+            _mouse.ClickPosition(_r.ChaosDungeon_RightArrow, 300);
 
             _mouse.ClickPosition(GetChaosDungeonTabCoords(character.ChaosLevel), 500);
-            _mouse.ClickPosition(_r[$"ChaosDungeon_{character.ChaosLevel}"], 500);
+            var chaosPoint = (OpenCvSharp.Point)_r.GetType().GetProperty($"ChaosDungeon_{character.ChaosLevel}").GetValue(_r);
+
+            _mouse.ClickPosition(chaosPoint, 500);
 
             return true;
         }
 
-        private string GetChaosDungeonTabCoords(int itemLevel)
+        private Point GetChaosDungeonTabCoords(int itemLevel)
         {
             if (itemLevel >= 1415 && itemLevel < 1580)
-                return _r["ChaosDungeon_Vern"];
+                return _r.ChaosDungeon_Vern;
             else if (itemLevel >= 1580 && itemLevel < 1610)
-                return _r["ChaosDungeon_Elgacia"];
+                return _r.ChaosDungeon_Elgacia;
             else if (itemLevel >= 1610 && itemLevel < 1640)
-                return _r["ChaosDungeon_Voldis"];
+                return _r.ChaosDungeon_Voldis;
             else
                 throw new ArgumentOutOfRangeException("Unknown Chaos Dungeon Entry");
         }
@@ -1400,8 +1388,7 @@ namespace Chaotic.Tasks
 
         public void MoveOnScreen(int x, int y, int minTime, int maxTime, bool blink = false)
         {
-            var centerScreen = _r.Point("CenterScreen");
-            if (x == centerScreen.X && x == centerScreen.Y)
+            if (x == CenterScreen.X && x == CenterScreen.Y)
                 return;
 
             if (MoveTime < 50)
@@ -1581,9 +1568,8 @@ namespace Chaotic.Tasks
 
         public Point CalcMinimapPos(int x, int y)
         {
-            var minimapCenter = _r.Point("MinimapCenter");
-            var screenCenter = _r.Point("CenterScreen");
-            var dist = Int32.Parse(_r["Y_Distance"]);
+            var minimapCenter = _r.MinimapCenter;
+            var dist = _r.YDistance;
 
             x = x - minimapCenter.X;
             y = y - minimapCenter.Y;
@@ -1598,13 +1584,13 @@ namespace Chaotic.Tasks
             if (x == 0)
             {
                 newY = y < 0 ? y - Math.Abs(dist) : y + Math.Abs(dist);
-                return SetMoveToPoint(screenCenter.X, newY + screenCenter.Y);
+                return SetMoveToPoint(CenterScreen.X, newY + CenterScreen.Y);
             }
 
             if (y == 0)
             {
                 newX = x < 0 ? x - Math.Abs(dist) : x + Math.Abs(dist);
-                return SetMoveToPoint(newX + screenCenter.X, screenCenter.Y);
+                return SetMoveToPoint(newX + CenterScreen.X, CenterScreen.Y);
             }
 
             double k = (double)y / (double)x;
@@ -1646,7 +1632,7 @@ namespace Chaotic.Tasks
             }
 
 
-            return SetMoveToPoint(newX + screenCenter.X, newY + screenCenter.Y);
+            return SetMoveToPoint(newX + CenterScreen.X, newY + CenterScreen.Y);
         }
     }
 }

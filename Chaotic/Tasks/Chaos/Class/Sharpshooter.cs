@@ -7,13 +7,14 @@ using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using IP = Chaotic.Utilities.ImageProcessing; 
+using IP = Chaotic.Utilities.ImageProcessing;
+using Chaotic.Resources;
 
 namespace Chaotic.Tasks.Chaos.Class
 {
     public class Sharpshooter : ChaosClass
     {
-        public Sharpshooter(UserSettings settings, UserCharacter character, ResourceHelper r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger) : base(settings, character, r, kb, mouse, logger)
+        public Sharpshooter(UserSettings settings, UserCharacter character, ApplicationResources r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger) : base(settings, character, r, kb, mouse, logger)
         {
 
         }
