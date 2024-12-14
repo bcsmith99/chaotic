@@ -224,7 +224,11 @@ namespace Chaotic.Tasks
             if (remoteStorageButton.Found)
                 _mouse.ClickPosition(remoteStorageButton.CenterX, remoteStorageButton.CenterY, 1000);
             else
+            {
+                _logger.Log(LogDetailLevel.Debug, "Did not find remote storage button on inventory management, aborting.");
                 success = false;
+            }
+                
 
             return success;
         }
@@ -263,8 +267,8 @@ namespace Chaotic.Tasks
         private void OpenPetMenu()
         {
 
-            _mouse.ClickPosition(_r.GuideMenu, 500);
-            _mouse.ClickPosition(_r.GuidePetMenu, 1000);
+            _mouse.ClickPosition(_r["GuideMenu"], 800);
+            _mouse.ClickPosition(_r["GuidePetMenu"], 1500);
         }
 
         public bool GameMenuOpen()
