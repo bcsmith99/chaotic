@@ -31,5 +31,10 @@ namespace Chaotic.Extensions
         {
             return new Rect((rect.Left + rect.Right) / 2, (rect.Top + rect.Bottom) / 2, rect.Width / 2, rect.Height / 2);
         }
+
+        public static Point RandomPoint(this Rect rect)
+        {
+            return new Point(Random.Shared.Next(rect.X, rect.X + rect.Width), Random.Shared.Next(rect.Y, rect.Y + rect.Height));
+        }
     }
 }

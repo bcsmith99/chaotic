@@ -66,6 +66,9 @@ namespace Chaotic.Resources
             CommunityMenu = new Point(3290, 1385);
             Complete = new Rect(400, 950, 200, 100);
             ConnectButton = new Point(1850, 1000);
+            CubeNextFloor = new Point(1680, 850);
+            CubeMiddleFloor = new Point(2150, 325);
+            CubeInitialMove = new Point(2400, 175);
             ElgaciaShardClickpoints = new List<Point>()
             {
                 new Point(2000,1200),

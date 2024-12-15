@@ -245,7 +245,11 @@ namespace Chaotic.Tasks
             if (exitButton.Found)
                 _mouse.ClickPosition(exitButton.CenterX, exitButton.CenterY, 1000);
             else
+            {
+                _logger.Log(LogDetailLevel.Debug, "Inventory Management Exit button not found, clicking escape");
                 _kb.Press(Key.Escape, 1000);
+            }
+                
 
 
             var closeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("x.png", _settings.Resolution), confidence: .8);

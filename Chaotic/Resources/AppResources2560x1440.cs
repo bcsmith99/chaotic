@@ -66,6 +66,9 @@ namespace Chaotic.Resources
             CommunityMenu = new Point(2460, 1225);
             Complete = new Rect(300, 900, 200, 75);
             ConnectButton = new Point(1375, 930);
+            CubeNextFloor = new Point(1260, 825);
+            CubeMiddleFloor = new Point(1650, 1025);
+            CubeInitialMove = new Point(1830, 325);
             ElgaciaShardClickpoints = new List<Point>()
             {
                 new Point(1500,1100),
@@ -106,7 +109,7 @@ namespace Chaotic.Resources
             KurzanMap3StickingPoint = new Rect(1280, 180, 600, 300);
 
 
-            MinimapCenter = new Point(2385, 347);
+            MinimapCenter = new Point(2385, 348);
             Minimap = new Rect(2230, 220, 300, 250);
             OngoingQuests = new Rect(2210, 550, 150, 40);
             PlecciaShardClickpoints = new List<Point>()

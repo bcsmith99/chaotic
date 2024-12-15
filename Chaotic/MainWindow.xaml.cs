@@ -652,8 +652,12 @@ namespace Chaotic
         {
             Action a = () =>
             {
-                _mouse.ClickCenterScreen(_r.CenterScreen);
-                _ut.RunDailyUna(_CurrentDailySelectedChar.ThirdUnaTask);
+                var ct = new CubeTasks(_settings, _mouse, _kb, _r, _uit, _logger);
+
+                ct.RunCube(CurrentDailySelectedChar);
+                //_mouse.ClickCenterScreen(_r.CenterScreen);
+                ////_ut.RunDailyUna(_CurrentDailySelectedChar.ThirdUnaTask);
+                //_uit.CloseInventoryManagement(); 
                 //var pleccia = new PlecciaShard(_uit, _mouse, _kb, _r, _settings, _logger);
                 //pleccia.ExecuteTask(); 
                 //for (int i = 0; i < 60; i++)

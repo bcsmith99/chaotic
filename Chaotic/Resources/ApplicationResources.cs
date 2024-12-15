@@ -100,6 +100,12 @@ namespace Chaotic.Resources
         public Point UnaWeekly { get; set; }
         public Point UnaWeeklyDropdown { get; set; }
         public Point UnaWeeklyDropdownFavorite { get; set; }
+
+        
+        public Point CubeNextFloor { get; set; }
+        public Point CubeMiddleFloor { get; set; }
+        public Point CubeInitialMove { get; set; }
+
         public List<Point> ElgaciaShardClickpoints { get; set; }
         public List<Point> KurzanMap1Start { get; set; }
         public List<Point> KurzanMap2Start { get; set; }

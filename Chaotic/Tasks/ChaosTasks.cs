@@ -324,7 +324,7 @@ namespace Chaotic.Tasks
                     }
 
                     var boss_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("boss_mob_middle.png", _settings.Resolution), MinimapRegion, .7);
-                    var gold_on_screen = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("gold_mob_actual.png", _settings.Resolution), ClickableRegion, .67);
+                    var gold_on_screen = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("gold_mob_actual.png", _settings.Resolution), ClickableRegion, .9);
                     var gold_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("gold_mob_middle.png", _settings.Resolution), MinimapRegion, .75);
                     var elite_mob = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("elite_mob_middle.png", _settings.Resolution), MinimapRegion, .86);
 
@@ -341,7 +341,7 @@ namespace Chaotic.Tasks
 
                     if (gold_on_screen.Found)
                     {
-                        _logger.Log(LogDetailLevel.Debug, $"Actual Gold Mob Found - {gold_mob.MaxConfidence}");
+                        _logger.Log(LogDetailLevel.Debug, $"Actual Gold Mob Found - {gold_on_screen.MaxConfidence}");
                         SetMoveToPoint(gold_on_screen.CenterX, gold_on_screen.CenterY);
                         MoveOnScreen(gold_on_screen.CenterX, gold_on_screen.CenterY, 1000, 1500);
                         cc.UseAbilities(MoveToPoint, 3);

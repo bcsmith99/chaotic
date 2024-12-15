@@ -46,14 +46,14 @@ namespace Chaotic.Tasks.Chaos.Class
         protected Rect CharacterIconRegion { get; private set; }
         public Point ScreenCenter { get; private set; }
 
-        public void UseAwakening(Point screenPoint)
+        public void UseAwakening(Point screenPoint, bool ignoreShortCast = false)
         {
             var awakening = _char.AllResolutionSkills[_settings.Resolution].Awakening;
             var skillFound = CheckSkillAvailable(awakening, .8);
 
             if (awakening.Priority > 0 && skillFound.Found)
             {
-                CastSkill(awakening, screenPoint);
+                CastSkill(awakening, screenPoint, ignoreShortCast);
             }
 
         }
@@ -81,9 +81,9 @@ namespace Chaotic.Tasks.Chaos.Class
             return new Point(xCoord, yCoord);
         }
 
-        public void UseAbilities(Point screenPoint, int maxCasts = 0)
+        public void UseAbilities(Point screenPoint, int maxCasts = 0, bool ignoreShortCast = false)
         {
-            _logger.Log(LogDetailLevel.Debug, $"Abilities cycle - {maxCasts} casts");
+            //_logger.Log(LogDetailLevel.Debug, $"Abilities cycle - {maxCasts} casts");
             StartUp();
 
             UseCharacterSpecificAbilities();
@@ -102,7 +102,7 @@ namespace Chaotic.Tasks.Chaos.Class
                 var skillAvailable = CheckSkillAvailable(ability);
                 if (skillAvailable.Found)
                 {
-                    CastSkill(ability, screenPoint);
+                    CastSkill(ability, screenPoint, ignoreShortCast);
                     currentCasts++;
                 }
 
@@ -127,12 +127,12 @@ namespace Chaotic.Tasks.Chaos.Class
                 return skillFound;
             }
         }
-        private void CastSkill(UserCharacterSkill skill, Point screenPoint)
+        private void CastSkill(UserCharacterSkill skill, Point screenPoint, bool ignoreShortCast)
         {
             if (skill.IsDirectional)
             {
                 var newPoint = screenPoint;
-                if (skill.IsShortCast)
+                if (skill.IsShortCast && !ignoreShortCast)
                 {
                     newPoint = GetShortCastPos(screenPoint, ScreenCenter);
                 }
