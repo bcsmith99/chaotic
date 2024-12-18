@@ -75,7 +75,7 @@ namespace Chaotic.Tasks
         }
 
 
-        public bool RunChaos(UserCharacter character, int chaosCount = 2)
+        public bool RunChaos(UserCharacter character, int chaosCount = 1)
         {
             BackgroundProcessing.ProgressCheck();
 
@@ -230,6 +230,7 @@ namespace Chaotic.Tasks
         {
             if (_settings.CaptureTimeoutScreenshot)
             {
+                _logger.Log(LogDetailLevel.Debug, "Capturing Timeout Screenshot"); 
                 var timeOutDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Chaotic\\Timeouts";
                 if (!Directory.Exists(timeOutDir))
                     Directory.CreateDirectory(timeOutDir);
@@ -446,7 +447,6 @@ namespace Chaotic.Tasks
             ClearQuests();
             Sleep.SleepMs(500, 600);
 
-            AuraRepair();
 
             _mouse.ClickPosition(CenterScreen, 500, MouseButtons.Right);
 
@@ -480,7 +480,6 @@ namespace Chaotic.Tasks
             ClearQuests();
             Sleep.SleepMs(500, 600);
 
-            AuraRepair();
 
             _mouse.ClickPosition(CenterScreen, 800, MouseButtons.Right);
 
@@ -520,8 +519,6 @@ namespace Chaotic.Tasks
 
             ClearQuests();
             Sleep.SleepMs(500, 600);
-
-            AuraRepair();
 
             _mouse.ClickPosition(CenterScreen, 800, MouseButtons.Right);
 
@@ -636,12 +633,12 @@ namespace Chaotic.Tasks
                 if (GameCrashCheck() || OfflineCheck() || TimeoutCheck())
                     return;
 
-                if (CurrentState == ChaosStates.Floor1 && CheckEliteMob())
-                {
-                    _logger.Log(LogDetailLevel.Debug, "Accidentally entered floor 2");
-                    CurrentState = ChaosStates.Floor2;
-                    return;
-                }
+                //if (CurrentState == ChaosStates.Floor1 && CheckEliteMob())
+                //{
+                //    _logger.Log(LogDetailLevel.Debug, "Accidentally entered floor 2");
+                //    CurrentState = ChaosStates.Floor2;
+                //    return;
+                //}
                 else if (CurrentState == ChaosStates.Floor2 && CheckTower())
                 {
                     _logger.Log(LogDetailLevel.Debug, "Accidentally entered floor 3");
@@ -695,6 +692,10 @@ namespace Chaotic.Tasks
                 if (CurrentState == ChaosStates.Floor1 && CheckRedMob())
                 {
                     MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 400, 600);
+                }
+                else if (CurrentState == ChaosStates.Floor1 && CheckEliteMob())
+                {
+                    MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 750, 850, false);
                 }
 
                 else if (CurrentState == ChaosStates.Floor2)
@@ -1115,12 +1116,12 @@ namespace Chaotic.Tasks
         public bool TimeoutCheck()
         {
             var timeoutRegion = _r.Timeout;
-            var timeout = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("timeout1.png", _settings.Resolution), timeoutRegion, confidence: .9);
+            var timeout = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("timeout1.png", _settings.Resolution), timeoutRegion, confidence: .95);
             if (timeout.Found)
                 _logger.Log(LogDetailLevel.Info, $"Timeout1 found. Confidence : {timeout.MaxConfidence}");
             else
             {
-                timeout = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("timeout2.png", _settings.Resolution), timeoutRegion, confidence: .9);
+                timeout = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("timeout2.png", _settings.Resolution), timeoutRegion, confidence: .95);
                 if (timeout.Found)
                     _logger.Log(LogDetailLevel.Info, $"Timeout2 found. Confidence : {timeout.MaxConfidence}");
             }
@@ -1136,11 +1137,6 @@ namespace Chaotic.Tasks
         private bool GameCrashCheck()
         {
             return false;
-        }
-
-        private void AuraRepair()
-        {
-
         }
 
         private void ClearQuests()

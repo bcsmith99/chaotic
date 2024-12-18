@@ -72,7 +72,7 @@ namespace Chaotic
         };
 
         //private ApplicationResources _r;
-        private ApplicationResources _r; 
+        private ApplicationResources _r;
         private UITasks _uit;
         private GuildTasks _gt;
         private UnaTasks _ut;
@@ -329,7 +329,7 @@ namespace Chaotic
 
         private void InitializeTasks()
         {
-            _r = ApplicationResources.Create(UserSettings.Resolution); 
+            _r = ApplicationResources.Create(UserSettings.Resolution);
             //_r = new ApplicationResources("Chaotic.Resources." + UserSettings.Resolution);
             _uit = new UITasks(UserSettings, _mouse, _kb, _r, _logger);
             _gt = new GuildTasks(UserSettings, _mouse, _kb, _r, _logger);
@@ -363,7 +363,7 @@ namespace Chaotic
 
         private void Resolution_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _r = ApplicationResources.Create(UserSettings.Resolution); 
+            _r = ApplicationResources.Create(UserSettings.Resolution);
             //_r = new ApplicationResources("Chaotic.Resources." + UserSettings.Resolution);
             SaveUserSettings();
 
@@ -539,11 +539,11 @@ namespace Chaotic
                 foreach (var skill in CurrentSelectedEditChar.AllResolutionSkills[UserSettings.Resolution].AllSkills)
                 {
                     if (skill == null) continue;
-                    
+
                     var region = (OpenCvSharp.Rect)_r.GetType().GetProperty($"Skill_{skill.SkillKey}").GetValue(_r);
 
                     if (skill.IsAwakening && CurrentSelectedEditChar.ChaosLevel >= 1640)
-                        region = (OpenCvSharp.Rect)_r.GetType().GetProperty($"Skill_Hyper{skill.SkillKey}").GetValue(_r); 
+                        region = (OpenCvSharp.Rect)_r.GetType().GetProperty($"Skill_Hyper{skill.SkillKey}").GetValue(_r);
 
                     if (skill.SkillKey == "T" && CurrentSelectedEditChar.ChaosLevel < 1640)
                         continue;
@@ -652,9 +652,46 @@ namespace Chaotic
         {
             Action a = () =>
             {
-                var ct = new CubeTasks(_settings, _mouse, _kb, _r, _uit, _logger);
+                var centerScreen = _r.CenterScreen;
+                _mouse.ClickCenterScreen(_r.CenterScreen);
+                var lastPotTime = DateTime.Now;
+                var lastCollectionLoop = DateTime.Now;
 
-                ct.RunCube(CurrentDailySelectedChar);
+                while (true)
+                {
+                    BackgroundProcessing.ProgressCheck();
+                    _mouse.SetPosition(3000, 950);
+                    _kb.Press(Key.W, 1000);
+                    _mouse.SetPosition(2050, 190);
+                    _kb.Press(Key.Z, 1000);
+                    _kb.Press(Key.A, 2500);
+
+                    var collectionTime = DateTime.Now.Subtract(lastCollectionLoop);
+                    _logger.Log(LogDetailLevel.Debug, $"Collection Time: {collectionTime.TotalMinutes}");
+                    if (DateTime.Now.Subtract(lastPotTime).TotalMinutes > 10)
+                    {
+                        _logger.Log(LogDetailLevel.Debug, "Pressing health pot");
+                        _kb.Press(Key.F1);
+                        lastPotTime = DateTime.Now;
+                    }
+                    if (collectionTime.TotalMinutes > 4)
+                    {
+                        _logger.Log(LogDetailLevel.Debug, "Collecting loot");
+                        _mouse.ClickPosition(centerScreen.X + 1000, centerScreen.Y, 2000, MouseButtons.Right);
+                        _mouse.ClickPosition(centerScreen.X - 1000, centerScreen.Y, 2000, MouseButtons.Right);
+                        //_mouse.ClickPosition(centerScreen.X - 500, centerScreen.Y - 300, 1000, MouseButtons.Right);
+                        //_mouse.ClickPosition(centerScreen.X - 500, centerScreen.Y + 350, 1000, MouseButtons.Right);
+                        lastCollectionLoop = DateTime.Now;
+                        Sleep.SleepMs(3000, 4000);
+                    }
+                    else
+                        Sleep.SleepMs(7000, 8000);
+                }
+
+
+                //var ct = new CubeTasks(_settings, _mouse, _kb, _r, _uit, _logger);
+
+                //ct.RunCube(CurrentDailySelectedChar);
                 //_mouse.ClickCenterScreen(_r.CenterScreen);
                 ////_ut.RunDailyUna(_CurrentDailySelectedChar.ThirdUnaTask);
                 //_uit.CloseInventoryManagement(); 

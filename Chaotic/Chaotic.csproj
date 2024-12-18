@@ -465,7 +465,7 @@
     <None Update="Resources\Assets\3440x1440\complete_button.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Assets\3440x1440\cube_floor_complete.png">
+    <None Update="Resources\Assets\3440x1440\cube\cube_floor_complete.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\cube_reentry_button.png">
