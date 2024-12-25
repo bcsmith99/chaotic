@@ -344,7 +344,7 @@ namespace Chaotic.Tasks
                 _mouse.ClickPosition(_r.SoloModeExchangeX, item.CenterY, 1000);
                 _mouse.ClickPosition(_r.SoloModeMax, 1000);
 
-                var okButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation($"ok_button.png", _settings.Resolution), confidence: .9, breakAfterFirst: true);
+                var okButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation($"ok_button.png", _settings.Resolution), confidence: .8, breakAfterFirst: true);
                 if (okButton.Found)
                 {
                     _logger.Log(LogDetailLevel.Debug, $"Item {itemImg} OK Button found.  Confidence: {okButton.MaxConfidence}");
