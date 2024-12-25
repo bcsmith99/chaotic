@@ -30,7 +30,7 @@ namespace Chaotic.Tasks.Una
 
         public bool RunLopangLocation(int bifrostPoint)
         {
-            if (BifrostToPoint(bifrostPoint))
+            if (_uiTask.BifrostToPoint(bifrostPoint))
             {
                 _kb.Press(Key.G, 1500);
                 _kb.ShiftPress(Key.G, 1500);

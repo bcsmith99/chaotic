@@ -166,10 +166,12 @@ namespace Chaotic.Resources
             UnaWeeklyRegion = new Rect(1550, 470, 100, 550);
             VoldisLeapClose = new Rect(1250, 220, 700, 350);
             VoldisLeapNpc = new Rect(1830, 450, 450, 200);
+            SoloModeExchangeX = 1320;
+            SoloModeMax = new Point(1150, 700);
             VoldisLeapX = 600;
             YDistance = 300;
 
-            CheckFileExists(); 
+            CheckFileExists();
         }
     }
 }

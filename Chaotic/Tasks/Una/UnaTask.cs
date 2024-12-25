@@ -94,7 +94,7 @@ namespace Chaotic.Tasks.Una
         }
         public void RunUna(int bifrost)
         {
-            if (BifrostToPoint(bifrost))
+            if (_uiTask.BifrostToPoint(bifrost))
             {
                 _mouse.ClickCenterScreen(CenterScreen);
                 ExecuteTask();
@@ -103,22 +103,6 @@ namespace Chaotic.Tasks.Una
 
         public abstract void ExecuteTask();
 
-        protected bool BifrostToPoint(int bifrost)
-        {
-            _mouse.ClickPosition(_r.AdventureMenu, 1000);
-            _mouse.ClickPosition(_r.BifrostMenu, 1500);
-            var bifrostPoint = (OpenCvSharp.Point)_r.GetType().GetProperty($"Bifrost{bifrost}").GetValue(_r);
-            _mouse.ClickPosition(bifrostPoint, 1000);
 
-            var bifrostOkRegion = _r.BifrostOk;
-            var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), bifrostOkRegion, .95);
-            if (okButton.Found)
-            {
-                _mouse.ClickPosition(okButton.CenterX, okButton.CenterY, 5000);
-                return _uiTask.InAreaCheck();
-            }
-
-            return false;
-        }
     }
 }

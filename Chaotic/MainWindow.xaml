@@ -385,6 +385,59 @@
 
 									</Grid>
 								</StackPanel>
+
+								<CheckBox VerticalAlignment="Center"
+										  Margin="0,5,0,0"
+										  Content="Buy Solo Mode Shop"
+										  IsChecked="{Binding CurrentSelectedEditChar.BuySoloMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+								<StackPanel Orientation="Vertical"
+											IsEnabled="{Binding CurrentSelectedEditChar.BuySoloMode}">
+									<WrapPanel Orientation="Horizontal"
+											   Margin="10,5,0,0">
+										<Label>Solo Shop Bifrost</Label>
+										<ComboBox ItemsSource="{Binding AvailableBifrosts}"
+												  Width="50px"
+												  SelectedItem="{Binding CurrentSelectedEditChar.SoloModeBifrost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+										</ComboBox>
+									</WrapPanel>
+
+									<StackPanel Margin="10, 0, 0, 0">
+										<CheckBox VerticalAlignment="Center"
+												  Margin="0,5,0,0"
+												  Content="Buy Prime Oreha"
+												  IsChecked="{Binding CurrentSelectedEditChar.BuySoloPrimeOreha, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+										<CheckBox VerticalAlignment="Center"
+												  Margin="0,5,0,0"
+												  Content="Buy Superior Oreha"
+												  IsChecked="{Binding CurrentSelectedEditChar.BuySoloSuperiorOreha, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+										<CheckBox VerticalAlignment="Center"
+												  Margin="0,5,0,0"
+												  Content="Buy Oreha"
+												  IsChecked="{Binding CurrentSelectedEditChar.BuySoloOreha, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+										<CheckBox VerticalAlignment="Center"
+												  Margin="0,5,0,0"
+												  Content="Buy Radiant Leaps"
+												  IsChecked="{Binding CurrentSelectedEditChar.BuySoloRadiantLeaps, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+										<CheckBox VerticalAlignment="Center"
+												  Margin="0,5,0,0"
+												  Content="Buy Marvelous Leaps"
+												  IsChecked="{Binding CurrentSelectedEditChar.BuySoloMarvelousLeaps, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+										<CheckBox VerticalAlignment="Center"
+												  Margin="0,5,0,0"
+												  Content="Buy Honor Shards"
+												  IsChecked="{Binding CurrentSelectedEditChar.BuySoloHonorShards, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+										<CheckBox VerticalAlignment="Center"
+												  Margin="0,5,0,0"
+												  Content="Buy Refined Protection Stones"
+												  IsChecked="{Binding CurrentSelectedEditChar.BuySoloRefinedProtection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+										<CheckBox VerticalAlignment="Center"
+												  Margin="0,5,0,0"
+												  Content="Buy Refined Obliteration Stones"
+												  IsChecked="{Binding CurrentSelectedEditChar.BuySoloRefinedObliteration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+
+									</StackPanel>
+								</StackPanel>
+
 							</StackPanel>
 						</Grid>
 					</ScrollViewer>

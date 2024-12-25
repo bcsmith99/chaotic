@@ -230,13 +230,13 @@ namespace Chaotic.Tasks
         {
             if (_settings.CaptureTimeoutScreenshot)
             {
-                _logger.Log(LogDetailLevel.Debug, "Capturing Timeout Screenshot"); 
+                _logger.Log(LogDetailLevel.Debug, "Capturing Timeout Screenshot");
                 var timeOutDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Chaotic\\Timeouts";
                 if (!Directory.Exists(timeOutDir))
                     Directory.CreateDirectory(timeOutDir);
 
                 var ss = IP.CaptureScreen();
-                ss.Save($"{timeOutDir}{cc.ClassName}_{DateTime.Now.ToString("mm-dd-yyyy-HH-ss-fff")}.png");
+                ss.Save($"{timeOutDir}\\{cc.ClassName}_{DateTime.Now.ToString("mm-dd-yyyy-HH-ss-fff")}.png");
             }
         }
 
@@ -311,7 +311,7 @@ namespace Chaotic.Tasks
                 {
                     BackgroundProcessing.ProgressCheck();
                     HealthCheck(cc);
-                    DeathCheck();
+                    _uiTasks.DeathCheck();
                     if (TimeoutCheck())
                         break;
 
@@ -627,7 +627,7 @@ namespace Chaotic.Tasks
             while (true)
             {
                 BackgroundProcessing.ProgressCheck();
-                DeathCheck();
+                _uiTasks.DeathCheck();
                 HealthCheck(cc);
 
                 if (GameCrashCheck() || OfflineCheck() || TimeoutCheck())
@@ -731,7 +731,7 @@ namespace Chaotic.Tasks
                 }
                 else if (CurrentState == ChaosStates.Floor3 && CheckBossMob())
                 {
-                    DeathCheck();
+                    _uiTasks.DeathCheck();
                     MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 800, 900, false);
                 }
 
@@ -1087,31 +1087,6 @@ namespace Chaotic.Tasks
             }
         }
 
-
-        private void DeathCheck()
-        {
-            var dead = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("dead.png", _settings.Resolution), confidence: .75);
-
-            if (dead.Found)
-            {
-                _logger.Log(LogDetailLevel.Debug, "You ded.");
-                Sleep.SleepMs(5000, 7000);
-                int i = 0;
-                while (i < 10)
-                {
-                    var revive_button = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("revive.png", _settings.Resolution), confidence: .7);
-                    if (revive_button.Found)
-                    {
-                        _mouse.ClickPosition(revive_button.Center, 1000);
-                        return;
-                    }
-                    Sleep.SleepMs(500, 700);
-                    i++;
-                }
-                _logger.Log(LogDetailLevel.Debug, "Unable to find revive button to press in death check.");
-            }
-            return;
-        }
 
         public bool TimeoutCheck()
         {

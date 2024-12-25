@@ -233,6 +233,129 @@ namespace Chaotic.Tasks
             return success;
         }
 
+        public void DeathCheck()
+        {
+            var dead = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("dead.png", _settings.Resolution), confidence: .75);
+
+            if (dead.Found)
+            {
+                _logger.Log(LogDetailLevel.Debug, "You ded.");
+                Sleep.SleepMs(5000, 7000);
+                int i = 0;
+                while (i < 10)
+                {
+                    var revive_button = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("revive.png", _settings.Resolution), confidence: .7);
+                    if (revive_button.Found)
+                    {
+                        _mouse.ClickPosition(revive_button.Center, 1000);
+                        return;
+                    }
+                    Sleep.SleepMs(500, 700);
+                    i++;
+                }
+                _logger.Log(LogDetailLevel.Debug, "Unable to find revive button to press in death check.");
+            }
+            return;
+        }
+
+        public bool BifrostToPoint(int bifrost)
+        {
+            _mouse.ClickPosition(_r.AdventureMenu, 1000);
+            _mouse.ClickPosition(_r.BifrostMenu, 1500);
+            var bifrostPoint = (OpenCvSharp.Point)_r.GetType().GetProperty($"Bifrost{bifrost}").GetValue(_r);
+            _mouse.ClickPosition(bifrostPoint, 1000);
+
+            var bifrostOkRegion = _r.BifrostOk;
+            var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), bifrostOkRegion, .95);
+            if (okButton.Found)
+            {
+                _mouse.ClickPosition(okButton.CenterX, okButton.CenterY, 5000);
+                return InAreaCheck();
+            }
+
+            return false;
+        }
+
+        public bool BuySoloModeShop(UserCharacter character)
+        {
+            BackgroundProcessing.ProgressCheck();
+            bool success = true;
+
+            if (BifrostToPoint(character.SoloModeBifrost))
+            {
+                bool buyOreha = character.BuySoloOreha;
+                bool buySuperiorOreha = character.BuySoloSuperiorOreha;
+                bool buyPrimeOreha = character.BuySoloPrimeOreha;
+                bool buyMarvelousLeap = character.BuySoloMarvelousLeaps;
+                bool buyRadiantLeap = character.BuySoloRadiantLeaps;
+                bool buyHonorShards = character.BuySoloHonorShards;
+                bool buyRefinedProtection = character.BuySoloRefinedProtection;
+                bool buyRefinedObliteration = character.BuySoloRefinedObliteration;
+
+                int maxScrollAttempts = 30;
+                int currentScroll = 0;
+
+                _mouse.ClickPosition(_r.CenterScreen);
+                _kb.Press(Key.G, 1500);
+
+                _mouse.Scroll(MouseUtility.ScrollDirection.Down, 30, 200);
+
+                BackgroundProcessing.ProgressCheck();
+
+                while ((buyOreha || buySuperiorOreha || buyPrimeOreha || buyMarvelousLeap || buyRadiantLeap || buyHonorShards || buyRefinedObliteration || buyRefinedProtection) && currentScroll < maxScrollAttempts)
+                {
+                    BackgroundProcessing.ProgressCheck();
+                    if (buyOreha && BuySoloItem("oreha"))
+                        buyOreha = false;
+                    if (buySuperiorOreha && BuySoloItem("superior_oreha"))
+                        buySuperiorOreha = false;
+                    if (buyPrimeOreha && BuySoloItem("prime_oreha"))
+                        buyPrimeOreha = false;
+                    if (buyMarvelousLeap && BuySoloItem("marvelous_leap"))
+                        buyMarvelousLeap = false;
+                    if (buyRadiantLeap && BuySoloItem("radiant_leap"))
+                        buyRadiantLeap = false;
+                    if (buyHonorShards && BuySoloItem("honor_shard"))
+                        buyHonorShards = false;
+                    if (buyRefinedObliteration && BuySoloItem("refined_obliteration"))
+                        buyRefinedObliteration = false;
+                    if (buyRefinedProtection && BuySoloItem("refined_protection"))
+                        buyRefinedProtection = false;
+
+                    _mouse.Scroll(MouseUtility.ScrollDirection.Up, 1, 500);
+                    currentScroll++;
+                }
+
+                _kb.Press(Key.Escape, 1500);
+            }
+
+            return success;
+        }
+
+        private bool BuySoloItem(string itemImg)
+        {
+            bool itemBought = false;
+
+            var item = IP.LocateCenterOnScreen(Utility.ImageResourceLocation($"{itemImg}.png", _settings.Resolution, "soloshop"), confidence: .9, breakAfterFirst: true);
+
+            if (item.Found)
+            {
+                _logger.Log(LogDetailLevel.Debug, $"Item {itemImg} found.  Confidence: {item.MaxConfidence}");
+                _mouse.ClickPosition(_r.SoloModeExchangeX, item.CenterY, 1000);
+                _mouse.ClickPosition(_r.SoloModeMax, 1000);
+
+                var okButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation($"ok_button.png", _settings.Resolution), confidence: .9, breakAfterFirst: true);
+                if (okButton.Found)
+                {
+                    _logger.Log(LogDetailLevel.Debug, $"Item {itemImg} OK Button found.  Confidence: {okButton.MaxConfidence}");
+                    _mouse.ClickPosition(okButton.Center, 1000);
+                }
+                itemBought = true;
+            }
+            return itemBought;
+        }
+
+
         public bool CloseInventoryManagement()
         {
             _logger.Log(LogDetailLevel.Debug, "Closing Inventory Management");
@@ -249,7 +372,7 @@ namespace Chaotic.Tasks
                 _logger.Log(LogDetailLevel.Debug, "Inventory Management Exit button not found, clicking escape");
                 _kb.Press(Key.Escape, 1000);
             }
-                
+
 
 
             var closeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("x.png", _settings.Resolution), confidence: .8);

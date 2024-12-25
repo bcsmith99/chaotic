@@ -64,7 +64,7 @@ namespace Chaotic.Tasks
         {
             Sleep.SleepMs(5000, 10000);
 
-            var reEnter = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_reentry_button.png", _settings.Resolution), confidence: .9, useGrayscale: true);
+            var reEnter = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_reentry_button.png", _settings.Resolution, "cube"), confidence: .9, useGrayscale: true);
             if (reEnter.Found)
             {
                 _logger.Log(LogDetailLevel.Debug, $"Attempting to Re-Enter Cube(Updated Loc), Clicking ({reEnter.CenterX},{reEnter.CenterY})");
@@ -114,28 +114,35 @@ namespace Chaotic.Tasks
         private bool EnterCubeStart()
         {
             BackgroundProcessing.ProgressCheck();
-            var start = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_start_alt.png", _settings.Resolution), confidence: .6, useGrayscale: true);
+            Sleep.SleepMs(2000, 2500);
+
+            _mouse.ClickPosition(_r.CubeInitialMove, 2000, MouseButtons.Right);
+
+            var start = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_start_alt.png", _settings.Resolution, "cube"), confidence: .6, useGrayscale: true);
 
             while (!start.Found)
             {
                 Sleep.SleepMs(1000, 1500);
-                start = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_start_alt.png", _settings.Resolution), confidence: .6, useGrayscale: true);
+                start = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_start_alt.png", _settings.Resolution, "cube"), confidence: .6, useGrayscale: true);
             }
 
             _logger.Log(LogDetailLevel.Debug, $"Cube Start Location Found, Moving to it - {start.MaxConfidence}");
-            _mouse.ClickPosition(_r.CubeInitialMove, 2000, MouseButtons.Right);
+            Sleep.SleepMs(1000, 1000);
+            _mouse.ClickPosition(CenterScreen.Add(new Point(100, 100)), 1000, MouseButtons.Right);
 
             Sleep.SleepMs(5000, 7000);
+
+            var floorType = CheckCubeRoom();
 
             while (true)
             {
                 BackgroundProcessing.ProgressCheck();
-                var floorComplete = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_floor_complete.png", _settings.Resolution), confidence: .7, useGrayscale: true);
+                var floorComplete = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_floor_complete.png", _settings.Resolution, "cube"), confidence: .7, useGrayscale: true);
 
-                var reEnter = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_reentry_button.png", _settings.Resolution), confidence: .7, useGrayscale: true);
+                var reEnter = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_reentry_button.png", _settings.Resolution, "cube"), confidence: .7, useGrayscale: true);
 
                 if (floorComplete.Found)
-                    MoveToNextFloor();
+                    floorType = MoveToNextFloor();
 
                 if (reEnter.Found)
                 {
@@ -143,26 +150,98 @@ namespace Chaotic.Tasks
                     return ReEnterCube(reEnter);
                 }
 
-                var mob_health = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("mob_health_bar.png", _settings.Resolution), confidence: .9, breakAfterFirst: true);
-
-                if (mob_health.Found)
-                {
-                    _logger.Log(LogDetailLevel.Debug, "Found Mob Health Bar");
-                    CurrentCharacter.UseAbilities(mob_health.Center.Add(new Point(50, 150)), 1, true);
-                }
-
+                if (floorType == CubeFloors.Normal)
+                    RunNormalFloor();
                 else
-                    CurrentCharacter.UseAbilities(ClickableRegion.RandomPoint());
+                    RunGoldFloor();
 
                 Sleep.SleepMs(200, 400);
             }
         }
 
-        private void MoveToNextFloor()
+        private void RunNormalFloor()
+        {
+            var mob_health = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("mob_health_bar.png", _settings.Resolution), confidence: .95, breakAfterFirst: true);
+
+            if (mob_health.Found)
+            {
+                _logger.Log(LogDetailLevel.Debug, "Found Mob Health Bar");
+                CurrentCharacter.UseAbilities(mob_health.Center.Add(new Point(50, 150)), 1, true);
+            }
+
+            else
+                CurrentCharacter.UseAbilities(ClickableRegion.RandomPoint());
+        }
+
+        private void RunGoldFloor()
+        {
+            var mob_health = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("mob_health_bar.png", _settings.Resolution), confidence: .95, breakAfterFirst: true);
+
+            if (mob_health.Found)
+            {
+                _logger.Log(LogDetailLevel.Debug, "Found Mob Health Bar");
+                CurrentCharacter.UseAbilities(mob_health.Center.Add(new Point(50, 150)), 1, true);
+            }
+
+            else
+                CurrentCharacter.UseAbilities(ClickableRegion.RandomPoint());
+        }
+
+        private CubeFloors MoveToNextFloor()
         {
             Sleep.SleepMs(7000, 11000);
             _mouse.ClickPosition(_r.CubeNextFloor, 10000, MouseButtons.Right);
             _mouse.ClickPosition(_r.CubeMiddleFloor, 2000, MouseButtons.Right);
+
+            var floorType = CheckCubeRoom();
+            _logger.Log(LogDetailLevel.Debug, $"Cube Floor Type Set to {floorType.ToString()}");
+            return floorType;
+        }
+
+        private CubeFloors CheckCubeRoom()
+        {
+            var floor = CubeFloors.Normal;
+
+            var cube = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_fortune.png", _settings.Resolution, "cube"), confidence: .9, breakAfterFirst: true);
+            if (cube.Found)
+            {
+                floor = CubeFloors.Gold;
+
+                var cube_treasure = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_treasure.png", _settings.Resolution, "cube"), confidence: .9, breakAfterFirst: true);
+                if (cube_treasure.Found)
+                    return CubeFloors.GoldTreasure;
+                var cube_tooki = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_tooki.png", _settings.Resolution, "cube"), confidence: .9, breakAfterFirst: true);
+                if (cube_tooki.Found)
+                    return CubeFloors.GoldTooki;
+                var cube_tuturi = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_tuturi.png", _settings.Resolution, "cube"), confidence: .9, breakAfterFirst: true);
+                if (cube_tuturi.Found)
+                    return CubeFloors.GoldTuturi;
+                var cube_dragon = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_dragon.png", _settings.Resolution, "cube"), confidence: .9, breakAfterFirst: true);
+                if (cube_dragon.Found)
+                    return CubeFloors.GoldDragon;
+                var cube_flyer = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_flyer.png", _settings.Resolution, "cube"), confidence: .9, breakAfterFirst: true);
+                if (cube_flyer.Found)
+                    return CubeFloors.GoldDragon;
+                var cube_slime = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("cube_slime.png", _settings.Resolution, "cube"), confidence: .9, breakAfterFirst: true);
+                if (cube_slime.Found)
+                    return CubeFloors.GoldSlime;
+            }
+
+            return floor;
+        }
+
+        private enum CubeFloors
+        {
+            Normal,
+            Gold,
+            GoldTreasure,
+            GoldTooki,
+            GoldTuturi,
+            GoldDragon,
+            GoldSlime
         }
     }
+
+
+
 }

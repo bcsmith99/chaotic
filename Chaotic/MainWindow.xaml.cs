@@ -101,7 +101,7 @@ namespace Chaotic
         public List<String> Resolutions { get { return _Resolutions; } set { _Resolutions = value; } }
         public List<Tuple<string, int>> GemLevels { get { return _GemLevels; } set { _GemLevels = value; } }
         public List<Tuple<string, LogDetailLevel>> LogLevels { get { return _LogLevels; } set { _LogLevels = value; } }
-        private List<int> _AvailableBifrosts = Enumerable.Range(1, 6).ToList();
+        private List<int> _AvailableBifrosts = Enumerable.Range(0, 7).ToList();
         public List<int> AvailableBifrosts { get { return _AvailableBifrosts; } }
         public List<String> AvailableClasses { get { return UserCharacter.AllClasses; } }
         public List<String> AvailableUnaTaskNames { get { return UnaTasks.AvailableUnaTasks; } }
@@ -387,7 +387,12 @@ namespace Chaotic
                 success = success && _ut.RunDailies(character);
 
             if (success && shouldAcceptWeeklies)
-                success = success & _ut.AcceptWeeklies(character);
+            {
+                success = success && _ut.AcceptWeeklies(character);
+                if (character.BuySoloMode)
+                    success = success && _uit.BuySoloModeShop(character);
+
+            }
 
             if (success && character.RunChaos)
                 success = _ct.RunChaos(character);
@@ -652,57 +657,58 @@ namespace Chaotic
         {
             Action a = () =>
             {
-                var centerScreen = _r.CenterScreen;
                 _mouse.ClickCenterScreen(_r.CenterScreen);
-                var lastPotTime = DateTime.Now;
-                var lastCollectionLoop = DateTime.Now;
+                Sleep.SleepMs(300, 500);
 
-                while (true)
-                {
-                    BackgroundProcessing.ProgressCheck();
-                    _mouse.SetPosition(3000, 950);
-                    _kb.Press(Key.W, 1000);
-                    _mouse.SetPosition(2050, 190);
-                    _kb.Press(Key.Z, 1000);
-                    _kb.Press(Key.A, 2500);
-
-                    var collectionTime = DateTime.Now.Subtract(lastCollectionLoop);
-                    _logger.Log(LogDetailLevel.Debug, $"Collection Time: {collectionTime.TotalMinutes}");
-                    if (DateTime.Now.Subtract(lastPotTime).TotalMinutes > 10)
-                    {
-                        _logger.Log(LogDetailLevel.Debug, "Pressing health pot");
-                        _kb.Press(Key.F1);
-                        lastPotTime = DateTime.Now;
-                    }
-                    if (collectionTime.TotalMinutes > 4)
-                    {
-                        _logger.Log(LogDetailLevel.Debug, "Collecting loot");
-                        _mouse.ClickPosition(centerScreen.X + 1000, centerScreen.Y, 2000, MouseButtons.Right);
-                        _mouse.ClickPosition(centerScreen.X - 1000, centerScreen.Y, 2000, MouseButtons.Right);
-                        //_mouse.ClickPosition(centerScreen.X - 500, centerScreen.Y - 300, 1000, MouseButtons.Right);
-                        //_mouse.ClickPosition(centerScreen.X - 500, centerScreen.Y + 350, 1000, MouseButtons.Right);
-                        lastCollectionLoop = DateTime.Now;
-                        Sleep.SleepMs(3000, 4000);
-                    }
-                    else
-                        Sleep.SleepMs(7000, 8000);
-                }
+                if (CurrentDailySelectedChar != null)
+                    _uit.BuySoloModeShop(CurrentDailySelectedChar);
 
 
-                //var ct = new CubeTasks(_settings, _mouse, _kb, _r, _uit, _logger);
 
-                //ct.RunCube(CurrentDailySelectedChar);
+                //var centerScreen = _r.CenterScreen;
                 //_mouse.ClickCenterScreen(_r.CenterScreen);
-                ////_ut.RunDailyUna(_CurrentDailySelectedChar.ThirdUnaTask);
-                //_uit.CloseInventoryManagement(); 
-                //var pleccia = new PlecciaShard(_uit, _mouse, _kb, _r, _settings, _logger);
-                //pleccia.ExecuteTask(); 
-                //for (int i = 0; i < 60; i++)
-                //{
-                //    BackgroundProcessing.ProgressCheck();
+                //var lastPotTime = DateTime.Now;
+                //var lastCollectionLoop = DateTime.Now;
 
-                //    _logger.Log(LogDetailLevel.Debug, "Test Loop " + i);
-                //    Sleep.SleepMs(1000, 1000);
+                //while (true)
+                //{
+                //    //if (DateTime.Now > new DateTime(2024, 12, 20, 2, 58, 0))
+                //    //    break;
+
+                //    BackgroundProcessing.ProgressCheck();
+                //    _mouse.SetPosition(2900, 1000);
+                //    _kb.Press(Key.W, 1000);
+                //    _mouse.SetPosition(2750, 430);
+                //    _kb.Press(Key.Z, 1000);
+                //    _kb.Press(Key.A, 2500);
+
+                //    var collectionTime = DateTime.Now.Subtract(lastCollectionLoop);
+                //    //_logger.Log(LogDetailLevel.Debug, $"Collection Time: {collectionTime.TotalMinutes}");
+                //    if (DateTime.Now.Subtract(lastPotTime).TotalMinutes > 10)
+                //    {
+                //        _logger.Log(LogDetailLevel.Debug, "Pressing health pot");
+                //        _kb.Press(Key.F1);
+                //        lastPotTime = DateTime.Now;
+                //    }
+                //    if (collectionTime.TotalMinutes > 4)
+                //    {
+                //        //_logger.Log(LogDetailLevel.Debug, "Collecting loot");
+                //        _mouse.ClickPosition(centerScreen.X + 1000, centerScreen.Y, 2000, MouseButtons.Right);
+                //        _mouse.ClickPosition(centerScreen.X - 900, centerScreen.Y, 2000, MouseButtons.Right);
+                //        //_mouse.ClickPosition(centerScreen.X - 500, centerScreen.Y - 300, 1000, MouseButtons.Right);
+                //        //_mouse.ClickPosition(centerScreen.X - 500, centerScreen.Y + 350, 1000, MouseButtons.Right);
+                //        lastCollectionLoop = DateTime.Now;
+                //        Sleep.SleepMs(3000, 4000);
+                //    }
+                //    else
+                //        Sleep.SleepMs(7000, 8000);
+                //}
+
+
+                //if (CurrentDailySelectedChar != null)
+                //{
+                //    var ct = new CubeTasks(_settings, _mouse, _kb, _r, _uit, _logger);
+                //    ct.RunCube(CurrentDailySelectedChar);
                 //}
             };
 

@@ -101,10 +101,12 @@ namespace Chaotic.Resources
         public Point UnaWeeklyDropdown { get; set; }
         public Point UnaWeeklyDropdownFavorite { get; set; }
 
-        
+
         public Point CubeNextFloor { get; set; }
         public Point CubeMiddleFloor { get; set; }
         public Point CubeInitialMove { get; set; }
+
+        public Point SoloModeMax { get; set; }
 
         public List<Point> ElgaciaShardClickpoints { get; set; }
         public List<Point> KurzanMap1Start { get; set; }
@@ -125,6 +127,8 @@ namespace Chaotic.Resources
         public int VoldisLeapX { get; set; }
         public int YDistance { get; set; }
         public Point GuideMenu { get; set; }
+
+        public int SoloModeExchangeX { get; set; }
 
         protected void Save()
         {

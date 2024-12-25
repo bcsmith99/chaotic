@@ -126,6 +126,40 @@ namespace Chaotic.User
                 OnPropertyChanged();
             }
         }
+
+        private bool _BuySoloMode;
+        public bool BuySoloMode
+        {
+            get { return _BuySoloMode; }
+            set
+            {
+                _BuySoloMode = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _SoloModeBifrost = 0;
+        public int SoloModeBifrost
+        {
+            get { return _SoloModeBifrost; }
+            set
+            {
+                _SoloModeBifrost = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool BuySoloHonorShards { get; set; }
+        public bool BuySoloMarvelousLeaps { get; set; }
+        public bool BuySoloRadiantLeaps { get; set; }
+        public bool BuySoloRefinedObliteration { get; set; }
+        public bool BuySoloRefinedProtection { get; set; }
+
+        public bool BuySoloOreha { get; set; }
+        public bool BuySoloSuperiorOreha { get; set; }
+        public bool BuySoloPrimeOreha { get; set; }
+
+
         public bool GuildDonationSilver { get; set; }
         public bool GuildDonationGold { get; set; }
 

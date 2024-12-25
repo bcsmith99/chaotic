@@ -57,7 +57,7 @@ namespace Chaotic.Tasks.Chaos.Kurzan
             foreach (var image in jumpPadImages)
             {
                 //IP.SAVE_DEBUG_IMAGES = true;
-                jumpPad = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), confidence: .85);
+                jumpPad = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), confidence: .87);
                 if (jumpPad.Found)
                 {
                     //IP.SAVE_DEBUG_IMAGES = false;

@@ -166,6 +166,8 @@ namespace Chaotic.Resources
             UnaWeeklyRegion = new Rect(2080, 390, 150, 500);
             VoldisLeapClose = new Rect(1700, 20, 1000, 500);
             VoldisLeapNpc = new Rect(2300, 400, 500, 250);
+            SoloModeMax = new Point(1540, 690);
+            SoloModeExchangeX = 1775;
             VoldisLeapX = 800;
             YDistance = 400;
 
