@@ -111,7 +111,7 @@ namespace Chaotic.Utilities
         {
             var result = new ScreenSearchResult();
             var imResult = LocateOnScreen(findImage, x, y, width, height, confidence, useGrayscale, breakAfterFirst);
-            result.MaxConfidence = imResult.MaxConfidence;
+            result.MaxConfidence = Math.Round(imResult.MaxConfidence, 3, MidpointRounding.ToZero);
             result.Matches = imResult.Matches;
 
             if (result.Matches.Any())

@@ -131,7 +131,7 @@ namespace Chaotic.Utilities
             ClickPosition(positions[0], positions[1], waitAfter, mb);
         }
 
-        internal void Scroll(ScrollDirection direction, int numTimes, int delay = 400)
+        internal void Scroll(ScrollDirection direction, int numTimes, int delay = 300)
         {
             var scrollAmount = direction == ScrollDirection.Up ? 1 : -1;
 

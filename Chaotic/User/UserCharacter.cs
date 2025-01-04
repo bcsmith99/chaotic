@@ -36,6 +36,9 @@ namespace Chaotic.User
         public const string Reaper = "Reaper";
         public const string Summoner = "Summoner";
         public const string Soulfist = "Soulfist";
+        public const string Shadowhunter = "Shadowhunter";
+        public const string Striker = "Striker";
+        public const string Bard = "Bard"; 
     }
 
     public class UserCharacter : INotifyPropertyChanged
@@ -87,7 +90,10 @@ namespace Chaotic.User
             ClassNames.Wardancer,
             ClassNames.Reaper,
             ClassNames.Summoner,
-            ClassNames.Soulfist
+            ClassNames.Soulfist,
+            ClassNames.Shadowhunter, 
+            ClassNames.Bard,
+            ClassNames.Shadowhunter
         }.OrderBy(x => x).ToList();
 
 

@@ -101,6 +101,10 @@ namespace Chaotic.Resources
         public Point UnaWeeklyDropdown { get; set; }
         public Point UnaWeeklyDropdownFavorite { get; set; }
 
+        public Point FriendsMenu { get; set; }
+        public Point FriendsStatusChevron { get; set; }
+        public Point FriendsOfflineOption { get; set; }
+
 
         public Point CubeNextFloor { get; set; }
         public Point CubeMiddleFloor { get; set; }
@@ -115,6 +119,10 @@ namespace Chaotic.Resources
         public List<Point> PlecciaShardClickpoints { get; set; }
         public List<Point> SouthKurzanLeapClickpoints { get; set; }
         public List<Point> UnaLopangRoute { get; set; }
+
+        public List<Point> PraeteriaSolarClickpoints { get; set; }
+        public List<Point> PlecciaSolarClickpoints { get; set; }
+
         public int CharSelectCol0 { get; set; }
         public int CharSelectCol1 { get; set; }
         public int CharSelectCol2 { get; set; }

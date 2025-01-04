@@ -81,6 +81,9 @@ namespace Chaotic.Resources
             GuideMenu = new Point(2400, 1225);
             GuidePetMenu = new Point(2340, 1005);
             GuildMenu = new Point(2400, 1135);
+            FriendsMenu = new Point(2400, 1165);
+            FriendsStatusChevron = new Point(2490, 515);
+            FriendsOfflineOption = new Point(2425, 600);
             GuildNormalSupport = new Point(1130, 700);
             GuildSupport = new Rect(1550, 600, 150, 50);
             GuildSupportCancel = new Rect(1280, 920, 100, 50);
@@ -157,6 +160,29 @@ namespace Chaotic.Resources
                 new Point(575,1090),
                 new Point(580,285),
                 new Point(750,250)
+            };
+
+            PraeteriaSolarClickpoints = new List<Point>()
+            {
+                new Point(),
+                new Point(),
+                new Point(),
+                new Point(),
+                new Point(),
+                new Point()
+            };
+
+            PlecciaSolarClickpoints = new List<Point>()
+            {
+                new Point(),
+                new Point(),
+                new Point(),
+                new Point(),
+                new Point(),
+                new Point(),
+                new Point(),
+                new Point(),
+                new Point()
             };
 
             UnaTask = new Point(2250, 1135);

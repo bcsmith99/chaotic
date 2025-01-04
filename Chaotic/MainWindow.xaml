@@ -561,6 +561,13 @@
 									<TextBox Text="{Binding UserSettings.HealthPotionKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 											 VerticalContentAlignment="Center" />
 								</Border>
+								<Border Grid.Row="4"
+										Grid.ColumnSpan="2">
+									<CheckBox Content="Start daily rotation by going offline"
+											  Margin="5,5,0,0"
+											  VerticalAlignment="Center"
+											  IsChecked="{Binding UserSettings.GoOffline, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+								</Border>
 							</Grid>
 
 							<Label Content="Aura"

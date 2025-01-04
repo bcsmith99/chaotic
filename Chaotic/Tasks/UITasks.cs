@@ -68,6 +68,19 @@ namespace Chaotic.Tasks
             return false;
         }
 
+        public void GoOffline()
+        {
+            Sleep.SleepMs(500, 600);
+            BackgroundProcessing.ProgressCheck();
+
+            _logger.Log(LogDetailLevel.Debug, "Going to Offline Mode");
+            _mouse.ClickPosition(_r.CommunityMenu, 500);
+            _mouse.ClickPosition(_r.FriendsMenu, 1000);
+            _mouse.ClickPosition(_r.FriendsStatusChevron, 500);
+            _mouse.ClickPosition(_r.FriendsOfflineOption, 500);
+            _kb.Press(Key.Escape, 1000);
+        }
+
         public void ToggleArkPassive(bool disable)
         {
             BackgroundProcessing.ProgressCheck();
@@ -482,7 +495,7 @@ namespace Chaotic.Tasks
 
             _mouse.SetPosition(_r.CenterScreen);
 
-            _mouse.Scroll(MouseUtility.ScrollDirection.Up, 5);
+            _mouse.Scroll(MouseUtility.ScrollDirection.Up, 9);
 
             var index = character.CharacterIndex - 1;
             var row = index / 3;

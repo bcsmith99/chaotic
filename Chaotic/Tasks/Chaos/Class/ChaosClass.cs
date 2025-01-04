@@ -196,6 +196,12 @@ namespace Chaotic.Tasks.Chaos.Class
                     return new Slayer(settings, character, r, kb, mouse, logger);
                 case ClassNames.Destroyer:
                     return new Destroyer(settings, character, r, kb, mouse, logger);
+                case ClassNames.Bard:
+                    return new Bard(settings, character, r, kb, mouse, logger);
+                case ClassNames.Shadowhunter:
+                    return new Shadowhunter(settings, character, r, kb, mouse, logger);
+                case ClassNames.Striker:
+                    return new Striker(settings, character, r, kb, mouse, logger);
                 case ClassNames.Unset:
                 default:
                     return new ChaosClass(settings, character, r, kb, mouse, logger);

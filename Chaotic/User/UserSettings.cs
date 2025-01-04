@@ -33,6 +33,8 @@ namespace Chaotic.User
 
         public bool CaptureTimeoutScreenshot { get; set; } = true;
 
+        public bool GoOffline { get; set; } = true;
+
         public DateTime? LastWeeklyReset { get; set; }
         public ObservableCollection<UserCharacter> Characters { get; set; }
 

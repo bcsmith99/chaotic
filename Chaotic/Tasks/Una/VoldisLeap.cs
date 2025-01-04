@@ -50,8 +50,8 @@ namespace Chaotic.Tasks.Una
 
             if (npc.Found)
             {
-                _logger.Log(LogDetailLevel.Debug, $"Voldis NPC Confidence: {npc.MaxConfidence}");
-                _mouse.ClickPosition(npc.CenterX, npc.CenterY + 300, 2000, MouseButtons.Right);
+                _logger.Log(LogDetailLevel.Debug, $"Voldis NPC Confidence: {npc.MaxConfidence}, {{{npc.CenterX},{npc.CenterY}}}");
+                _mouse.ClickPosition(npc.CenterX - 200, npc.CenterY + 300, 2000, MouseButtons.Right);
             }
             else
             {

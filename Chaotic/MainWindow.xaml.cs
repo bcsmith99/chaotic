@@ -448,6 +448,9 @@ namespace Chaotic
             {
                 if (CurrentDailySelectedChar != null)
                 {
+                    if (_settings.GoOffline)
+                        _uit.GoOffline();
+
                     var success = RunCharacterDailyRotation(CurrentDailySelectedChar);
                     if (success)
                         _logger.Log(LogDetailLevel.Summary, "Character Daily Rotation Complete");
@@ -462,6 +465,9 @@ namespace Chaotic
             Action a = () =>
             {
                 Thread.Sleep(1000);
+
+                if (_settings.GoOffline)
+                    _uit.GoOffline();
 
                 bool acceptWeeklies = ShouldAcceptWeeklies();
 
@@ -657,11 +663,15 @@ namespace Chaotic
         {
             Action a = () =>
             {
-                _mouse.ClickCenterScreen(_r.CenterScreen);
+                //_mouse.ClickCenterScreen(_r.CenterScreen);
                 Sleep.SleepMs(300, 500);
 
-                if (CurrentDailySelectedChar != null)
-                    _uit.BuySoloModeShop(CurrentDailySelectedChar);
+                var solar = new PraeteriaSolar(_uit, _mouse, _kb, _r, _settings, _logger);
+                //solar.RunUna(3);
+                solar.ExecuteTask();
+
+                //if (CurrentDailySelectedChar != null)
+                //    _uit.BuySoloModeShop(CurrentDailySelectedChar);
 
 
 

@@ -34,6 +34,9 @@ namespace Chaotic.Tasks.Una
         public const string SKurzanLeap = "SKurzan-Leap";
         public const string NKurzanShard = "NKurzan-Shard";
         public const string PlecciaShard = "Pleccia-Shard";
+        public const string ElneadSolar = "Elnead-Solars";
+        public const string PlecciaSolar = "Pleccia-Solars";
+        public const string PraeteriaSolar = "Praeteria-Solars";
         public const string Lopang = "Lopang";
     }
 
@@ -65,6 +68,15 @@ namespace Chaotic.Tasks.Una
             UnaTask task;
             switch (unaTaskName)
             {
+                case UnaTaskNames.PraeteriaSolar:
+                    task = new PraeteriaSolar(uiTask, mouse, kb, r, settings, logger);
+                    break;
+                case UnaTaskNames.PlecciaSolar:
+                    task = new PlecciaSolar(uiTask, mouse, kb, r, settings, logger);
+                    break;
+                case UnaTaskNames.ElneadSolar:
+                    task = new ElneadSolar(uiTask, mouse, kb, r, settings, logger);
+                    break;
                 case UnaTaskNames.PlecciaShard:
                     task = new PlecciaShard(uiTask, mouse, kb, r, settings, logger);
                     break;

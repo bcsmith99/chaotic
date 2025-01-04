@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/resources_2560x1440.json
+/resources_3440x1440.json
+/userSettings.json
+/userStatistics.json
