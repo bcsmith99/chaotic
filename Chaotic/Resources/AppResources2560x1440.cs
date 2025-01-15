@@ -88,6 +88,13 @@ namespace Chaotic.Resources
             GuildSupport = new Rect(1550, 600, 150, 50);
             GuildSupportCancel = new Rect(1280, 920, 100, 50);
             GuildSupportOkButton = new Point(1225, 940);
+
+            GuildBloodstoneShopMenu = new Point(1550,360);
+            GuildBloodstoneTicketMenu = new Point(1470,410);
+            GuildBloodstoneDropdown = new Point(1025,460);
+            GuildBloodstoneViewAll = new Point(1025,495);
+            GuildExchangeX = 1950;
+
             HealthBar = new Rect(935, 1140, 250, 15);
             Inventory = new Rect(1450, 400, 530, 600);
             Kurzan_1640 = new Point(1105, 930);
@@ -194,6 +201,7 @@ namespace Chaotic.Resources
             VoldisLeapNpc = new Rect(1830, 450, 450, 200);
             SoloModeExchangeX = 1320;
             SoloModeMax = new Point(1150, 700);
+            SoloModeShareRewards = new Point(1000, 360);
             VoldisLeapX = 600;
             YDistance = 300;
 

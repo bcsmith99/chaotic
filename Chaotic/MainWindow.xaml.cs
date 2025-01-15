@@ -392,6 +392,8 @@ namespace Chaotic
                 if (character.BuySoloMode)
                     success = success && _uit.BuySoloModeShop(character);
 
+                if (character.BuyGuildShop)
+                    success = success && _uit.BuyGuildShop(character);
             }
 
             if (success && character.RunChaos)
@@ -418,6 +420,8 @@ namespace Chaotic
                     success = success && _uit.CloseInventoryManagement();
                 }
             }
+
+            _logger.Log(LogDetailLevel.Info, $"Character Dailies Complete on {character.ClassName}({character.ChaosLevel}).  Reported Success: {success}");
             return success;
         }
 
@@ -495,6 +499,7 @@ namespace Chaotic
                         if (!backInTown)
                             break;
                     }
+
                 }
 
                 if (acceptWeeklies)
@@ -665,14 +670,17 @@ namespace Chaotic
             {
                 //_mouse.ClickCenterScreen(_r.CenterScreen);
                 Sleep.SleepMs(300, 500);
+                _mouse.ClickCenterScreen(_r.CenterScreen); 
 
-                var solar = new PraeteriaSolar(_uit, _mouse, _kb, _r, _settings, _logger);
-                //solar.RunUna(3);
-                solar.ExecuteTask();
+                //var solar = new PraeteriaSolar(_uit, _mouse, _kb, _r, _settings, _logger);
+                ////solar.RunUna(3);
+                //solar.ExecuteTask();
 
-                //if (CurrentDailySelectedChar != null)
-                //    _uit.BuySoloModeShop(CurrentDailySelectedChar);
-
+                if (CurrentDailySelectedChar != null)
+                {
+                    //_uit.BuySoloModeShop(CurrentDailySelectedChar);
+                    _uit.BuyGuildShop(CurrentDailySelectedChar);
+                }
 
 
                 //var centerScreen = _r.CenterScreen;

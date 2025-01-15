@@ -88,6 +88,13 @@ namespace Chaotic.Resources
         public Point GuildMenu { get; set; }
         public Point GuildNormalSupport { get; set; }
         public Point GuildSupportOkButton { get; set; }
+
+        public Point GuildBloodstoneShopMenu { get; set; }
+        public Point GuildBloodstoneTicketMenu { get; set; }
+        public Point GuildBloodstoneDropdown { get; set; }
+        public Point GuildBloodstoneViewAll { get; set; }
+        public int GuildExchangeX { get; set; }
+
         public Point Kurzan_1640 { get; set; }
         public Point Kurzan_1660 { get; set; }
         public Point MinimapCenter { get; set; }
@@ -111,6 +118,7 @@ namespace Chaotic.Resources
         public Point CubeInitialMove { get; set; }
 
         public Point SoloModeMax { get; set; }
+        public Point SoloModeShareRewards { get; set; }
 
         public List<Point> ElgaciaShardClickpoints { get; set; }
         public List<Point> KurzanMap1Start { get; set; }

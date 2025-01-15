@@ -329,7 +329,7 @@ namespace Chaotic.Tasks
                     var elite_mob = EliteCheck(true, .86);
                     var gold_on_screen = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("gold_mob_actual.png", _settings.Resolution), ClickableRegion, .9);
 
-                    map.PerformSpecialChecks();
+                    map.PerformSpecialChecks(startTime);
 
                     //check map sticking point 
                     var stuck = map.CheckIfStuck();
@@ -401,38 +401,6 @@ namespace Chaotic.Tasks
             return false;
         }
 
-        //private bool CheckBossMob(bool includePixelSearch = false, double confidence = .7)
-        //{
-        //    var boss = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("boss_mob_middle.png", _settings.Resolution), MinimapRegion, confidence: confidence);
-        //    if (boss.Found)
-        //    {
-        //        _logger.Log(LogDetailLevel.Debug, $"Found Boss, Max Confidence: {boss.MaxConfidence}, Position: X: {boss.CenterX}, Y: {boss.CenterY}");
-        //        CalcMinimapPos(boss.CenterX, boss.CenterY);
-        //        return true;
-        //    }
-
-        //    else if (includePixelSearch)
-        //    {
-        //        var minimap = IP.CaptureScreen(MinimapRegion);
-
-        //        foreach (var entry in MinimapSpiralized)
-        //        {
-        //            if (entry.X >= minimap.Width || entry.Y >= minimap.Height)
-        //                continue;
-
-        //            var c = minimap.GetPixel(entry.X, entry.Y);
-
-        //            if ((c.R == 166 && c.G == 32 && c.B == 28) || (c.R == 115 && c.G == 10 && c.B == 11))
-        //            {
-        //                CalcMinimapPos(MinimapRegion.Left + entry.X, MinimapRegion.Top + entry.Y);
-        //                return true;
-        //            }
-        //        }
-        //    }
-
-        //    return false;
-        //}
-
         private ScreenSearchResult BossCheck(bool includePixelSearch = false, double confidence = .7)
         {
             var boss = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("boss_mob_middle.png", _settings.Resolution), MinimapRegion, confidence);
@@ -457,8 +425,8 @@ namespace Chaotic.Tasks
                     if ((Enumerable.Range(161, 10).Contains(c.R) && Enumerable.Range(27, 10).Contains(c.G) && Enumerable.Range(23, 10).Contains(c.B)))
                         //|| (Enumerable.Range(110, 10).Contains(c.R) && Enumerable.Range(5, 10).Contains(c.G) && Enumerable.Range(3, 10).Contains(c.B)))
                     {
-                        _logger.Log(LogDetailLevel.Debug, $"Boss Pixel Found - {{{entry.X},{entry.Y}}}");
-                        _logger.Log(LogDetailLevel.Debug, $"Pixel Properties: {c.ToString()}");
+                        //_logger.Log(LogDetailLevel.Debug, $"Boss Pixel Found - {{{entry.X},{entry.Y}}}");
+                        //_logger.Log(LogDetailLevel.Debug, $"Pixel Properties: {c.ToString()}");
                         result.Found = true;
                         result.CenterX = MinimapRegion.Left + entry.X;
                         result.CenterY = MinimapRegion.Top + entry.Y;
@@ -499,8 +467,8 @@ namespace Chaotic.Tasks
 
                     if ((Enumerable.Range(204, 10).Contains(c.R) && Enumerable.Range(135, 10).Contains(c.G) && Enumerable.Range(47, 10).Contains(c.B)) || (Enumerable.Range(127, 10).Contains(c.R) && Enumerable.Range(71, 10).Contains(c.G) && Enumerable.Range(0, 10).Contains(c.B)))
                     {
-                        _logger.Log(LogDetailLevel.Debug, $"Elite Pixel Found - {{{entry.X},{entry.Y}}}");
-                        _logger.Log(LogDetailLevel.Debug, $"Pixel Properties: {c.ToString()}");
+                        //_logger.Log(LogDetailLevel.Debug, $"Elite Pixel Found - {{{entry.X},{entry.Y}}}");
+                        //_logger.Log(LogDetailLevel.Debug, $"Pixel Properties: {c.ToString()}");
                         result.Found = true;
                         result.CenterX = MinimapRegion.Left + entry.X;
                         result.CenterY = MinimapRegion.Top + entry.Y;
@@ -536,8 +504,8 @@ namespace Chaotic.Tasks
                     var c = minimap.GetPixel(entry.X, entry.Y);
                     if ((Enumerable.Range(250, 5).Contains(c.R) && Enumerable.Range(183, 10).Contains(c.G) && Enumerable.Range(25, 10).Contains(c.B)))
                     {
-                        _logger.Log(LogDetailLevel.Debug, $"Gold Pixel Found - {{{entry.X},{entry.Y}}}");
-                        _logger.Log(LogDetailLevel.Debug, $"Pixel Properties: {c.ToString()}");
+                        //_logger.Log(LogDetailLevel.Debug, $"Gold Pixel Found - {{{entry.X},{entry.Y}}}");
+                        //_logger.Log(LogDetailLevel.Debug, $"Pixel Properties: {c.ToString()}");
                         result.Found = true;
                         result.CenterX = MinimapRegion.Left + entry.X;
                         result.CenterY = MinimapRegion.Top + entry.Y;
@@ -1058,7 +1026,7 @@ namespace Chaotic.Tasks
             foreach (var image in emberImages)
             {
                 //IP.SAVE_DEBUG_IMAGES = true;
-                ember = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), MinimapRegion, confidence: .9);
+                ember = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), MinimapRegion, confidence: .8);
                 if (ember.Found)
                 {
                     //IP.SAVE_DEBUG_IMAGES = false;
@@ -1323,7 +1291,7 @@ namespace Chaotic.Tasks
             BackgroundProcessing.ProgressCheck();
             CurrentState = ChaosStates.InCity;
             _mouse.ClickCenterScreen(CenterScreen);
-            _kb.AltPress(Key.Q, 1000);
+            _kb.AltPress(Key.Q, 1500);
 
             var kurzanChaos = (OpenCvSharp.Point)_r.GetType().GetProperty($"Kurzan_{character.ChaosLevel}").GetValue(_r);
             _mouse.ClickPosition(kurzanChaos, 300);

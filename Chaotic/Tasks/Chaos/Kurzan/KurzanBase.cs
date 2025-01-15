@@ -58,7 +58,7 @@ namespace Chaotic.Tasks.Chaos.Kurzan
             return new ScreenSearchResult() { Found = false };
         }
 
-        public virtual void PerformSpecialChecks()
+        public virtual void PerformSpecialChecks(DateTime startTime)
         {
 
         }

@@ -234,6 +234,24 @@
     <None Update="Resources\Assets\2560x1440\gold_mob_middle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\2560x1440\guild\allied_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\guild\knights_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\guild\lazenith_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\guild\militia_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\guild\sage_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\guild\tarunian_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\2560x1440\kf_map1_jumparrow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -354,6 +372,9 @@
     <None Update="Resources\Assets\2560x1440\rift_core1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\2560x1440\soloshop\echidna_eye.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\2560x1440\soloshop\honor_shard.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -376,6 +397,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\soloshop\superior_oreha.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\soloshop\thaemine_fire.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\support_button.png">
@@ -663,6 +687,24 @@
     <None Update="Resources\Assets\3440x1440\gold_mob_middle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\3440x1440\guild\allied_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\guild\knights_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\guild\lazenith_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\guild\militia_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\guild\sage_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\guild\tarunian_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\3440x1440\kf_map1_jumparrow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -691,6 +733,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\kurzan_map1_jumppoint2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\kurzan_map1_jumppoint3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\kurzan_map1_jumpready.png">
@@ -789,6 +834,9 @@
     <None Update="Resources\Assets\3440x1440\rift_core2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\3440x1440\soloshop\echidna_eye.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\3440x1440\soloshop\honor_shard.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -811,6 +859,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\soloshop\superior_oreha.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\soloshop\thaemine_fire.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\support_button.png">

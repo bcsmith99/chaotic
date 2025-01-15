@@ -144,6 +144,18 @@ namespace Chaotic.User
             }
         }
 
+
+        private bool _BuyGuildShop;
+        public bool BuyGuildShop
+        {
+            get { return _BuyGuildShop; }
+            set
+            {
+                _BuyGuildShop = value;
+                OnPropertyChanged();
+            }
+        }
+
         private int _SoloModeBifrost = 0;
         public int SoloModeBifrost
         {
@@ -165,6 +177,16 @@ namespace Chaotic.User
         public bool BuySoloSuperiorOreha { get; set; }
         public bool BuySoloPrimeOreha { get; set; }
 
+        public bool BuyEchidnaEyes { get; set; }
+        public bool BuyThaemineFire { get; set; }
+
+        public bool BuyGuildMilitia { get; set; }
+        public bool BuyGuildKnights { get; set; }
+        public bool BuyGuildTarunian { get; set; }
+        public bool BuyGuildLazenith { get; set; }
+        
+        public bool BuyGuildSage { get; set; }
+        public bool BuyGuildAllied { get; set; }
 
         public bool GuildDonationSilver { get; set; }
         public bool GuildDonationGold { get; set; }

@@ -316,6 +316,46 @@
 										  Margin="10,5,0,0"
 										  IsEnabled="{Binding CurrentSelectedEditChar.GuildDonation}"
 										  IsChecked="{Binding CurrentSelectedEditChar.GuildDonationGold, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+								<CheckBox VerticalAlignment="Center"
+										  Content="Buy Guild Shop Tickets"
+										  Margin="10,5,0,0"
+										  IsEnabled="{Binding CurrentSelectedEditChar.GuildDonation}"
+										  IsChecked="{Binding CurrentSelectedEditChar.BuyGuildShop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+
+								<CheckBox VerticalAlignment="Center"
+										  Content="Militia Chest (1325)"
+										  Margin="15,5,0,0"
+										  IsEnabled="{Binding CurrentSelectedEditChar.BuyGuildShop}"
+										  IsChecked="{Binding CurrentSelectedEditChar.BuyGuildMilitia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+								<CheckBox VerticalAlignment="Center"
+										  Content="Knights Chest (1490)"
+										  Margin="15,5,0,0"
+										  IsEnabled="{Binding CurrentSelectedEditChar.BuyGuildShop}"
+										  IsChecked="{Binding CurrentSelectedEditChar.BuyGuildKnights, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+
+								<CheckBox VerticalAlignment="Center"
+										  Content="Tarunian Chest (1540)"
+										  Margin="15,5,0,0"
+										  IsEnabled="{Binding CurrentSelectedEditChar.BuyGuildShop}"
+										  IsChecked="{Binding CurrentSelectedEditChar.BuyGuildTarunian, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+
+								<CheckBox VerticalAlignment="Center"
+										  Content="Lazenith Chest (1580)"
+										  Margin="15,5,0,0"
+										  IsEnabled="{Binding CurrentSelectedEditChar.BuyGuildShop}"
+										  IsChecked="{Binding CurrentSelectedEditChar.BuyGuildLazenith, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+
+								<CheckBox VerticalAlignment="Center"
+										  Content="Sage Chest (1610)"
+										  Margin="15,5,0,0"
+										  IsEnabled="{Binding CurrentSelectedEditChar.BuyGuildShop}"
+										  IsChecked="{Binding CurrentSelectedEditChar.BuyGuildSage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+
+								<CheckBox VerticalAlignment="Center"
+										  Content="Allied Chest (1640)"
+										  Margin="15,5,0,0"
+										  IsEnabled="{Binding CurrentSelectedEditChar.BuyGuildShop}"
+										  IsChecked="{Binding CurrentSelectedEditChar.BuyGuildAllied, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
 
 								<CheckBox VerticalAlignment="Center"
 										  Margin="0,5,0,0"
@@ -434,6 +474,14 @@
 												  Margin="0,5,0,0"
 												  Content="Buy Refined Obliteration Stones"
 												  IsChecked="{Binding CurrentSelectedEditChar.BuySoloRefinedObliteration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+										<CheckBox VerticalAlignment="Center"
+												  Margin="0,5,0,0"
+												  Content="Buy Dark Fire"
+												  IsChecked="{Binding CurrentSelectedEditChar.BuyThaemineFire, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+										<CheckBox VerticalAlignment="Center"
+												  Margin="0,5,0,0"
+												  Content="Buy Echidna Eyes"
+												  IsChecked="{Binding CurrentSelectedEditChar.BuyEchidnaEyes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
 
 									</StackPanel>
 								</StackPanel>

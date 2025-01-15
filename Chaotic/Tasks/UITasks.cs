@@ -289,6 +289,57 @@ namespace Chaotic.Tasks
             return false;
         }
 
+        public bool BuyGuildShop(UserCharacter character)
+        {
+            BackgroundProcessing.ProgressCheck();
+            var success = true;
+
+            Thread.Sleep(2000);
+            _mouse.ClickPosition(_r.CommunityMenu, 500);
+            _mouse.ClickPosition(_r.GuildMenu, 3200);
+            _mouse.ClickPosition(_r.GuildBloodstoneShopMenu, 1000);
+            _mouse.ClickPosition(_r.GuildBloodstoneTicketMenu, 1000);
+            _mouse.ClickPosition(_r.GuildBloodstoneDropdown, 1000);
+            _mouse.ClickPosition(_r.GuildBloodstoneViewAll, 1000);
+
+            bool buyMilitia = character.BuyGuildMilitia;
+            bool buyKnights = character.BuyGuildKnights;
+            bool buyTarunian = character.BuyGuildTarunian;
+            bool buyLazenith = character.BuyGuildLazenith;
+            bool buySage = character.BuyGuildSage;
+            bool buyAllied = character.BuyGuildAllied;
+
+            int currentScroll = 0;
+            int maxScroll = 3;
+
+            BackgroundProcessing.ProgressCheck();
+
+            _mouse.ClickPosition(_r.CenterScreen, 1000);
+
+            while ((buyMilitia || buyKnights || buyTarunian || buyLazenith || buySage || buyAllied) && currentScroll < maxScroll)
+            {
+                if (buyMilitia)
+                    success = success && BuyGuildTickets("militia_chest");
+                if (buyKnights)
+                    success = success && BuyGuildTickets("knights_chest");
+                if (buyTarunian)
+                    success = success && BuyGuildTickets("tarunian_chest");
+                if (buyLazenith)
+                    success = success && BuyGuildTickets("lazenith_chest");
+                if (buySage)
+                    success = success && BuyGuildTickets("sage_chest");
+                if (buyAllied)
+                    success = success && BuyGuildTickets("allied_chest");
+
+                _mouse.Scroll(MouseUtility.ScrollDirection.Down, 7);
+                currentScroll++;
+            }
+
+            _kb.Press(Key.Escape, 1500);
+
+            return success;
+        }
+
         public bool BuySoloModeShop(UserCharacter character)
         {
             BackgroundProcessing.ProgressCheck();
@@ -338,8 +389,63 @@ namespace Chaotic.Tasks
                     _mouse.Scroll(MouseUtility.ScrollDirection.Up, 1, 500);
                     currentScroll++;
                 }
+                Sleep.SleepMs(500, 700);
+                success = success && BuySoloSharedRewards(character);
 
                 _kb.Press(Key.Escape, 1500);
+            }
+
+            return success;
+        }
+
+        private bool BuySoloSharedRewards(UserCharacter character)
+        {
+            BackgroundProcessing.ProgressCheck();
+            bool success = true;
+
+            bool buyEchidnaEyes = character.BuyEchidnaEyes;
+            bool buyThaemineFire = character.BuyThaemineFire;
+
+            int maxScrollAttempts = 10;
+            int currentScroll = 0;
+
+            if (buyEchidnaEyes || buyThaemineFire)
+            {
+                _mouse.ClickPosition(_r.SoloModeShareRewards, 1000);
+                _mouse.SetPosition(_r.CenterScreen);
+                _mouse.Scroll(MouseUtility.ScrollDirection.Down, 10, 200);
+
+                BackgroundProcessing.ProgressCheck();
+
+                while ((buyEchidnaEyes || buyThaemineFire) && currentScroll < maxScrollAttempts)
+                {
+                    BackgroundProcessing.ProgressCheck();
+                    if (buyEchidnaEyes && BuySoloItem("echidna_eye"))
+                        buyEchidnaEyes = false;
+                    if (buyThaemineFire && BuySoloItem("thaemine_fire"))
+                        buyThaemineFire = false;
+
+                    _mouse.Scroll(MouseUtility.ScrollDirection.Up, 1, 500);
+                    currentScroll++;
+                }
+            }
+
+            return success;
+        }
+
+        private bool BuyGuildTickets(string itemImg)
+        {
+            var success = true;
+            var results = IP.LocateOnScreen(Utility.ImageResourceLocation($"{itemImg}.png", _settings.Resolution, "guild"), confidence: .9);
+            foreach (var match in results.Matches)
+            {
+                _mouse.ClickPosition(_r.GuildExchangeX, match.Center.Y, 1000);
+                var okButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation($"ok_button.png", _settings.Resolution), confidence: .8, breakAfterFirst: true);
+                if (okButton.Found)
+                {
+                    _logger.Log(LogDetailLevel.Debug, $"Item {itemImg} OK Button found.  Confidence: {okButton.MaxConfidence}");
+                    _mouse.ClickPosition(okButton.Center, 1000);
+                }
             }
 
             return success;

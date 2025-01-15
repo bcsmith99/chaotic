@@ -44,8 +44,17 @@ namespace Chaotic.Tasks.Chaos.Kurzan
             cc.UseAbilities(newPoint, 4);
         }
 
-        public override void PerformSpecialChecks()
+        public override void PerformSpecialChecks(DateTime startTime)
         {
+            var currentTime = DateTime.Now;
+
+            //Don't look for jump pad until 1.5mins in
+            if (currentTime.Subtract(startTime).TotalSeconds < 90)
+                return;
+            //Don't update the movement area until after we have hopefully jumped.
+            if (currentTime.Subtract(startTime).TotalSeconds >= 180)
+                PreferredMovementArea = ClickableRegion;
+
             var jumpPadImages = new List<string>()
             {
                 "kurzan_map1_jumppoint.png",
@@ -57,7 +66,7 @@ namespace Chaotic.Tasks.Chaos.Kurzan
             foreach (var image in jumpPadImages)
             {
                 //IP.SAVE_DEBUG_IMAGES = true;
-                jumpPad = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), confidence: .87);
+                jumpPad = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), confidence: .82);
                 if (jumpPad.Found)
                 {
                     //IP.SAVE_DEBUG_IMAGES = false;
@@ -73,8 +82,6 @@ namespace Chaotic.Tasks.Chaos.Kurzan
                 {
                     _kb.Press(Key.G, 200);
                 }
-
-                PreferredMovementArea = _r.ClickableRegion; 
             }
         }
 

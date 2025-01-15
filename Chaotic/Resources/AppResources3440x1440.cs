@@ -88,11 +88,19 @@ namespace Chaotic.Resources
             GuildSupport = new Rect(2080, 575, 200, 50);
             GuildSupportCancel = new Rect(1720, 990, 120, 50);
             GuildSupportOkButton = new Point(1650, 1010);
+
+            GuildBloodstoneShopMenu = new Point(2100,240);
+            GuildBloodstoneTicketMenu = new Point(1970,300);
+            GuildBloodstoneDropdown = new Point(1400,375);
+            GuildBloodstoneViewAll = new Point(1400,420);
+            GuildExchangeX = 2620;
+
+
             HealthBar = new Rect(1260, 1270, 330, 30);
             Inventory = new Rect(1950, 300, 700, 800);
             Kurzan_1640 = new Point(1490, 1040);
             Kurzan_1660 = new Point(1725, 888);
-            KurzanMap1PreferredArea = new Rect(1550, 100, 1200, 600);
+            KurzanMap1PreferredArea = new Rect(1600, 100, 1200, 600);
             KurzanMap1Start = new List<Point>
             {
                 new Point(800,275),
@@ -202,6 +210,7 @@ namespace Chaotic.Resources
             VoldisLeapClose = new Rect(1700, 20, 1000, 500);
             VoldisLeapNpc = new Rect(2300, 400, 500, 250);
             SoloModeMax = new Point(1540, 690);
+            SoloModeShareRewards = new Point(1350, 235);
             SoloModeExchangeX = 1775;
             VoldisLeapX = 800;
             YDistance = 400;

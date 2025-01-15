@@ -56,9 +56,9 @@ namespace Chaotic.Statistics
                     TotalFailed = x.Count(y => y.TaskOutcome == TaskOutcomes.Failure),
                     TotalTimeout = x.Count(y => y.TaskOutcome == TaskOutcomes.Timeout),
                     AverageTime = new TimeSpan(0, 0, 0, (int)x.Average(y => y.TotalDuration.TotalSeconds)),
-                    AverageFloor1 = new TimeSpan(0, 0, 0, (int)x.Where(y => y.Floor1Duration.TotalMilliseconds > 0).Average(y => y.Floor1Duration.TotalSeconds)),
-                    AverageFloor2 = new TimeSpan(0, 0, 0, (int)x.Where(y => y.Floor2Duration.TotalMilliseconds > 0).Average(y => y.Floor2Duration.TotalSeconds)),
-                    AverageFloor3 = new TimeSpan(0, 0, 0, (int)x.Where(y => y.Floor3Duration.TotalMilliseconds > 0).Average(y => y.Floor3Duration.TotalSeconds)),
+                    AverageFloor1 = new TimeSpan(0, 0, 0, (int)x.Where(y => y.Floor1Duration.TotalMilliseconds > 0).DefaultIfEmpty().Average(y => y != null ? y.Floor1Duration.TotalSeconds : 0)),
+                    AverageFloor2 = new TimeSpan(0, 0, 0, (int)x.Where(y => y.Floor2Duration.TotalMilliseconds > 0).DefaultIfEmpty().Average(y => y != null ? y.Floor2Duration.TotalSeconds : 0)),
+                    AverageFloor3 = new TimeSpan(0, 0, 0, (int)x.Where(y => y.Floor3Duration.TotalMilliseconds > 0).DefaultIfEmpty().Average(y => y != null ? y.Floor3Duration.TotalSeconds : 0)),
                 };
 
             }).ToList();
