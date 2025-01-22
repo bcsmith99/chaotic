@@ -187,6 +187,7 @@ namespace Chaotic.User
         
         public bool BuyGuildSage { get; set; }
         public bool BuyGuildAllied { get; set; }
+        public bool BuyGuildAllied2 { get; set; }
 
         public bool GuildDonationSilver { get; set; }
         public bool GuildDonationGold { get; set; }

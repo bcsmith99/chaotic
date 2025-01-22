@@ -234,6 +234,9 @@
     <None Update="Resources\Assets\2560x1440\gold_mob_middle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\2560x1440\guild\allied2_chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\2560x1440\guild\allied_chest.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -685,6 +688,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\gold_mob_middle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\guild\allied2_chest.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\guild\allied_chest.png">

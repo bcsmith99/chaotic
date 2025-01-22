@@ -119,7 +119,8 @@ namespace Chaotic
             1600,
             1610,
             1640,
-            1660
+            1660,
+            1680
         };
 
         public List<int> AvailableChaosLevels { get { return _AvailableChaosLevels; } }

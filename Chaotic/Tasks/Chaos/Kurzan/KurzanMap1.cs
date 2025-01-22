@@ -76,9 +76,21 @@ namespace Chaotic.Tasks.Chaos.Kurzan
             //Look for jump portal and take it.
             if (jumpPad.Found)
             {
+                var clickX = jumpPad.CenterX;
+                var clickY = jumpPad.CenterY;
+
+                if (clickX < ClickableRegion.Left)
+                    clickX = ClickableRegion.Left;
+                if (clickX > ClickableRegion.Right)
+                    clickX = ClickableRegion.Right;
+                if (clickY < ClickableRegion.Top)
+                    clickY = ClickableRegion.Top;
+                if (clickY > ClickableRegion.Bottom)
+                    clickY = ClickableRegion.Bottom;
+
                 _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad Found - {jumpPad.MaxConfidence}");
-                _mouse.ClickPosition(jumpPad.CenterX, jumpPad.CenterY + 50, 200, MouseButtons.Right);
-                for (int i = 0; i < 8; i++)
+                _mouse.ClickPosition(clickX, clickY + 50, 200, MouseButtons.Right);
+                for (int i = 0; i < 10; i++)
                 {
                     _kb.Press(Key.G, 200);
                 }

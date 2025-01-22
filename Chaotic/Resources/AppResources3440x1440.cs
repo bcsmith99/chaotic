@@ -89,10 +89,10 @@ namespace Chaotic.Resources
             GuildSupportCancel = new Rect(1720, 990, 120, 50);
             GuildSupportOkButton = new Point(1650, 1010);
 
-            GuildBloodstoneShopMenu = new Point(2100,240);
-            GuildBloodstoneTicketMenu = new Point(1970,300);
-            GuildBloodstoneDropdown = new Point(1400,375);
-            GuildBloodstoneViewAll = new Point(1400,420);
+            GuildBloodstoneShopMenu = new Point(2100, 240);
+            GuildBloodstoneTicketMenu = new Point(1970, 300);
+            GuildBloodstoneDropdown = new Point(1400, 375);
+            GuildBloodstoneViewAll = new Point(1400, 420);
             GuildExchangeX = 2620;
 
 
@@ -100,6 +100,7 @@ namespace Chaotic.Resources
             Inventory = new Rect(1950, 300, 700, 800);
             Kurzan_1640 = new Point(1490, 1040);
             Kurzan_1660 = new Point(1725, 888);
+            Kurzan_1680 = new Point(2035, 600);
             KurzanMap1PreferredArea = new Rect(1600, 100, 1200, 600);
             KurzanMap1Start = new List<Point>
             {

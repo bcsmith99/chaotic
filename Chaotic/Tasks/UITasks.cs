@@ -308,6 +308,7 @@ namespace Chaotic.Tasks
             bool buyLazenith = character.BuyGuildLazenith;
             bool buySage = character.BuyGuildSage;
             bool buyAllied = character.BuyGuildAllied;
+            bool buyAllied2 = character.BuyGuildAllied2;
 
             int currentScroll = 0;
             int maxScroll = 3;
@@ -330,6 +331,8 @@ namespace Chaotic.Tasks
                     success = success && BuyGuildTickets("sage_chest");
                 if (buyAllied)
                     success = success && BuyGuildTickets("allied_chest");
+                if (buyAllied2)
+                    success = success && BuyGuildTickets("allied2_chest");
 
                 _mouse.Scroll(MouseUtility.ScrollDirection.Down, 7);
                 currentScroll++;

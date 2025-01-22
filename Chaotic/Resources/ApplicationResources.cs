@@ -97,6 +97,7 @@ namespace Chaotic.Resources
 
         public Point Kurzan_1640 { get; set; }
         public Point Kurzan_1660 { get; set; }
+        public Point Kurzan_1680 { get; set; }
         public Point MinimapCenter { get; set; }
         public Point ServicesMenu { get; set; }
         public Point SwitchCharacterButton { get; set; }

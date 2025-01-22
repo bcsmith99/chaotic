@@ -378,8 +378,8 @@ namespace Chaotic.Tasks
                             //Sleep.SleepMs(500, 1000);
                             MoveOnScreen(Random.Shared.Next(MoveToPoint.X - 50, MoveToPoint.X + 50), Random.Shared.Next(MoveToPoint.Y - 30, MoveToPoint.Y + 30), 1500, 2800);
                             cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 2);
-                            cc.UseAbilities(new Point(CenterScreen.X - 50, CenterScreen.Y + 50), 2);
-                            cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 2);
+                            cc.UseAbilities(new Point(CenterScreen.X - 50, CenterScreen.Y + 50), 1);
+                            cc.UseAbilities(new Point(CenterScreen.X + 50, CenterScreen.Y - 50), 1);
                         }
                         else
                         {
@@ -1294,11 +1294,11 @@ namespace Chaotic.Tasks
             _kb.AltPress(Key.Q, 1500);
 
             var kurzanChaos = (OpenCvSharp.Point)_r.GetType().GetProperty($"Kurzan_{character.ChaosLevel}").GetValue(_r);
-            _mouse.ClickPosition(kurzanChaos, 300);
+            _mouse.ClickPosition(kurzanChaos, 800);
 
             var cc = ChaosClass.Create(_settings, character, _r, _kb, _mouse, _logger);
 
-            var enterButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("enter_button.png", _settings.Resolution), confidence: .9);
+            var enterButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("enter_button.png", _settings.Resolution), confidence: .85);
 
             if (enterButton.Found)
             {
