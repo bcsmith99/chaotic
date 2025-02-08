@@ -32,14 +32,14 @@ namespace Chaotic.Tasks.Una
 
             while (retryCount < maxTries)
             {
-                _kb.Press(Key.G, 500);
+                _kb.Press(Key.G, 750);
 
                 var closeButton = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("x.png", _settings.Resolution), _r.VoldisLeapClose, .65);
                 if (closeButton.Found)
                     _mouse.ClickPosition(closeButton.CenterX, closeButton.CenterY, 200);
 
                 if (retryCount > 4)
-                    npc = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("voldis_leap_npc.png", _settings.Resolution), _r.VoldisLeapNpc, .7);
+                    npc = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("voldis_leap_npc.png", _settings.Resolution), _r.VoldisLeapNpc, .72);
 
                 if (npc.Found)
                     break;

@@ -279,7 +279,7 @@ namespace Chaotic.Tasks
             _mouse.ClickPosition(bifrostPoint, 1000);
 
             var bifrostOkRegion = _r.BifrostOk;
-            var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), bifrostOkRegion, .95);
+            var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), bifrostOkRegion, .9);
             if (okButton.Found)
             {
                 _mouse.ClickPosition(okButton.CenterX, okButton.CenterY, 5000);
@@ -406,13 +406,14 @@ namespace Chaotic.Tasks
             BackgroundProcessing.ProgressCheck();
             bool success = true;
 
+            bool buyAkkanEyes = character.BuyAkkanEyes;
             bool buyEchidnaEyes = character.BuyEchidnaEyes;
             bool buyThaemineFire = character.BuyThaemineFire;
 
             int maxScrollAttempts = 10;
             int currentScroll = 0;
 
-            if (buyEchidnaEyes || buyThaemineFire)
+            if (buyAkkanEyes || buyEchidnaEyes || buyThaemineFire)
             {
                 _mouse.ClickPosition(_r.SoloModeShareRewards, 1000);
                 _mouse.SetPosition(_r.CenterScreen);
@@ -420,9 +421,11 @@ namespace Chaotic.Tasks
 
                 BackgroundProcessing.ProgressCheck();
 
-                while ((buyEchidnaEyes || buyThaemineFire) && currentScroll < maxScrollAttempts)
+                while ((buyAkkanEyes || buyEchidnaEyes || buyThaemineFire) && currentScroll < maxScrollAttempts)
                 {
                     BackgroundProcessing.ProgressCheck();
+                    if (buyAkkanEyes && BuySoloItem("akkan_eye"))
+                        buyAkkanEyes = false;
                     if (buyEchidnaEyes && BuySoloItem("echidna_eye"))
                         buyEchidnaEyes = false;
                     if (buyThaemineFire && BuySoloItem("thaemine_fire"))

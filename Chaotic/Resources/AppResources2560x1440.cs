@@ -62,7 +62,6 @@ namespace Chaotic.Resources
             ClickableOffset = new Point(200, 150);
             ClickableRegion = new Rect(450, 325, 1625, 700);
             ClickableArea = new Point(800, 400);
-            ClickableArea = new Point(800, 400);
             CommunityMenu = new Point(2460, 1225);
             Complete = new Rect(300, 900, 200, 75);
             ConnectButton = new Point(1375, 930);

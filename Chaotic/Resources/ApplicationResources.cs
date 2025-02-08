@@ -210,6 +210,8 @@ namespace Chaotic.Resources
                     return new AppResources3440x1440();
                 case "2560x1440":
                     return new AppResources2560x1440();
+                case "1920x1080":
+                    return new AppResources1920x1080();
                 default:
                     throw new NotImplementedException("The provided resolution is not supported");
             }

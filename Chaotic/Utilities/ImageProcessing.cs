@@ -210,78 +210,86 @@ namespace Chaotic.Utilities
         //int x, int y, int width, int height,
         public static ImageMatchResult Locate(Stream toFind, System.Drawing.Bitmap src, int x, int y, double confidence = .999, bool grayScale = false, bool breakAfterFirst = false)
         {
-            var result = new ImageMatchResult() { MaxConfidence = 0 };
-
-            var findImg = Mat.FromStream(toFind, ImreadModes.Color);
-            var srcImg = src.ToMat();
-
-
-            if (SHOW_DEBUG_IMAGES)
-                Cv2.ImShow("Find Image", findImg);
-            //Cv2.WaitKey();
-
-
-            using (Mat res = new Mat(srcImg.Rows - findImg.Rows + 1, srcImg.Cols - findImg.Cols + 1, MatType.CV_32FC1))
+            try
             {
-                Mat gFind = findImg.CvtColor(grayScale ? ColorConversionCodes.RGB2GRAY : ColorConversionCodes.RGB2BGR);
-                Mat gSrc = srcImg.CvtColor(grayScale ? ColorConversionCodes.RGB2GRAY : ColorConversionCodes.RGB2BGR);
+                var result = new ImageMatchResult() { MaxConfidence = 0 };
+
+                var findImg = Mat.FromStream(toFind, ImreadModes.Color);
+                var srcImg = src.ToMat();
+
 
                 if (SHOW_DEBUG_IMAGES)
-                    Cv2.ImShow("Converted Find Image", gFind);
-                //Cv2.WaitKey();
-                if (SHOW_DEBUG_IMAGES)
-                    Cv2.ImShow("Converted Source Image", gSrc);
+                    Cv2.ImShow("Find Image", findImg);
                 //Cv2.WaitKey();
 
-                Cv2.MatchTemplate(gFind, gSrc, res, TemplateMatchModes.CCoeffNormed);
-                var foundThreshold = Cv2.Threshold(res, res, confidence, 1.0, ThresholdTypes.Tozero);
 
-                //Cv2.ImShow("Res Image", res);
-                while (true)
+                using (Mat res = new Mat(srcImg.Rows - findImg.Rows + 1, srcImg.Cols - findImg.Cols + 1, MatType.CV_32FC1))
                 {
-                    double minVal, maxVal, threshold = confidence;
-                    OpenCvSharp.Point minLoc, maxLoc;
-                    Cv2.MinMaxLoc(res, out minVal, out maxVal, out minLoc, out maxLoc);
+                    Mat gFind = findImg.CvtColor(grayScale ? ColorConversionCodes.RGB2GRAY : ColorConversionCodes.RGB2BGR);
+                    Mat gSrc = srcImg.CvtColor(grayScale ? ColorConversionCodes.RGB2GRAY : ColorConversionCodes.RGB2BGR);
 
-                    result.MaxConfidence = Math.Max(result.MaxConfidence, maxVal);
+                    if (SHOW_DEBUG_IMAGES)
+                        Cv2.ImShow("Converted Find Image", gFind);
+                    //Cv2.WaitKey();
+                    if (SHOW_DEBUG_IMAGES)
+                        Cv2.ImShow("Converted Source Image", gSrc);
+                    //Cv2.WaitKey();
 
-                    if (maxVal >= threshold)
+                    Cv2.MatchTemplate(gFind, gSrc, res, TemplateMatchModes.CCoeffNormed);
+                    var foundThreshold = Cv2.Threshold(res, res, confidence, 1.0, ThresholdTypes.Tozero);
+
+                    //Cv2.ImShow("Res Image", res);
+                    while (true)
                     {
-                        ////Setup the rectangle to draw
-                        OpenCvSharp.Rect r = new OpenCvSharp.Rect(new OpenCvSharp.Point(maxLoc.X, maxLoc.Y), new OpenCvSharp.Size(findImg.Width, findImg.Height));
-                        //Console.WriteLine($"MinVal={minVal.ToString()} MaxVal={maxVal.ToString()} MinLoc={minLoc.ToString()} MaxLoc={maxLoc.ToString()} Rect={r.ToString()}");
+                        double minVal, maxVal, threshold = confidence;
+                        OpenCvSharp.Point minLoc, maxLoc;
+                        Cv2.MinMaxLoc(res, out minVal, out maxVal, out minLoc, out maxLoc);
 
-                        ////Draw a rectangle of the matching area
-                        Cv2.Rectangle(srcImg, r, Scalar.LimeGreen, 2);
+                        result.MaxConfidence = Math.Max(result.MaxConfidence, maxVal);
 
-                        ////Fill in the res Mat so you don't find the same area again in the MinMaxLoc
-                        OpenCvSharp.Rect outRect;
-                        Cv2.FloodFill(res, maxLoc, new Scalar(0), out outRect, new Scalar(0.1), new Scalar(1.0));
+                        if (maxVal >= threshold)
+                        {
+                            ////Setup the rectangle to draw
+                            OpenCvSharp.Rect r = new OpenCvSharp.Rect(new OpenCvSharp.Point(maxLoc.X, maxLoc.Y), new OpenCvSharp.Size(findImg.Width, findImg.Height));
+                            //Console.WriteLine($"MinVal={minVal.ToString()} MaxVal={maxVal.ToString()} MinLoc={minLoc.ToString()} MaxLoc={maxLoc.ToString()} Rect={r.ToString()}");
 
-                        result.Matches.Add(new ImageMatch() { Confidence = maxVal, Match = r, Center = GetMatchCenter(r, x, y) });
-                        if (breakAfterFirst)
+                            ////Draw a rectangle of the matching area
+                            Cv2.Rectangle(srcImg, r, Scalar.LimeGreen, 2);
+
+                            ////Fill in the res Mat so you don't find the same area again in the MinMaxLoc
+                            OpenCvSharp.Rect outRect;
+                            Cv2.FloodFill(res, maxLoc, new Scalar(0), out outRect, new Scalar(0.1), new Scalar(1.0));
+
+                            result.Matches.Add(new ImageMatch() { Confidence = maxVal, Match = r, Center = GetMatchCenter(r, x, y) });
+                            if (breakAfterFirst)
+                                break;
+                        }
+                        else
                             break;
                     }
-                    else
-                        break;
+                    if (SHOW_DEBUG_IMAGES)
+                        Cv2.ImShow("Source Image", srcImg);
+                    //if (SHOW_DEBUG_IMAGES)
+                    //    Cv2.ImShow("Res", res);
                 }
-                if (SHOW_DEBUG_IMAGES)
-                    Cv2.ImShow("Source Image", srcImg);
-                //if (SHOW_DEBUG_IMAGES)
-                //    Cv2.ImShow("Res", res);
-            }
 
-            if (result.Matches.Count > 0 && SAVE_DEBUG_IMAGES)
+                if (result.Matches.Count > 0 && SAVE_DEBUG_IMAGES)
+                {
+                    findImg.SaveImage($"C:\\DebugPics\\findImg{DateTime.Now.ToString("mm-dd-yyyy-HH-ss-fff")}.png");
+                    srcImg.SaveImage($"C:\\DebugPics\\srcImg{DateTime.Now.ToString("mm-dd-yyyy-HH-ss-fff")}.png");
+                }
+
+
+                //Cv2.ImShow("Matches", srcImg);
+                //Cv2.WaitKey();
+
+                return result;
+            }
+            catch(Exception e)
             {
-                findImg.SaveImage($"C:\\DebugPics\\findImg{DateTime.Now.ToString("mm-dd-yyyy-HH-ss-fff")}.png");
-                srcImg.SaveImage($"C:\\DebugPics\\srcImg{DateTime.Now.ToString("mm-dd-yyyy-HH-ss-fff")}.png");
+                throw; 
             }
-
-
-            //Cv2.ImShow("Matches", srcImg);
-            //Cv2.WaitKey();
-
-            return result;
+            
         }
     }
 }

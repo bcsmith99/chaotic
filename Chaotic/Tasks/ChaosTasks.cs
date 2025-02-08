@@ -741,135 +741,144 @@ namespace Chaotic.Tasks
 
         private void UseChaosDungeonAbilities(ChaosClass cc)
         {
-            while (true)
+            try
             {
-                BackgroundProcessing.ProgressCheck();
-                _uiTasks.DeathCheck();
-                HealthCheck(cc);
-
-                var boss = BossCheck(true);
-                var elite = EliteCheck(true);
-
-                if (GameCrashCheck() || OfflineCheck() || TimeoutCheck())
-                    return;
-
-                //if (CurrentState == ChaosStates.Floor1 && CheckEliteMob())
-                //{
-                //    _logger.Log(LogDetailLevel.Debug, "Accidentally entered floor 2");
-                //    CurrentState = ChaosStates.Floor2;
-                //    return;
-                //}
-                else if (CurrentState == ChaosStates.Floor2 && CheckTower())
+                while (true)
                 {
-                    _logger.Log(LogDetailLevel.Debug, "Accidentally entered floor 3");
-                    CurrentState = ChaosStates.Floor3;
-                    return;
-                }
+                    BackgroundProcessing.ProgressCheck();
+                    _uiTasks.DeathCheck();
+                    HealthCheck(cc);
 
-                if (CurrentState == ChaosStates.Floor2 && !elite.Found && CheckRedMob())
-                {
-                    MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 400, 500, false);
-                }
-                else if (CurrentState == ChaosStates.Floor2 && !elite.Found && !CheckRedMob())
-                {
-                    _logger.Log(LogDetailLevel.Debug, "No mob on floor 2, random move");
-                    RandomMove();
-                }
-                else if (CurrentState == ChaosStates.Floor2 && boss.Found)
-                {
-                    CalcMinimapPos(boss.CenterX, boss.CenterY);
-                    MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 500, 600, false);
-                    if (CheckBossMobHealthBar())
-                        cc.UseAwakening(MoveToPoint);
-                }
+                    var boss = BossCheck(true);
+                    var elite = EliteCheck(true);
 
-                else if (CurrentState == ChaosStates.Floor1 && !CheckRedMob())
-                {
-                    _logger.Log(LogDetailLevel.Debug, "No mob on floor 1, random move");
-                    RandomMove();
-                }
-                else if (CurrentState == ChaosStates.Floor3 && elite.Found)
-                {
-                    CalcMinimapPos(elite.CenterX, elite.CenterY);
-                    MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 200, 300, false);
-                    cc.UseAwakening(MoveToPoint);
-                }
+                    if (GameCrashCheck() || OfflineCheck() || TimeoutCheck())
+                        return;
 
-                if (CurrentState == ChaosStates.Floor3 && CheckChaosFinished())
-                {
-                    _logger.Log(LogDetailLevel.Info, "Floor 3 Cleared and Chaos Finished");
-                    return;
-                }
+                    //if (CurrentState == ChaosStates.Floor1 && CheckEliteMob())
+                    //{
+                    //    _logger.Log(LogDetailLevel.Debug, "Accidentally entered floor 2");
+                    //    CurrentState = ChaosStates.Floor2;
+                    //    return;
+                    //}
+                    else if (CurrentState == ChaosStates.Floor2 && CheckTower())
+                    {
+                        _logger.Log(LogDetailLevel.Debug, "Accidentally entered floor 3");
+                        CurrentState = ChaosStates.Floor3;
+                        return;
+                    }
 
-                if (CheckPortal() && (CurrentState == ChaosStates.Floor1 || CurrentState == ChaosStates.Floor2 || CurrentState == ChaosStates.Floor3))
-                {
-                    _mouse.SetPosition(CenterScreen);
-                    CheckPortal();
-                    return;
-                }
-
-                if (CurrentState == ChaosStates.Floor3)
-                    ClickChaosTower();
-
-                if (CurrentState == ChaosStates.Floor1 && CheckRedMob())
-                {
-                    MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 400, 600);
-                }
-                else if (CurrentState == ChaosStates.Floor1 && elite.Found)
-                {
-                    CalcMinimapPos(elite.CenterX, elite.CenterY);
-                    MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 750, 850, false);
-                }
-
-                else if (CurrentState == ChaosStates.Floor2)
-                {
-
-                    if (boss.Found)
+                    if (CurrentState == ChaosStates.Floor2 && !elite.Found && CheckRedMob())
+                    {
+                        MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 400, 500, false);
+                    }
+                    else if (CurrentState == ChaosStates.Floor2 && !elite.Found && !CheckRedMob())
+                    {
+                        _logger.Log(LogDetailLevel.Debug, "No mob on floor 2, random move");
+                        RandomMove();
+                    }
+                    else if (CurrentState == ChaosStates.Floor2 && boss.Found)
                     {
                         CalcMinimapPos(boss.CenterX, boss.CenterY);
-                        MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 950, 1050, true);
+                        MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 500, 600, false);
                         if (CheckBossMobHealthBar())
                             cc.UseAwakening(MoveToPoint);
                     }
-                    else if (elite.Found)
+
+                    else if (CurrentState == ChaosStates.Floor1 && !CheckRedMob())
+                    {
+                        _logger.Log(LogDetailLevel.Debug, "No mob on floor 1, random move");
+                        RandomMove();
+                    }
+                    else if (CurrentState == ChaosStates.Floor3 && elite.Found)
+                    {
+                        CalcMinimapPos(elite.CenterX, elite.CenterY);
+                        MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 200, 300, false);
+                        cc.UseAwakening(MoveToPoint);
+                    }
+
+                    if (CurrentState == ChaosStates.Floor3 && CheckChaosFinished())
+                    {
+                        _logger.Log(LogDetailLevel.Info, "Floor 3 Cleared and Chaos Finished");
+                        return;
+                    }
+
+                    if (CheckPortal() && (CurrentState == ChaosStates.Floor1 || CurrentState == ChaosStates.Floor2 || CurrentState == ChaosStates.Floor3))
+                    {
+                        _mouse.SetPosition(CenterScreen);
+                        CheckPortal();
+                        return;
+                    }
+
+                    if (CurrentState == ChaosStates.Floor3)
+                        ClickChaosTower();
+
+                    if (CurrentState == ChaosStates.Floor1 && CheckRedMob())
+                    {
+                        MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 400, 600);
+                    }
+                    else if (CurrentState == ChaosStates.Floor1 && elite.Found)
                     {
                         CalcMinimapPos(elite.CenterX, elite.CenterY);
                         MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 750, 850, false);
                     }
-                }
 
-                else if (CurrentState == ChaosStates.Floor3 && CheckTower())
-                {
-                    MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 1200, 1300, true);
-                    ClickChaosTower();
-                    if (!elite.Found && !CheckRedMob())
+                    else if (CurrentState == ChaosStates.Floor2)
                     {
-                        RandomMove(500, 1500, biasPoint: MoveToPoint, biasPercent: 75);
-                        if (CheckTower())
-                            ClickChaosTower();
+
+                        if (boss.Found)
+                        {
+                            CalcMinimapPos(boss.CenterX, boss.CenterY);
+                            MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 950, 1050, true);
+                            if (CheckBossMobHealthBar())
+                                cc.UseAwakening(MoveToPoint);
+                        }
+                        else if (elite.Found)
+                        {
+                            CalcMinimapPos(elite.CenterX, elite.CenterY);
+                            MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 750, 850, false);
+                        }
                     }
-                }
-                else if (CurrentState == ChaosStates.Floor3 && CheckRedMob())
-                {
-                    MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 200, 300, false);
-                    cc.UseAwakening(MoveToPoint);
-                }
-                else if (CurrentState == ChaosStates.Floor3 && boss.Found)
-                {
-                    _uiTasks.DeathCheck();
-                    CalcMinimapPos(boss.CenterX, boss.CenterY);
-                    MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 800, 900, false);
-                }
 
-                cc.UseAbilities(MoveToPoint, 4);
+                    else if (CurrentState == ChaosStates.Floor3 && CheckTower())
+                    {
+                        MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 1200, 1300, true);
+                        ClickChaosTower();
+                        if (!elite.Found && !CheckRedMob())
+                        {
+                            RandomMove(500, 1500, biasPoint: MoveToPoint, biasPercent: 75);
+                            if (CheckTower())
+                                ClickChaosTower();
+                        }
+                    }
+                    else if (CurrentState == ChaosStates.Floor3 && CheckRedMob())
+                    {
+                        MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 200, 300, false);
+                        cc.UseAwakening(MoveToPoint);
+                    }
+                    else if (CurrentState == ChaosStates.Floor3 && boss.Found)
+                    {
+                        _uiTasks.DeathCheck();
+                        CalcMinimapPos(boss.CenterX, boss.CenterY);
+                        MoveOnScreen(MoveToPoint.X, MoveToPoint.Y, 800, 900, false);
+                    }
 
-                if (CurrentState == ChaosStates.Floor3 && !elite.Found && !boss.Found)
-                {
-                    _logger.Log(LogDetailLevel.Debug, "Floor 3 random move");
-                    RandomMove();
+                    cc.UseAbilities(MoveToPoint, 4);
+
+                    if (CurrentState == ChaosStates.Floor3 && !elite.Found && !boss.Found)
+                    {
+                        _logger.Log(LogDetailLevel.Debug, "Floor 3 random move");
+                        RandomMove();
+                    }
+
                 }
-
             }
+            catch(Exception e)
+            {
+                _logger.Log(LogDetailLevel.Debug, "Error in UseChaosAbilities");
+                throw;
+            }
+
         }
 
         private List<System.Drawing.Point> _minimapSpiralized = null;
@@ -1235,7 +1244,7 @@ namespace Chaotic.Tasks
             var quest = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("quest.png", _settings.Resolution), confidence: .85);
             if (quest.Found)
             {
-                _mouse.ClickPosition(quest.CenterX, quest.CenterY, 1500);
+                _mouse.ClickPosition(quest.CenterX, quest.CenterY, 2000);
                 _kb.Press(Key.Escape, 1500);
             }
         }

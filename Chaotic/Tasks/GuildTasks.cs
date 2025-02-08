@@ -43,7 +43,7 @@ namespace Chaotic.Tasks
             _mouse.ClickPosition(_r.GuildMenu, 3200);
 
             //1630, 710, 200, 60,
-            var ok = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .95);
+            var ok = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .87);
 
             if (ok.Found)
             {

@@ -51,7 +51,7 @@ namespace Chaotic
 
         private readonly ApplicationResources _config;
 
-        private List<string> _Resolutions = new List<string> { "3440x1440", "2560x1440" };
+        private List<string> _Resolutions = new List<string> { "3440x1440", "2560x1440", "1920x1080" };
         private List<Tuple<string, int>> _GemLevels = new List<Tuple<string, int>>()
         {
             new Tuple<string, int>("Level 3+", 3),
@@ -342,7 +342,7 @@ namespace Chaotic
         private BackgroundWorker _bw;
         private readonly ManualResetEvent _busy;
 
-        private bool ShouldAcceptWeeklies()
+        private bool ShouldAcceptWeeklies(UserCharacter character)
         {
             bool accept = false;
             DateTime lastReset;
@@ -356,7 +356,7 @@ namespace Chaotic
                 lastReset = lastWednesday;
             }
 
-            if (!_settings.LastWeeklyReset.HasValue || lastReset >= _settings.LastWeeklyReset)
+            if (lastReset > character.LastWeeklyReset)
                 accept = true;
 
             return accept;
@@ -474,13 +474,12 @@ namespace Chaotic
                 if (_settings.GoOffline)
                     _uit.GoOffline();
 
-                bool acceptWeeklies = ShouldAcceptWeeklies();
-
                 var charsToRun = UserSettings.Characters.Where(x => x.IsCharSelected).ToList();
 
                 for (int i = 0; i < charsToRun.Count; i++)
                 {
                     var character = charsToRun[i];
+                    bool acceptWeeklies = ShouldAcceptWeeklies(character);
                     var success = RunCharacterDailyRotation(character, acceptWeeklies);
 
                     if (!success)
@@ -501,12 +500,11 @@ namespace Chaotic
                             break;
                     }
 
-                }
-
-                if (acceptWeeklies)
-                {
-                    UserSettings.LastWeeklyReset = DateTime.Now.Date;
-                    SaveUserSettings();
+                    if (acceptWeeklies)
+                    {
+                        character.LastWeeklyReset = DateTime.Now.Date;
+                        SaveUserSettings();
+                    }
                 }
 
                 if (UserSettings.QuitAfterFullRotation)
@@ -671,7 +669,7 @@ namespace Chaotic
             {
                 //_mouse.ClickCenterScreen(_r.CenterScreen);
                 Sleep.SleepMs(300, 500);
-                _mouse.ClickCenterScreen(_r.CenterScreen); 
+                _mouse.ClickCenterScreen(_r.CenterScreen);
 
                 //var solar = new PraeteriaSolar(_uit, _mouse, _kb, _r, _settings, _logger);
                 ////solar.RunUna(3);

@@ -38,7 +38,7 @@ namespace Chaotic.User
         public const string Soulfist = "Soulfist";
         public const string Shadowhunter = "Shadowhunter";
         public const string Striker = "Striker";
-        public const string Bard = "Bard"; 
+        public const string Bard = "Bard";
     }
 
     public class UserCharacter : INotifyPropertyChanged
@@ -53,6 +53,7 @@ namespace Chaotic.User
 
             AllResolutionSkills.Add("3440x1440", new UserCharacterSkills());
             AllResolutionSkills.Add("2560x1440", new UserCharacterSkills());
+            AllResolutionSkills.Add("1920x1080", new UserCharacterSkills());
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -91,7 +92,7 @@ namespace Chaotic.User
             ClassNames.Reaper,
             ClassNames.Summoner,
             ClassNames.Soulfist,
-            ClassNames.Shadowhunter, 
+            ClassNames.Shadowhunter,
             ClassNames.Bard,
             ClassNames.Shadowhunter
         }.OrderBy(x => x).ToList();
@@ -107,6 +108,8 @@ namespace Chaotic.User
                 OnPropertyChanged();
             }
         }
+
+        public DateTime LastWeeklyReset { get; set; } = DateTime.MinValue;
 
         public Guid Identifier { get; set; }
 
@@ -179,12 +182,13 @@ namespace Chaotic.User
 
         public bool BuyEchidnaEyes { get; set; }
         public bool BuyThaemineFire { get; set; }
+        public bool BuyAkkanEyes { get; set; }
 
         public bool BuyGuildMilitia { get; set; }
         public bool BuyGuildKnights { get; set; }
         public bool BuyGuildTarunian { get; set; }
         public bool BuyGuildLazenith { get; set; }
-        
+
         public bool BuyGuildSage { get; set; }
         public bool BuyGuildAllied { get; set; }
         public bool BuyGuildAllied2 { get; set; }

@@ -29,8 +29,9 @@ namespace Chaotic.Tasks.Chaos.Class
             var special = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("class/artist.png", _settings.Resolution), CharacterIconRegion, .75);
             if (special.Found)
             {
+                _kb.Press(Key.G, 200);
                 _mouse.SetPosition(ScreenCenter.X, ScreenCenter.Y);
-                _kb.Press(Key.X, 800);
+                _kb.Press(Key.X, 1500);
                 _kb.Press(Key.G, 200);
                 _kb.Press(Key.G, 200);
             }
