@@ -251,7 +251,7 @@
     <None Update="Resources\Assets\1920x1080\kf_map1_preferredarea3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\Assets\1920x1080\kf_map1_prefferedarea1.png">
+    <None Update="Resources\Assets\1920x1080\kf_map1_preferredarea1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\1920x1080\kurzan_map1.png">
