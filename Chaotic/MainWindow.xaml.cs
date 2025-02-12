@@ -667,19 +667,45 @@ namespace Chaotic
         {
             Action a = () =>
             {
-                //_mouse.ClickCenterScreen(_r.CenterScreen);
+                ////_mouse.ClickCenterScreen(_r.CenterScreen);
                 Sleep.SleepMs(300, 500);
                 _mouse.ClickCenterScreen(_r.CenterScreen);
 
-                //var solar = new PraeteriaSolar(_uit, _mouse, _kb, _r, _settings, _logger);
-                ////solar.RunUna(3);
-                //solar.ExecuteTask();
 
-                if (CurrentDailySelectedChar != null)
+                var jumpPadImages = new List<string>()
+            {
+                //"kurzan_map1_jumppoint.png",
+                //"kurzan_map1_jumppoint1.png",
+                //"kurzan_map1_jumppoint2.png"
+                "kf_map1_newjump.png"
+            };
+                ScreenSearchResult jumpPad = new ScreenSearchResult();
+
+                foreach (var image in jumpPadImages)
                 {
-                    //_uit.BuySoloModeShop(CurrentDailySelectedChar);
-                    _uit.BuyGuildShop(CurrentDailySelectedChar);
+                    //IP.SAVE_DEBUG_IMAGES = true;
+                    jumpPad = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), confidence: .45);
+                    if (jumpPad.Found)
+                    {
+                        //IP.SAVE_DEBUG_IMAGES = false;
+                        break;
+                    }
                 }
+                //Look for jump portal and take it.
+                if (jumpPad.Found)
+                {
+                    _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad Found - {jumpPad.MaxConfidence}");
+                }
+
+                ////var solar = new PraeteriaSolar(_uit, _mouse, _kb, _r, _settings, _logger);
+                //////solar.RunUna(3);
+                ////solar.ExecuteTask();
+
+                //if (CurrentDailySelectedChar != null)
+                //{
+                //    //_uit.BuySoloModeShop(CurrentDailySelectedChar);
+                //    _uit.BuyGuildShop(CurrentDailySelectedChar);
+                //}
 
 
                 //var centerScreen = _r.CenterScreen;

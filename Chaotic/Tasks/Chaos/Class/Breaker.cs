@@ -26,6 +26,8 @@ namespace Chaotic.Tasks.Chaos.Class
         public override void UseCharacterSpecificAbilities()
         {
 
+            _kb.Press(Key.X, 300);
+
             var special = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("class/breaker.png", _settings.Resolution), CharacterIconRegion, .75);
             if (special.Found)
             {

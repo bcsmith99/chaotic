@@ -423,7 +423,7 @@ namespace Chaotic.Tasks
                     var c = minimap.GetPixel(entry.X, entry.Y);
 
                     if ((Enumerable.Range(161, 10).Contains(c.R) && Enumerable.Range(27, 10).Contains(c.G) && Enumerable.Range(23, 10).Contains(c.B)))
-                        //|| (Enumerable.Range(110, 10).Contains(c.R) && Enumerable.Range(5, 10).Contains(c.G) && Enumerable.Range(3, 10).Contains(c.B)))
+                    //|| (Enumerable.Range(110, 10).Contains(c.R) && Enumerable.Range(5, 10).Contains(c.G) && Enumerable.Range(3, 10).Contains(c.B)))
                     {
                         //_logger.Log(LogDetailLevel.Debug, $"Boss Pixel Found - {{{entry.X},{entry.Y}}}");
                         //_logger.Log(LogDetailLevel.Debug, $"Pixel Properties: {c.ToString()}");
@@ -873,7 +873,7 @@ namespace Chaotic.Tasks
 
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.Log(LogDetailLevel.Debug, "Error in UseChaosAbilities");
                 throw;
@@ -1054,7 +1054,7 @@ namespace Chaotic.Tasks
             return false;
         }
 
-        private bool CheckPortal()
+        private bool CheckPortal(bool includePixelSearch = true)
         {
             var portalImages = new List<string>()
             {
@@ -1083,6 +1083,29 @@ namespace Chaotic.Tasks
 
                 return true;
             }
+
+            if (includePixelSearch)
+            {
+                var minimap = IP.CaptureScreen(MinimapRegion);
+
+                foreach (var entry in MinimapSpiralized)
+                {
+                    if (entry.X >= minimap.Width || entry.Y >= minimap.Height)
+                        continue;
+
+                    var c = minimap.GetPixel(entry.X, entry.Y);
+                    if ((Enumerable.Range(85, 10).Contains(c.R) && Enumerable.Range(150, 10).Contains(c.G) && Enumerable.Range(250, 5).Contains(c.B)) ||
+                        (Enumerable.Range(73, 10).Contains(c.R) && Enumerable.Range(131, 10).Contains(c.G) && Enumerable.Range(250, 5).Contains(c.B)) ||
+                        (Enumerable.Range(112, 10).Contains(c.R) && Enumerable.Range(192, 10).Contains(c.G) && Enumerable.Range(250, 5).Contains(c.B)))
+                    {
+                        _logger.Log(LogDetailLevel.Debug, "Portal Pixel found.");
+                        CalcMinimapPos(MinimapRegion.Left + entry.X, MinimapRegion.Top + entry.Y);
+                        return true;
+                    }
+                }
+            }
+
+
             //_logger.Log(LogDetailLevel.Debug, "Portal not found");
             return false;
         }

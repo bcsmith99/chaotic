@@ -245,6 +245,12 @@
     <None Update="Resources\Assets\1920x1080\guild\tarunian_chest.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\1920x1080\jump.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\1920x1080\kf_map1_newjump.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\1920x1080\kf_map1_preferredarea2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -611,7 +617,13 @@
     <None Update="Resources\Assets\2560x1440\guild\tarunian_chest.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\2560x1440\jump.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\2560x1440\kf_map1_jumparrow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\kf_map1_newjump.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\kf_map1_preferredarea1.png">
@@ -1070,7 +1082,13 @@
     <None Update="Resources\Assets\3440x1440\guild\tarunian_chest.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\3440x1440\jump.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\3440x1440\kf_map1_jumparrow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\kf_map1_newjump.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\kf_map1_preferredarea1.png">

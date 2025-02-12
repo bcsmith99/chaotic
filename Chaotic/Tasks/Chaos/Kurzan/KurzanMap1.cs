@@ -1,4 +1,5 @@
-﻿using Chaotic.Resources;
+﻿using Chaotic.Extensions;
+using Chaotic.Resources;
 using Chaotic.Tasks.Chaos.Class;
 using Chaotic.User;
 using Chaotic.Utilities;
@@ -55,6 +56,14 @@ namespace Chaotic.Tasks.Chaos.Kurzan
             if (currentTime.Subtract(startTime).TotalSeconds >= 180)
                 PreferredMovementArea = ClickableRegion;
 
+            var jumpButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("jump.png", _settings.Resolution), confidence: .7);
+            if (jumpButton.Found)
+            {
+                _logger.Log(LogDetailLevel.Debug, "Jump Button found, jumping");
+                _kb.Press(Key.G, 2000);
+                return; 
+            }
+
             var jumpPadImages = new List<string>()
             {
                 "kurzan_map1_jumppoint.png",
@@ -90,6 +99,47 @@ namespace Chaotic.Tasks.Chaos.Kurzan
 
                 _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad Found - {jumpPad.MaxConfidence}");
                 _mouse.ClickPosition(clickX, clickY + 50, 200, MouseButtons.Right);
+                for (int i = 0; i < 10; i++)
+                {
+                    _kb.Press(Key.G, 200);
+                }
+
+                return;
+            }
+
+            jumpPadImages = new List<string>()
+            {
+                "kf_map1_newjump.png"
+            };
+            jumpPad = new ScreenSearchResult();
+
+            foreach (var image in jumpPadImages)
+            {
+                //IP.SAVE_DEBUG_IMAGES = true;
+                jumpPad = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), confidence: .45);
+                if (jumpPad.Found)
+                {
+                    //IP.SAVE_DEBUG_IMAGES = false;
+                    break;
+                }
+            }
+            //Look for jump portal and take it.
+            if (jumpPad.Found)
+            {
+                var clickX = jumpPad.CenterX;
+                var clickY = jumpPad.CenterY;
+
+                if (clickX < ClickableRegion.Left)
+                    clickX = ClickableRegion.Left;
+                if (clickX > ClickableRegion.Right)
+                    clickX = ClickableRegion.Right;
+                if (clickY < ClickableRegion.Top)
+                    clickY = ClickableRegion.Top;
+                if (clickY > ClickableRegion.Bottom)
+                    clickY = ClickableRegion.Bottom;
+
+                _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Area Found - {jumpPad.MaxConfidence}");
+                _mouse.ClickPosition(clickX - 175, clickY + 120, 200, MouseButtons.Right);
                 for (int i = 0; i < 10; i++)
                 {
                     _kb.Press(Key.G, 200);

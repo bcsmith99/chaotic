@@ -26,8 +26,8 @@ namespace Chaotic.Tasks.Chaos.Class
         public override void UseCharacterSpecificAbilities()
         {
 
-            var special = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("class/soulfist.png", _settings.Resolution), CharacterIconRegion, .65);
-            if (!special.Found)
+            var special = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("class/soulfist.png", _settings.Resolution), CharacterIconRegion, .87);
+            if (special.Found)
                 _kb.Press(Key.Z, 200);
         }
     }

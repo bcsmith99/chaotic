@@ -47,7 +47,7 @@ namespace Chaotic.Resources
 
             ChaosLeave = new Rect(70, 300, 130, 75);
             ChaosOk = new Rect(890, 840, 150, 40);
-            CharacterIcon = new Rect(895, 820, 150, 100);
+            CharacterIcon = new Rect(895, 820, 125, 125);
             CharacterMenu = new Point(1700, 920);
             CharacterProfileMenu = new Point(1650, 850);
             CharSelectCol0 = 765;
