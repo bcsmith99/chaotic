@@ -266,6 +266,7 @@
 								<RowDefinition Height="Auto" />
 								<RowDefinition Height="Auto" />
 								<RowDefinition Height="Auto" />
+								<RowDefinition Height="Auto" />
 							</Grid.RowDefinitions>
 							<Label Content="Class"></Label>
 							<ComboBox Grid.Column="1"
@@ -289,19 +290,27 @@
 									  SelectedItem="{Binding CurrentSelectedEditChar.ChaosLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
 							</ComboBox>
-							<CheckBox Grid.Row="3"
+							<Label Grid.Row="3"
+								   Content="Raid Preset Key"></Label>
+							<ComboBox Grid.Row="3"
+									  Grid.Column="1"
+									  ItemsSource="{Binding AvailableRaidPresets}"
+									  SelectedItem="{Binding CurrentSelectedEditChar.RaidPreset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+							</ComboBox>
+							<CheckBox Grid.Row="4"
 									  IsChecked="{Binding CurrentSelectedEditChar.IsMain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 									  Content="Main Character" />
-							<StackPanel Grid.Row="4"
+							<StackPanel Grid.Row="5"
 										Grid.ColumnSpan="3">
 								<CheckBox VerticalAlignment="Center"
 										  Margin="0, 5, 0, 0"
 										  IsChecked="{Binding CurrentSelectedEditChar.RunChaos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 										  Content="Run Chaos"></CheckBox>
-								<CheckBox VerticalAlignment="Center"
+								<!--<CheckBox VerticalAlignment="Center"
 										  Margin="10,5,0,0"
 										  IsChecked="{Binding CurrentSelectedEditChar.DisableArkPassive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-										  Content="Disable Ark Passive"></CheckBox>
+										  Content="Disable Ark Passive"></CheckBox>-->
 								<CheckBox VerticalAlignment="Center"
 										  Content="Enable Guild	"
 										  Margin="0,5,0,0"

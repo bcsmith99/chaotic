@@ -32,7 +32,9 @@ namespace Chaotic.Tasks.Chaos.Class
 
 
             var special_bird = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("class/sharpshooter_bird.png", _settings.Resolution), CharacterIconRegion, .8);
-            if (special_bird.Found)
+            var special_bird_ap = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("class/sharpshooter_bird_ap.png", _settings.Resolution), CharacterIconRegion, .8);
+
+            if (special_bird.Found || special_bird_ap.Found)
                 _kb.Press(Key.Z, 200);
         }
     }

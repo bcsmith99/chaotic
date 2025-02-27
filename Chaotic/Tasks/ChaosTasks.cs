@@ -176,8 +176,8 @@ namespace Chaotic.Tasks
             }
             else
             {
-                if (character.DisableArkPassive)
-                    _uiTasks.ToggleArkPassive(true);
+                //if (character.DisableArkPassive)
+                //    _uiTasks.ToggleArkPassive(true);
 
                 if (EnterKurzanFront(character))
                 {
@@ -214,8 +214,8 @@ namespace Chaotic.Tasks
 
                     AddKurzanTaskStatistic(outcome, character, km, startTime, endTime);
 
-                    if (character.DisableArkPassive)
-                        _uiTasks.ToggleArkPassive(false);
+                    //if (character.DisableArkPassive)
+                    //    _uiTasks.ToggleArkPassive(false);
                 }
                 else if (CheckAuraExpended())
                 {
@@ -1054,8 +1054,10 @@ namespace Chaotic.Tasks
             return false;
         }
 
-        private bool CheckPortal(bool includePixelSearch = true)
+        private bool CheckPortal()
         {
+            bool includePixelSearch = CurrentState != ChaosStates.Floor3;
+
             var portalImages = new List<string>()
             {
                 "portal.png",

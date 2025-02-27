@@ -122,6 +122,9 @@
     <None Update="Resources\Assets\1920x1080\class\sharpshooter_bird.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Assets\1920x1080\class\sharpshooter_bird_ap.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Assets\1920x1080\class\slayer.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -477,6 +480,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\class\sharpshooter_bird.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\2560x1440\class\sharpshooter_bird_ap.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\2560x1440\class\slayer.png">
@@ -867,6 +873,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\class\sharpshooter_bird.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Assets\3440x1440\class\sharpshooter_bird_ap.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Assets\3440x1440\class\slayer.png">

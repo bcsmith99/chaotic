@@ -39,6 +39,7 @@ namespace Chaotic.User
         public const string Shadowhunter = "Shadowhunter";
         public const string Striker = "Striker";
         public const string Bard = "Bard";
+        public const string WildSoul = "WildSoul";
     }
 
     public class UserCharacter : INotifyPropertyChanged
@@ -94,7 +95,9 @@ namespace Chaotic.User
             ClassNames.Soulfist,
             ClassNames.Shadowhunter,
             ClassNames.Bard,
-            ClassNames.Shadowhunter
+            ClassNames.Shadowhunter,
+            ClassNames.WildSoul
+
         }.OrderBy(x => x).ToList();
 
 
@@ -118,9 +121,9 @@ namespace Chaotic.User
         public string ClassName { get; set; } = "";
         public int CharacterIndex { get; set; }
         public int ChaosLevel { get; set; }
+        public string RaidPreset { get; set; } = "None";
 
         public bool RunChaos { get; set; }
-        public bool DisableArkPassive { get; set; }
         public bool RunLopangUnas { get; set; }
         public bool RunLopangShushireOnly { get; set; }
 

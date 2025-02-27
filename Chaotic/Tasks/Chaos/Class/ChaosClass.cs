@@ -202,6 +202,8 @@ namespace Chaotic.Tasks.Chaos.Class
                     return new Shadowhunter(settings, character, r, kb, mouse, logger);
                 case ClassNames.Striker:
                     return new Striker(settings, character, r, kb, mouse, logger);
+                case ClassNames.WildSoul:
+                    return new Wildsoul(settings, character, r, kb, mouse, logger);
                 case ClassNames.Unset:
                 default:
                     return new ChaosClass(settings, character, r, kb, mouse, logger);

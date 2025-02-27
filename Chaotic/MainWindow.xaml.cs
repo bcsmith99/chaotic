@@ -123,6 +123,18 @@ namespace Chaotic
             1680
         };
 
+        private List<string> _AvailableRaidPresets = new List<string>()
+        {
+            "None",
+            "A",
+            "S",
+            "D",
+            "F",
+            "G",
+        };
+
+        public List<string> AvailableRaidPresets { get { return _AvailableRaidPresets; } }
+
         public List<int> AvailableChaosLevels { get { return _AvailableChaosLevels; } }
         private List<int> _AvailableIndexes = Enumerable.Range(1, 30).ToList();
         public List<int> AvailableIndexes { get { return _AvailableIndexes; } }
@@ -395,10 +407,19 @@ namespace Chaotic
 
                 if (character.BuyGuildShop)
                     success = success && _uit.BuyGuildShop(character);
+
+                if (success)
+                {
+                    character.LastWeeklyReset = DateTime.Now.Date;
+                    SaveUserSettings();
+                }
             }
 
             if (success && character.RunChaos)
                 success = _ct.RunChaos(character);
+
+            if (character.RaidPreset != "None")
+                _uit.SetCharacterSkillSet(character.RaidPreset);
 
             BackgroundProcessing.ProgressCheck();
             _uit.ClearOngoingQuests();
@@ -498,12 +519,6 @@ namespace Chaotic
                         var backInTown = _uit.InAreaCheck();
                         if (!backInTown)
                             break;
-                    }
-
-                    if (acceptWeeklies)
-                    {
-                        character.LastWeeklyReset = DateTime.Now.Date;
-                        SaveUserSettings();
                     }
                 }
 
@@ -665,94 +680,17 @@ namespace Chaotic
 
         private void Test_Click(object sender, RoutedEventArgs e)
         {
+            //IP.SHOW_DEBUG_IMAGES = true;
+            //var special = IP.LocateCenterOnScreen(Utility.ImageResourceLocation("class/soulfist.png", _settings.Resolution), _r.CharacterIcon, .7);
+            //if (special.Found)
+            //    _kb.Press(Key.Z, 200);
+            //IP.SHOW_DEBUG_IMAGES = false;
+
             Action a = () =>
             {
-                ////_mouse.ClickCenterScreen(_r.CenterScreen);
-                Sleep.SleepMs(300, 500);
-                _mouse.ClickCenterScreen(_r.CenterScreen);
 
-
-                var jumpPadImages = new List<string>()
-            {
-                //"kurzan_map1_jumppoint.png",
-                //"kurzan_map1_jumppoint1.png",
-                //"kurzan_map1_jumppoint2.png"
-                "kf_map1_newjump.png"
-            };
-                ScreenSearchResult jumpPad = new ScreenSearchResult();
-
-                foreach (var image in jumpPadImages)
-                {
-                    //IP.SAVE_DEBUG_IMAGES = true;
-                    jumpPad = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation(image, _settings.Resolution), confidence: .45);
-                    if (jumpPad.Found)
-                    {
-                        //IP.SAVE_DEBUG_IMAGES = false;
-                        break;
-                    }
-                }
-                //Look for jump portal and take it.
-                if (jumpPad.Found)
-                {
-                    _logger.Log(LogDetailLevel.Debug, $"Kurzan Jump Pad Found - {jumpPad.MaxConfidence}");
-                }
-
-                ////var solar = new PraeteriaSolar(_uit, _mouse, _kb, _r, _settings, _logger);
-                //////solar.RunUna(3);
-                ////solar.ExecuteTask();
-
-                //if (CurrentDailySelectedChar != null)
-                //{
-                //    //_uit.BuySoloModeShop(CurrentDailySelectedChar);
-                //    _uit.BuyGuildShop(CurrentDailySelectedChar);
-                //}
-
-
-                //var centerScreen = _r.CenterScreen;
-                //_mouse.ClickCenterScreen(_r.CenterScreen);
-                //var lastPotTime = DateTime.Now;
-                //var lastCollectionLoop = DateTime.Now;
-
-                //while (true)
-                //{
-                //    //if (DateTime.Now > new DateTime(2024, 12, 20, 2, 58, 0))
-                //    //    break;
-
-                //    BackgroundProcessing.ProgressCheck();
-                //    _mouse.SetPosition(2900, 1000);
-                //    _kb.Press(Key.W, 1000);
-                //    _mouse.SetPosition(2750, 430);
-                //    _kb.Press(Key.Z, 1000);
-                //    _kb.Press(Key.A, 2500);
-
-                //    var collectionTime = DateTime.Now.Subtract(lastCollectionLoop);
-                //    //_logger.Log(LogDetailLevel.Debug, $"Collection Time: {collectionTime.TotalMinutes}");
-                //    if (DateTime.Now.Subtract(lastPotTime).TotalMinutes > 10)
-                //    {
-                //        _logger.Log(LogDetailLevel.Debug, "Pressing health pot");
-                //        _kb.Press(Key.F1);
-                //        lastPotTime = DateTime.Now;
-                //    }
-                //    if (collectionTime.TotalMinutes > 4)
-                //    {
-                //        //_logger.Log(LogDetailLevel.Debug, "Collecting loot");
-                //        _mouse.ClickPosition(centerScreen.X + 1000, centerScreen.Y, 2000, MouseButtons.Right);
-                //        _mouse.ClickPosition(centerScreen.X - 900, centerScreen.Y, 2000, MouseButtons.Right);
-                //        //_mouse.ClickPosition(centerScreen.X - 500, centerScreen.Y - 300, 1000, MouseButtons.Right);
-                //        //_mouse.ClickPosition(centerScreen.X - 500, centerScreen.Y + 350, 1000, MouseButtons.Right);
-                //        lastCollectionLoop = DateTime.Now;
-                //        Sleep.SleepMs(3000, 4000);
-                //    }
-                //    else
-                //        Sleep.SleepMs(7000, 8000);
-                //}
-
-
-                //if (CurrentDailySelectedChar != null)
-                //{
-                //    var ct = new CubeTasks(_settings, _mouse, _kb, _r, _uit, _logger);
-                //    ct.RunCube(CurrentDailySelectedChar);
-                //}
+                if (CurrentDailySelectedChar != null)
+                    _uit.BuyGuildShop(CurrentDailySelectedChar);
             };
 
             CreateBackgroundWorker(a);

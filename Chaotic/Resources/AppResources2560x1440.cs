@@ -88,7 +88,7 @@ namespace Chaotic.Resources
             GuildSupportCancel = new Rect(1280, 920, 100, 50);
             GuildSupportOkButton = new Point(1225, 940);
 
-            GuildBloodstoneShopMenu = new Point(1550, 360);
+            GuildBloodstoneShopMenu = new Point(1700, 360);
             GuildBloodstoneTicketMenu = new Point(1470, 410);
             GuildBloodstoneDropdown = new Point(1025, 460);
             GuildBloodstoneViewAll = new Point(1025, 495);

@@ -23,6 +23,7 @@ namespace Chaotic.Tasks
         private readonly KeyboardUtility _kb;
         private readonly ApplicationResources _r;
         private readonly AppLogger _logger;
+        private readonly KeyConverter _kc;
 
         public UITasks(UserSettings settings, MouseUtility mouse, KeyboardUtility kb, ApplicationResources r, AppLogger logger)
         {
@@ -31,6 +32,7 @@ namespace Chaotic.Tasks
             _kb = kb;
             _r = r;
             _logger = logger;
+            _kc = new KeyConverter(); 
         }
 
         public bool CrashCheck()
@@ -81,58 +83,57 @@ namespace Chaotic.Tasks
             _kb.Press(Key.Escape, 1000);
         }
 
-        public void ToggleArkPassive(bool disable)
-        {
-            BackgroundProcessing.ProgressCheck();
-            Sleep.SleepMs(500, 500, _settings.PerformanceMultiplier);
-            _mouse.ClickCenterScreen(_r.CenterScreen);
+        //public void ToggleArkPassive(bool disable)
+        //{
+        //    BackgroundProcessing.ProgressCheck();
+        //    Sleep.SleepMs(500, 500, _settings.PerformanceMultiplier);
+        //    _mouse.ClickCenterScreen(_r.CenterScreen);
 
-            _mouse.ClickPosition(_r.CharacterMenu, 500);
-            _mouse.ClickPosition(_r.CharacterProfileMenu, 1000);
+        //    _mouse.ClickPosition(_r.CharacterMenu, 500);
+        //    _mouse.ClickPosition(_r.CharacterProfileMenu, 1000);
 
-            var arkPassive = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("arkpassive_button.png", _settings.Resolution), confidence: .9);
+        //    var arkPassive = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("arkpassive_button.png", _settings.Resolution), confidence: .9);
 
-            if (arkPassive.Found)
-            {
-                _mouse.ClickPosition(arkPassive.CenterX, arkPassive.CenterY, 1000);
+        //    if (arkPassive.Found)
+        //    {
+        //        _mouse.ClickPosition(arkPassive.CenterX, arkPassive.CenterY, 1000);
 
-                if (disable)
-                {
-                    var disableButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("arkpassive_disable.png", _settings.Resolution), confidence: .9);
-                    if (disableButton.Found)
-                    {
-                        _mouse.ClickPosition(disableButton.CenterX, disableButton.CenterY, 500);
-                        var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .9);
-                        while (okButton.Found)
-                        {
-                            _mouse.ClickPosition(okButton.CenterX, okButton.CenterY, 500);
-                            okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .9);
-                        }
-                    }
-                    else
-                        _kb.Press(Key.Escape, 500);
-                }
-                else
-                {
-                    var enableButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("arkpassive_enable.png", _settings.Resolution), confidence: .9);
-                    if (enableButton.Found)
-                    {
-                        _mouse.ClickPosition(enableButton.CenterX, enableButton.CenterY, 500);
-                        var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .9);
-                        while (okButton.Found)
-                        {
-                            _mouse.ClickPosition(okButton.CenterX, okButton.CenterY, 500);
-                            okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .9);
-                        }
-                    }
-                    else
-                        _kb.Press(Key.Escape, 500);
-                }
+        //        if (disable)
+        //        {
+        //            var disableButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("arkpassive_disable.png", _settings.Resolution), confidence: .9);
+        //            if (disableButton.Found)
+        //            {
+        //                _mouse.ClickPosition(disableButton.CenterX, disableButton.CenterY, 500);
+        //                var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .9);
+        //                while (okButton.Found)
+        //                {
+        //                    _mouse.ClickPosition(okButton.CenterX, okButton.CenterY, 500);
+        //                    okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .9);
+        //                }
+        //            }
+        //            else
+        //                _kb.Press(Key.Escape, 500);
+        //        }
+        //        else
+        //        {
+        //            var enableButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("arkpassive_enable.png", _settings.Resolution), confidence: .9);
+        //            if (enableButton.Found)
+        //            {
+        //                _mouse.ClickPosition(enableButton.CenterX, enableButton.CenterY, 500);
+        //                var okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .9);
+        //                while (okButton.Found)
+        //                {
+        //                    _mouse.ClickPosition(okButton.CenterX, okButton.CenterY, 500);
+        //                    okButton = ImageProcessing.LocateCenterOnScreen(Utility.ImageResourceLocation("ok_button.png", _settings.Resolution), confidence: .9);
+        //                }
+        //            }
+        //            else
+        //                _kb.Press(Key.Escape, 500);
+        //        }
 
-                _kb.Press(Key.Escape, 500);
-            }
-
-        }
+        //        _kb.Press(Key.Escape, 500);
+        //    }
+        //}
 
         public void ClearOngoingQuests()
         {
@@ -287,6 +288,16 @@ namespace Chaotic.Tasks
             }
 
             return false;
+        }
+
+        public void SetCharacterSkillSet(string key)
+        {
+            if (key == "None")
+                return;
+
+            _mouse.ClickCenterScreen(_r.CenterScreen);
+            Key raidPreset = (Key)_kc.ConvertFromString(key);
+            _kb.ControlPress(raidPreset, 500);
         }
 
         public bool BuyGuildShop(UserCharacter character)

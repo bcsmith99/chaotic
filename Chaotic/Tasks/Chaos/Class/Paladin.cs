@@ -16,7 +16,7 @@ namespace Chaotic.Tasks.Chaos.Class
     {
         public Paladin(UserSettings settings, UserCharacter character, ApplicationResources r, KeyboardUtility kb, MouseUtility mouse, AppLogger logger) : base(settings, character, r, kb, mouse, logger)
         {
-
+            SkillConfidence = 0.85;
         }
 
         public override void StartUp()
